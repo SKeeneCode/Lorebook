@@ -1,2 +1,2 @@
-rootProject.name = "TornadoFXTemplate"
+rootProject.name = "Lorebook"
 
