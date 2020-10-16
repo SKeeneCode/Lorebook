@@ -11,7 +11,7 @@ plugins {
 }
 
 application {
-    mainClassName = "org.ksoftware.lorebook.MyAppKt"
+    mainClassName = "org.ksoftware.lorebook.main.MainKt"
 }
 kotlin {
     tasks.withType<KotlinCompile> {
