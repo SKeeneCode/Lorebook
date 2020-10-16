@@ -40,6 +40,8 @@ dependencies {
     implementation ("no.tornado:tornadofx:2.0.0-SNAPSHOT")
     implementation("org.fxmisc.richtext:richtextfx:0.10.5")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.3.9")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
     testImplementation("org.testfx:testfx-junit5:4.0.16-alpha")

@@ -30,8 +30,27 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                         cellFormat {
                             text = this.item.toString()
                             this.onDoubleClick {
-                                projectWorkspaceController.dockPage(this.item, workspace)
+                                projectViewModel.pages.value.remove(this.item)
+                               // projectWorkspaceController.dockPage(this.item, workspace)
                             }
+                        }
+                    }
+                    button("print") {
+                        action {
+                            println(projectViewModel.pages.value.toString())
+                        }
+                    }
+                    button("reset") {
+                        enableWhen(projectViewModel.dirty)
+                        action {
+                            projectViewModel.rollback()
+                            projectViewModel.rollBackPages()
+                        }
+                    }
+                    button("save") {
+                        enableWhen(projectViewModel.dirty)
+                        action {
+                            projectViewModel.commit()
                         }
                     }
                 }

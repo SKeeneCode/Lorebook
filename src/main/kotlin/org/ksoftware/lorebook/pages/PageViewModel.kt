@@ -12,6 +12,6 @@ class PageViewModel(model: PageModel = PageModel()) : ItemViewModel<PageModel>()
         item = model
     }
 
-    val id = bind(PageModel::id)
+    val id = bind(PageModel::idProperty)
 
 }
