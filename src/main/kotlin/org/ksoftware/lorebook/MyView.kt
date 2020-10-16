@@ -14,7 +14,6 @@ import org.ksoftware.lorebook.richtext.TextStyle
 import tornadofx.*
 import java.util.function.BiConsumer
 import java.util.function.Function
-import java.util.function.Predicate
 
 class MyView : View("My View") {
 

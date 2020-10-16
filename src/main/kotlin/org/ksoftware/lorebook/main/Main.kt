@@ -6,7 +6,7 @@ import tornadofx.*
 /**
  * Entry class for the application
  */
-class LorebookApp : App(LorebookWorkspace::class, Styles::class)
+class LorebookApp : App(ProjectWorkspace::class, Styles::class)
 
 fun main() {
     launch<LorebookApp>()
