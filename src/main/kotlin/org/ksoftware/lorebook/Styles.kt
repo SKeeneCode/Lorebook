@@ -1,4 +1,4 @@
-package org.example
+package org.ksoftware.lorebook
 
 import tornadofx.Stylesheet
 
