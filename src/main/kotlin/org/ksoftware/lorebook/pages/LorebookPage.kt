@@ -11,6 +11,7 @@ import tornadofx.*
 class LorebookPage : View("MyPage") {
 
     private val lorebookPageController: LorebookPageController by inject(FX.defaultScope)
+    private val lorebookPageViewModel: LorebookPageViewModel by inject()
     private var nodeContainer: Pane by singleAssign()
 
     override val root = borderpane {
