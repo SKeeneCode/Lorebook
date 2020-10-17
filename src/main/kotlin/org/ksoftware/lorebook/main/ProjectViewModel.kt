@@ -1,6 +1,5 @@
 package org.ksoftware.lorebook.main
 
-import javafx.collections.FXCollections
 import org.ksoftware.lorebook.pages.PageModel
 import tornadofx.*
 
@@ -14,7 +13,8 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
         item = model
     }
 
-    val dockedPages = bind(ProjectModel::dockedPages)
+    val pageViewCache = bind(ProjectModel::pageViewCache)
+
     val pages = bind(ProjectModel::pages)
     private var pagesBacking = listOf<PageModel>()
 

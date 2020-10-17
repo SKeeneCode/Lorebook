@@ -9,7 +9,7 @@ import tornadofx.*
  * a new scope. They contain a pane to hold the users content nodes (text node etc) as well as controls for rich text
  * and page tags.
  */
-class Page : View("MyPage") {
+class PageView : View("MyPage") {
 
     private val pageController: PageController by inject(FX.defaultScope)
     private val pageViewModel: PageViewModel by inject()

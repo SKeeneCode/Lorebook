@@ -30,8 +30,8 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                         cellFormat {
                             text = this.item.toString()
                             this.onDoubleClick {
-                                projectViewModel.pages.value.remove(this.item)
-                               // projectWorkspaceController.dockPage(this.item, workspace)
+                                //projectViewModel.pages.value.remove(this.item)
+                                projectWorkspaceController.dockPageView(this.item, workspace)
                             }
                         }
                     }
