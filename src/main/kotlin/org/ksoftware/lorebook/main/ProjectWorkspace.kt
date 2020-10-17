@@ -15,6 +15,12 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
         primaryStage.height = 800.0
     }
 
+    init {
+        with(header) {
+            label(projectViewModel.taskMessage)
+        }
+    }
+
 
     init {
         with(leftDrawer) {
@@ -53,6 +59,21 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                             projectViewModel.commit()
                         }
                     }
+                    button("save project") {
+                        action {
+                            projectWorkspaceController.saveProject()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    init {
+        with(bottomDrawer) {
+            item("footers") {
+                pane {
+                    prefHeight = 200.0
                 }
             }
         }

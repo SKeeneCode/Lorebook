@@ -26,7 +26,11 @@ class PageView : View("MyPage") {
         // pane container holding nodes
         center {
             nodeContainer = pane {
-
+                button("moshi") {
+                    action {
+                        pageViewModel.item.getJson()
+                    }
+                }
             }
         }
 

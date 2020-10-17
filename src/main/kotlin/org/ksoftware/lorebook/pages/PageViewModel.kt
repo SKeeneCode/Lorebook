@@ -14,4 +14,7 @@ class PageViewModel(model: PageModel = PageModel()) : ItemViewModel<PageModel>()
 
     val id = bind(PageModel::idProperty)
 
+    override fun onCommit() {
+        item.modified = true
+    }
 }

@@ -1,5 +1,6 @@
 package org.ksoftware.lorebook.main
 
+import javafx.beans.property.SimpleStringProperty
 import org.ksoftware.lorebook.pages.PageModel
 import tornadofx.*
 
@@ -17,6 +18,8 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
 
     val pages = bind(ProjectModel::pages)
     private var pagesBacking = listOf<PageModel>()
+
+    val taskMessage = SimpleStringProperty("No Task Running")
 
     init {
         // copies the list to its backing list after initial binding

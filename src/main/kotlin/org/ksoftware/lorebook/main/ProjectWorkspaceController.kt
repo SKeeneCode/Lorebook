@@ -1,16 +1,22 @@
 package org.ksoftware.lorebook.main
 
+import javafx.stage.DirectoryChooser
+import kotlinx.coroutines.*
+import kotlinx.coroutines.javafx.JavaFx
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import tornadofx.*
+import java.io.File
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Controller for the project workspace. This controller should always be injected from the same scope
  * so that it remains a singleton.
  */
-class ProjectWorkspaceController : Controller() {
+class ProjectWorkspaceController : Controller(), CoroutineScope {
 
+    override val coroutineContext: CoroutineContext = Dispatchers.JavaFx
     private val projectViewModel: ProjectViewModel by inject(FX.defaultScope)
 
     /**
@@ -37,5 +43,23 @@ class ProjectWorkspaceController : Controller() {
             cache[page.idProperty.get()] = workspace.dockedComponent as PageView
         }
     }
-   // workspace.dockInNewScope<Page>(PageViewModel(page))
+
+    fun saveProject() {
+        val projectSaveFolder = askUserForProjectSaveFolder()
+        launch {
+            projectViewModel.taskMessage.value = "Saving Project"
+            val jobs: List<Job> = projectViewModel.pages.value.map {
+                launch {
+                    it.save(projectSaveFolder, projectViewModel.taskMessage)
+                }
+            }
+            jobs.joinAll()
+            projectViewModel.taskMessage.value = "Finished Saving"
+        }
+    }
+
+    private fun askUserForProjectSaveFolder() : File {
+        val directoryChooser = DirectoryChooser()
+        return directoryChooser.showDialog(primaryStage)
+    }
 }
