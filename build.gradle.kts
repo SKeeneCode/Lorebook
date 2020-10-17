@@ -7,6 +7,7 @@ plugins {
     application
     java
     kotlin("jvm") version "1.4.10"
+    kotlin("kapt") version "1.4.10"
     id("org.openjfx.javafxplugin") version "0.0.9"
 }
 
@@ -42,6 +43,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.3.9")
+    implementation("com.squareup.moshi:moshi:1.11.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
     testImplementation("org.testfx:testfx-junit5:4.0.16-alpha")
