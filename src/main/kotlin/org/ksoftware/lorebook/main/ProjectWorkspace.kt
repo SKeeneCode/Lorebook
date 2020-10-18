@@ -1,5 +1,6 @@
 package org.ksoftware.lorebook.main
 
+import org.ksoftware.lorebook.newproject.NewProjectView
 import tornadofx.*
 
 /**
@@ -7,12 +8,13 @@ import tornadofx.*
  */
 class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
 
-    private val projectWorkspaceController: ProjectWorkspaceController by inject(FX.defaultScope)
-    private val projectViewModel: ProjectViewModel by inject(FX.defaultScope)
+    private val projectWorkspaceController: ProjectWorkspaceController by inject()
+    private val projectViewModel: ProjectViewModel by inject()
 
-    init {
-        primaryStage.width = 1200.0
-        primaryStage.height = 800.0
+    override fun onDock() {
+        super.onDock()
+        currentStage?.width = 1200.0
+        currentStage?.height = 800.0
     }
 
     init {
@@ -21,7 +23,6 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
         }
     }
 
-
     init {
         with(leftDrawer) {
             item("all pages", expanded = true) {
@@ -29,15 +30,14 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     prefWidth = 200.0
                     button("add a page") {
                         action {
-                            projectWorkspaceController.dockNewPage(workspace)
+                            projectWorkspaceController.dockNewPage(this@ProjectWorkspace)
                         }
                     }
                     listview(projectViewModel.pages) {
                         cellFormat {
                             text = this.item.toString()
                             this.onDoubleClick {
-                                //projectViewModel.pages.value.remove(this.item)
-                                projectWorkspaceController.dockPageView(this.item, workspace)
+                                projectWorkspaceController.dockPageView(this.item, this@ProjectWorkspace)
                             }
                         }
                     }
@@ -61,7 +61,12 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     }
                     button("save project") {
                         action {
-                            projectWorkspaceController.saveProject()
+                            currentStage?.let { projectWorkspaceController.saveProject(it) }
+                        }
+                    }
+                    button("new project") {
+                        action {
+                            find(NewProjectView::class).openModal()
                         }
                     }
                 }
