@@ -38,13 +38,15 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
      * If not, creates a new page view in a new scope and docks it.
      */
     fun dockPageView(page: PageModel, workspace: Workspace) {
-        val cache = projectViewModel.pageViewCache.value
-        val pageToDock = cache[page.idProperty.get()]
-        if (pageToDock != null) {
-            workspace.dock(pageToDock)
-        } else {
-            workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel)
-            cache[page.idProperty.get()] = workspace.dockedComponent as PageView
+        launch {
+            val cache = projectViewModel.pageViewCache.value
+            val pageToDock = cache[page.idProperty.get()]
+            if (pageToDock != null) {
+                workspace.dock(pageToDock)
+            } else {
+                workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel)
+                cache[page.idProperty.get()] = workspace.dockedComponent as PageView
+            }
         }
     }
 
