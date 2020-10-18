@@ -14,6 +14,8 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
         item = model
     }
 
+    val id = bind(ProjectModel::idProperty)
+
     val pageViewCache = bind(ProjectModel::pageViewCache)
 
     val pages = bind(ProjectModel::pages)

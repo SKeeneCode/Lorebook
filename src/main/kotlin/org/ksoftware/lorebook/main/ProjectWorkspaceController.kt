@@ -70,16 +70,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
     }
 
     private suspend fun saveProjectInLocation(projectModel: ProjectModel, saveLocation: File) {
-        projectViewModel.taskMessage.value = "Saving Project"
-        val jobs: List<Job> = projectModel.pages.map {
-            coroutineScope {
-                launch {
-                    it.save(saveLocation, projectViewModel.taskMessage)
-                }
-            }
-        }
-        jobs.joinAll() // wait until all jobs are finished
-        projectViewModel.taskMessage.value = "Finished Saving"
+        projectModel.save(saveLocation, projectViewModel.taskMessage)
     }
 
     private fun askUserForProjectSaveFolder(stage: Stage) : File? {
