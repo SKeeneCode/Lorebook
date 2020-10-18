@@ -28,8 +28,8 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
      */
     fun dockNewPage(workspace: Workspace) {
         val newPage = PageModel()
-        dockPageView(newPage, workspace)
         projectViewModel.pages.value.add(newPage)
+        dockPageView(newPage, workspace)
     }
 
     /**
