@@ -1,5 +1,6 @@
 package org.ksoftware.lorebook.main
 
+import com.squareup.moshi.JsonClass
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
@@ -20,6 +21,7 @@ import java.util.*
  * Model class for a project. Properties in this class should (almost) never be bound to the user interface.
  * Instead use a ProjectViewModel.
  */
+@JsonClass(generateAdapter = true)
 class ProjectModel(override val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) : Savable, Id {
 
     // list of all page models in this project
