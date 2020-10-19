@@ -3,6 +3,7 @@ package org.ksoftware.lorebook.newproject
 import javafx.stage.DirectoryChooser
 import org.ksoftware.lorebook.main.ProjectWorkspace
 import tornadofx.*
+import java.io.File
 
 /**
  * View class containing the controls allowing a user to create a new project.
@@ -22,8 +23,9 @@ class NewProjectView : View("New Project") {
                     button("Find") {
                         action {
                             val directoryChooser = DirectoryChooser()
+                            directoryChooser.initialDirectory = File("/")
                             val folder = directoryChooser.showDialog(primaryStage)
-                            newProjectViewModel.newProjectSaveDirectory.value = folder.toString()
+                            folder?.let { newProjectViewModel.newProjectSaveDirectory.value = folder.toString()  }
                         }
                     }
                 }

@@ -77,6 +77,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
 
     private fun askUserForProjectSaveFolder(stage: Stage) : File? {
         val directoryChooser = DirectoryChooser()
+        directoryChooser.initialDirectory = File("/")
         return directoryChooser.showDialog(stage)
     }
 
