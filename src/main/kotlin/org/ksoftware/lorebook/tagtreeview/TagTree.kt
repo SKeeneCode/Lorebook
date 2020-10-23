@@ -14,6 +14,9 @@ class TagTree : View("My View") {
     }
 
     fun rebuildTree() {
+        val cache = tagTreeViewModel.treeCells
+        cache.forEach { it.onDelete() }
+        cache.clear()
         tagTreeController.build(root, tagTreeViewModel.root)
     }
 

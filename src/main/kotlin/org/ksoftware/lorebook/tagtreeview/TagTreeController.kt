@@ -1,17 +1,20 @@
 package org.ksoftware.lorebook.tagtreeview
 
 import javafx.scene.Node
-import org.ksoftware.lorebook.main.ProjectViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.javafx.JavaFx
+import kotlinx.coroutines.launch
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import tornadofx.*
 
-class TagTreeController : Controller() {
+class TagTreeController : Controller(), CoroutineScope {
 
+    override val coroutineContext = Dispatchers.JavaFx
     private val tagTreeViewModel: TagTreeViewModel by inject()
     private val pageViewModel: PageViewModel by inject()
-    private val projectViewModel: ProjectViewModel by inject()
 
     fun filterItemsAndRebuild(name: String, location: Node, root: TagModel) {
         filterByName(name, root)
@@ -36,37 +39,28 @@ class TagTreeController : Controller() {
     }
 
     fun build(location: Node, root: TagModel) {
-        tagTreeViewModel.treeCells.forEach {
-            it.onDelete()
-            it.removeFromParent()
-        }
-        tagTreeViewModel.treeCells.clear()
-        with(location) {
-            buildTree(root)?.let {
-                location.add(it.root)
-
-                tagTreeViewModel.treeCells.forEach {
-                    it.onCreate()
-                }
-                if (tagTreeViewModel.treeCells.isEmpty()) {
-                    label("No results found")
-                }
+        launch {
+            with(location) {
+                buildTree(root)?.let { add(it.root) }
+                if (tagTreeViewModel.treeCells.isEmpty()) { label("No results found") }
             }
         }
 
     }
 
-    fun buildTree(tag: TagModel): UIComponent? {
+    private fun buildTree(tag: TagModel): UIComponent? {
         return when {
             !tag.showInTree -> null
             tag.children.isEmpty() -> {
                 val cell = find(TagTreeCell::class, Scope(tagTreeViewModel, pageViewModel, TagViewModel(tag)))
                 tagTreeViewModel.treeCells.add(cell)
+                cell.onCreate()
                 return cell
             }
             else -> {
                 val cell = find(TagTreeSqueezeCell::class, Scope(tagTreeViewModel, pageViewModel, TagViewModel(tag)))
                 tagTreeViewModel.treeCells.add(cell)
+                cell.onCreate()
                 return cell
             }
         }
