@@ -2,12 +2,13 @@ package org.ksoftware.lorebook.pages
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
 import javafx.beans.property.StringProperty
-import org.ksoftware.lorebook.adapters.StringPropertyAdapter
+import javafx.collections.FXCollections
+import javafx.collections.ObservableSet
 import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.attributes.JsonModel
 import org.ksoftware.lorebook.io.Savable
+import org.ksoftware.lorebook.tags.TagModel
 import tornadofx.*
 import java.io.File
 import java.util.*
@@ -19,6 +20,7 @@ import java.util.*
 @JsonClass(generateAdapter = true)
 data class PageModel(
         @Json(name = "id") override val idProperty: StringProperty = UUID.randomUUID().toString().toProperty(),
+        val tagSet: ObservableSet<TagModel> = FXCollections.observableSet(),
         // flag to indicate if this model has had any commits since it was last saved
         @Transient var modified: Boolean = false
 ) : JsonModel(), Savable, Id {

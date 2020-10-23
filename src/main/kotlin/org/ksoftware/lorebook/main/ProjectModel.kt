@@ -14,6 +14,7 @@ import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageModel
+import org.ksoftware.lorebook.tags.TagModel
 import java.io.File
 import java.util.*
 
@@ -22,7 +23,7 @@ import java.util.*
  * Instead use a ProjectViewModel.
  */
 @JsonClass(generateAdapter = true)
-class ProjectModel(override val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) : Savable, Id {
+data class ProjectModel(override val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) : Savable, Id {
 
     // list of all page models in this project
     val pages: ObservableList<PageModel> = FXCollections.observableArrayList()

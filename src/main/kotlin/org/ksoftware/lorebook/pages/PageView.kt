@@ -1,7 +1,9 @@
 package org.ksoftware.lorebook.pages
 
+import com.jfoenix.skins.JFXCustomColorPickerDialog
 import javafx.scene.layout.Pane
 import org.ksoftware.lorebook.main.ProjectViewModel
+import org.ksoftware.lorebook.organiser.Organiser
 import tornadofx.*
 
 /**
@@ -17,23 +19,25 @@ class PageView : View("MyPage") {
     private val projectViewModel: ProjectViewModel by inject()
     private var nodeContainer: Pane by singleAssign()
 
-    init {
-        println(projectViewModel)
-        println(workspace)
-    }
 
     override val root = borderpane {
         // rich text controls
         top {
-
         }
 
         // pane container holding nodes
         center {
             nodeContainer = pane {
-                button("moshi") {
-                    action {
-                        pageViewModel.item.getJson()
+                vbox {
+                    button("moshi") {
+                        action {
+                            pageViewModel.item.getJson()
+                        }
+                    }
+                    button("open") {
+                        action {
+                            JFXCustomColorPickerDialog(currentWindow).show()
+                        }
                     }
                 }
             }
@@ -41,7 +45,13 @@ class PageView : View("MyPage") {
 
         // page tags
         bottom {
-
+            hbox {
+                button("Open Page Organiser") {
+                    action {
+                        openInternalWindow(find(Organiser::class), owner = workspace.root, modal = true, movable = false)
+                    }
+                }
+            }
         }
     }
 }

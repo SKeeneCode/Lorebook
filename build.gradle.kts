@@ -13,6 +13,17 @@ plugins {
 
 application {
     mainClassName = "org.ksoftware.lorebook.main.MainKt"
+    applicationDefaultJvmArgs = listOf(
+            "--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
+            "--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+            "--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.binding=ALL-UNNAMED",
+            "--add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.util=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED"
+    )
 }
 kotlin {
     tasks.withType<KotlinCompile> {
@@ -44,6 +55,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.3.9")
     implementation("com.squareup.moshi:moshi:1.11.0")
+    implementation("com.jfoenix:jfoenix:9.0.10")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.1")

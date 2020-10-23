@@ -2,6 +2,7 @@ package org.ksoftware.lorebook.main
 
 import javafx.beans.property.SimpleStringProperty
 import org.ksoftware.lorebook.pages.PageModel
+import org.ksoftware.lorebook.tags.TagModel
 import tornadofx.*
 
 /**
@@ -21,6 +22,8 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val pages = bind(ProjectModel::pages)
     private var pagesBacking = listOf<PageModel>()
 
+    val rootTag = TagModel()
+
     val taskMessage = SimpleStringProperty("No Task Running")
 
     init {
@@ -35,6 +38,47 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     fun rollBackPages() {
         pages.value = pagesBacking.map { it.copy() }.asObservable()
         super.commit(pages) {}
+    }
+
+    init {
+
+        val tree1 = TagModel(name = "Item 1")
+        val tree2 = TagModel(name = "Item 2")
+        val tree3 = TagModel(name = "Item 3")
+        val tree4 = TagModel(name = "Item 4")
+        val tree5 = TagModel(name = "Item 5")
+
+        val tree11 = TagModel(name = "Item 1-1")
+        val tree12 = TagModel(name = "Item 1-2")
+        val tree13 = TagModel(name = "Item 1-3")
+        val tree14 = TagModel(name = "Item 1-4")
+        val tree15 = TagModel(name = "Item 1-5")
+        val tree16 = TagModel(name = "Item 1-6")
+
+        val tree111 = TagModel(name = "Item 1-1-1")
+        val tree112 = TagModel(name = "Item 1-1-2")
+
+
+        val tree121 = TagModel(name = "Item 1-2-1")
+        val tree122 = TagModel(name = "Item 1-2-2")
+
+        tree1.addChild(tree11)
+        tree1.addChild(tree12)
+        tree1.addChild(tree13)
+        tree1.addChild(tree14)
+        tree1.addChild(tree15)
+        tree1.addChild(tree16)
+
+        tree11.addChild(tree111)
+        tree11.addChild(tree112)
+        tree12.addChild(tree121)
+        tree12.addChild(tree122)
+
+        rootTag.addChild(tree1)
+        rootTag.addChild(tree2)
+        rootTag.addChild(tree3)
+        rootTag.addChild(tree4)
+        rootTag.addChild(tree5)
     }
 
 }

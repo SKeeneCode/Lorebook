@@ -1,6 +1,9 @@
 package org.ksoftware.lorebook.main
 
+import javafx.scene.control.Label
+import javafx.scene.layout.FlowPane
 import org.ksoftware.lorebook.newproject.NewProjectView
+import org.ksoftware.lorebook.test.AutocompletionTextField
 import tornadofx.*
 
 /**
@@ -10,6 +13,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
 
     private val projectWorkspaceController: ProjectWorkspaceController by inject()
     private val projectViewModel: ProjectViewModel by inject()
+    var flow: FlowPane by singleAssign()
 
     override fun onDock() {
         super.onDock()
@@ -77,9 +81,22 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
     init {
         with(bottomDrawer) {
             item("footers") {
-                pane {
-                    prefHeight = 200.0
+                flow = flowpane()
+            }
+        }
+
+        with(flow) {
+            prefHeight = 200.0
+            AutocompletionTextField().also {
+                it.entries.addAll(arrayListOf("aaa", "bbb", "ccc", "albert"))
+                this.onLeftClick{
+                    it.requestFocus()
                 }
+                it.action {
+                    this@with.children.add(Label(it.text))
+                    it.clear()
+                }
+                add(it)
             }
         }
     }
