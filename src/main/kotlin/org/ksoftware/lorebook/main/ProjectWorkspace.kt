@@ -9,7 +9,7 @@ import tornadofx.*
 /**
  * Workspace implementation used for a projects main window.
  */
-class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
+class ProjectWorkspace : Workspace("Lorebook") {
 
     private val projectWorkspaceController: ProjectWorkspaceController by inject()
     private val projectViewModel: ProjectViewModel by inject()

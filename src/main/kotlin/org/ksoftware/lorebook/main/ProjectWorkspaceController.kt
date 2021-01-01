@@ -45,7 +45,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
                 workspace.dock(pageToDock)
             } else {
                 workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel)
-                cache[page.idProperty.get()] = workspace.dockedComponent as PageView
+              //  cache[page.idProperty.get()] = workspace.dockedComponent as PageView
             }
         }
     }

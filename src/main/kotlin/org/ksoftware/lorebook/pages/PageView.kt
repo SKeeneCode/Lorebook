@@ -1,6 +1,5 @@
 package org.ksoftware.lorebook.pages
 
-import com.jfoenix.skins.JFXCustomColorPickerDialog
 import javafx.scene.layout.Pane
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.organiser.Organiser
@@ -19,7 +18,6 @@ class PageView : View("MyPage") {
     private val projectViewModel: ProjectViewModel by inject()
     private var nodeContainer: Pane by singleAssign()
 
-
     override val root = borderpane {
         // rich text controls
         top {
@@ -32,11 +30,6 @@ class PageView : View("MyPage") {
                     button("moshi") {
                         action {
                             pageViewModel.item.getJson()
-                        }
-                    }
-                    button("open") {
-                        action {
-                            JFXCustomColorPickerDialog(currentWindow).show()
                         }
                     }
                 }

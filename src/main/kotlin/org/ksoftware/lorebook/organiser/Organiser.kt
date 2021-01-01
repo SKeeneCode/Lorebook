@@ -27,6 +27,7 @@ class Organiser : View("Page Organiser") {
 
     override fun onDock() {
         subscribe<TagTreeRebuildRequest> {
+            println("rebuilding")
             tagTree.rebuildTree()
         }
         tagTree.rebuildTree()
