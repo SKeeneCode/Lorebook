@@ -13,3 +13,7 @@ fun getContrastColor(color: Color?): Color {
     val y = (299 * color.red + 587 * color.green + 114 * color.blue) / 1000
     return if (y >= 0.5) Color.BLACK else Color.WHITE
 }
+
+fun getRandomColor(): Color {
+    return Color.color(Math.random(), Math.random(), Math.random())
+}

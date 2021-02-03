@@ -3,19 +3,41 @@ package org.ksoftware.lorebook.tagtreeview
 import com.jfoenix.controls.JFXColorPicker
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import javafx.animation.Interpolator
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.SetChangeListener
+import javafx.geometry.Point2D
 import javafx.geometry.Pos
 import javafx.scene.Cursor
+import javafx.scene.Node
+import javafx.scene.Parent
+import javafx.scene.control.Button
+import javafx.scene.control.Control
+import javafx.scene.control.PopupControl
 import javafx.scene.input.TransferMode
+import javafx.scene.layout.Region
 import javafx.scene.text.Font
+import javafx.stage.Popup
 import org.ksoftware.lorebook.Styles
 import org.ksoftware.lorebook.events.TagTreeRebuildRequest
+import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
+import javafx.stage.PopupWindow
+import javafx.animation.KeyFrame
+import javafx.animation.KeyValue
+
+import javafx.animation.Timeline
+import javafx.event.EventHandler
+import javafx.scene.input.MouseEvent
+import javafx.util.Duration
+import javafx.scene.input.MouseButton
+
+
+
 
 
 class TagTreeCell : View() {
@@ -23,6 +45,8 @@ class TagTreeCell : View() {
     private val tagViewModel: TagViewModel by inject()
     private val tagTreeViewModel: TagTreeViewModel by inject()
     private val pageViewModel: PageViewModel by inject()
+    private val projectViewModel: ProjectViewModel by inject()
+
     private val item = tagViewModel.item
     private val enabled = SimpleBooleanProperty(true)
     private val editing = SimpleBooleanProperty(false)
@@ -35,7 +59,6 @@ class TagTreeCell : View() {
             enabled.value = true
         }
     }
-
 
     override fun onCreate() {
         pageViewModel.tags.value.addListener(setChangeListener)
@@ -53,29 +76,73 @@ class TagTreeCell : View() {
     }
 
     override val root = hbox {
+        alignment = Pos.CENTER
+        styleProperty().bind(tagViewModel.color.objectBinding {
+            "-fx-background-color: ${tagViewModel.color.value?.css};" +
+                    "-fx-background-radius: 12.0"
+        })
+        spacing = 2.0
+        paddingHorizontal = 16
+        paddingVertical = 12
+
+        val picker = projectViewModel.colorPicker
+        picker.isManaged = false
+        add(picker)
+
+        val popup = Popup()
+        popup.isAutoFix = true
+        popup.isAutoHide = true
+        popup.isHideOnEscape = true
+        popup.content.add(hbox {
             alignment = Pos.CENTER
             styleProperty().bind(tagViewModel.color.objectBinding {
                 "-fx-background-color: ${tagViewModel.color.value?.css};" +
                         "-fx-background-radius: 12.0"
             })
-            spacing = 2.0
+            spacing = 6.0
             paddingHorizontal = 8
             paddingVertical = 4
-            onDoubleClick {
-                if (enabled.value) editing.value = true
+
+            button {
+                paddingAll = 0
+                background = null
+                graphic = FontAwesomeIconView(FontAwesomeIcon.TINT).apply {
+                    glyphSize = 26
+                    fillProperty().bind(tagViewModel.color.objectBinding {
+                        getContrastColor(it)
+                    })
+                }
+                onHover {
+                    cursor = Cursor.HAND
+                }
+                action {
+                    this@hbox.add(picker)
+                    picker.value = tagViewModel.color.value
+
+                    picker.setOnAction {
+                        val newColor = picker.value
+                        val customColors = picker.customColors
+                        tagViewModel.color.value = newColor
+                        if (newColor in customColors) {
+                            customColors.move(newColor, 0)
+                        } else {
+                            customColors += newColor
+                            customColors.move(newColor, 0)
+                        }
+                        while (customColors.size > 10) {
+                            customColors.removeLast()
+                        }
+                        popup.hide()
+                    }
+                    picker.show()
+                }
             }
-            contextmenu {
-                addClass(Styles.transparentContextMenu)
-                val picker = JFXColorPicker(tagViewModel.color.value)
-                picker.bind(tagViewModel.color)
-                item("", graphic = picker)
-            }
+
             button {
                 paddingAll = 0
                 background = null
                 graphic = FontAwesomeIconView(FontAwesomeIcon.TIMES_CIRCLE).apply {
-                    glyphSize = 22
-                    fill = getContrastColor(item.colorProperty.value)
+                    glyphSize = 26
                     fillProperty().bind(tagViewModel.color.objectBinding {
                         getContrastColor(it)
                     })
@@ -83,46 +150,65 @@ class TagTreeCell : View() {
                 onHover {
                     cursor = Cursor.HAND
                 }
-                hiddenWhen((this@hbox.hoverProperty().not()).and(editing.not()))
                 action {
                     tagTreeViewModel.deleteFunction.operate(item)
+                    popup.hide()
                 }
             }
-            textfield(tagViewModel.name) {
-                prefWidth = tagViewModel.name.value.length.toDouble() * 8
-                removeWhen(editing.not())
-                whenVisible {
-                    requestFocus()
-                }
-                action {
-                    editing.value = false
-                }
-            }
-            label(item.nameProperty) {
-                removeWhen(editing)
-                textFill = getContrastColor(tagViewModel.color.value)
-                textFillProperty().bind(tagViewModel.color.objectBinding {
-                    getContrastColor(it)
-                })
-                font = Font.font(12.0)
-            }
+
             button {
                 paddingAll = 0
                 background = null
                 graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS_CIRCLE).apply {
-                    glyphSize = 22
+                    glyphSize = 26
                     fillProperty().bind(tagViewModel.color.objectBinding {
                         getContrastColor(it)
                     })
                 }
+                removeWhen(enabled.not())
                 onHover {
                     cursor = Cursor.HAND
                 }
-                hiddenWhen((this@hbox.hoverProperty().not()).or(enabled.not()).and(editing.not()))
                 action {
                     tagTreeViewModel.addFunction.operate(item)
                     editing.value = false
+                    popup.hide()
                 }
+            }
+        })
+
+
+        textfield(tagViewModel.name) {
+            prefWidth = tagViewModel.name.value.length.toDouble() * 8
+            removeWhen(editing.not())
+            whenVisible {
+                requestFocus()
+            }
+            focusedProperty().onChange {
+                if (!it) editing.value = false
+            }
+            action {
+                editing.value = false
+            }
+        }
+
+        label(item.nameProperty) {
+            removeWhen(editing)
+            textFillProperty().bind(tagViewModel.color.objectBinding {
+                getContrastColor(it)
+            })
+            font = Font.font(12.0)
+        }
+
+        setOnMouseClicked { mouseEvent ->
+            if (mouseEvent.button == MouseButton.PRIMARY) {
+                if (mouseEvent.clickCount == 2) {
+                        editing.value = true
+                        popup.hide()
+                }
+            } else if (mouseEvent.button == MouseButton.SECONDARY) {
+                showPopup(popup, this)
+            }
         }
 
         setOnDragDetected {
@@ -155,6 +241,30 @@ class TagTreeCell : View() {
             if (it.isAccepted) fire(TagTreeRebuildRequest)
             it.consume()
         }
+    }
 
+
+    private fun showPopup(popup: Popup, ownerNode: Region) {
+        val popupContent = popup.content.first()
+        popupContent.opacity = 0.0
+        popupContent.layoutY = 0.0
+
+        popup.anchorLocation = PopupWindow.AnchorLocation.WINDOW_TOP_LEFT
+        val anchorPoint: Point2D = ownerNode.localToScreen(
+            ownerNode.width / 2,
+            ownerNode.height
+        )
+
+        popup.show(
+            ownerNode,
+            anchorPoint.x,
+            anchorPoint.y - ownerNode.height / 2
+        )
+
+        popup.anchorX -= popup.width / 2
+
+        popupContent.layoutYProperty().animate(endValue = ownerNode.height / 2, duration = Duration(300.0), Interpolator.EASE_OUT)
+        popupContent.opacityProperty().animate(endValue = 1.0, duration = Duration(300.0), Interpolator.EASE_OUT)
     }
 }
+

@@ -40,12 +40,15 @@ class Organiser : View("Page Organiser") {
             textfield {
                 promptText = "search..."
                 textProperty().onChange {
+                    tagTree.clearTreeCache()
                     tagTree.filterTreeByName(it ?: "")
                 }
             }
             add(tagTree)
         }
-        add<TagFlow>()
+        scrollpane(fitToWidth = true, fitToHeight = true) {
+            add<TagFlow>()
+        }
     }
 
 }

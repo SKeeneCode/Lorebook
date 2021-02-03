@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
+import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
@@ -15,9 +16,11 @@ class TagTreeController : Controller(), CoroutineScope {
     override val coroutineContext = Dispatchers.JavaFx
     private val tagTreeViewModel: TagTreeViewModel by inject()
     private val pageViewModel: PageViewModel by inject()
+    private val projectViewModel: ProjectViewModel by inject()
 
     fun filterItemsAndRebuild(name: String, location: Node, root: TagModel) {
         filterByName(name, root)
+        println("filtered by '$name'")
         build(location, root)
     }
 
@@ -52,13 +55,13 @@ class TagTreeController : Controller(), CoroutineScope {
         return when {
             !tag.showInTree -> null
             tag.children.isEmpty() -> {
-                val cell = find(TagTreeCell::class, Scope(tagTreeViewModel, pageViewModel, TagViewModel(tag)))
+                val cell = find(TagTreeCell::class, Scope(tagTreeViewModel, pageViewModel, projectViewModel, TagViewModel(tag)))
                 tagTreeViewModel.treeCells.add(cell)
                 cell.onCreate()
                 return cell
             }
             else -> {
-                val cell = find(TagTreeSqueezeCell::class, Scope(tagTreeViewModel, pageViewModel, TagViewModel(tag)))
+                val cell = find(TagTreeSqueezeCell::class, Scope(tagTreeViewModel, pageViewModel, projectViewModel, TagViewModel(tag)))
                 tagTreeViewModel.treeCells.add(cell)
                 cell.onCreate()
                 return cell

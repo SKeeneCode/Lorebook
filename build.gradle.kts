@@ -44,10 +44,12 @@ javafx {
 repositories {
     mavenCentral()
     maven("https://dl.bintray.com/jerady/maven")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
-    implementation(fileTree("libs"))
+    //implementation(fileTree("libs"))
+    implementation("no.tornado:tornadofx:2.0.0-SNAPSHOT")
     implementation("de.jensd:fontawesomefx-commons:11.0")
     implementation("de.jensd:fontawesomefx-fontawesome:4.7.0-11")
     implementation("org.fxmisc.richtext:richtextfx:0.10.5")

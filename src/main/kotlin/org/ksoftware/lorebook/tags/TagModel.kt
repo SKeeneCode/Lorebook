@@ -13,6 +13,7 @@ import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.attributes.JsonModel
 import org.ksoftware.lorebook.attributes.Named
 import org.ksoftware.lorebook.io.Savable
+import org.ksoftware.lorebook.utilities.getRandomColor
 import tornadofx.*
 import java.io.File
 import java.util.*
@@ -21,7 +22,7 @@ import java.util.*
 data class TagModel(
         @Json(name = "id") override val idProperty: StringProperty = UUID.randomUUID().toString().toProperty(),
         @Transient private val name: String = "tag_name",
-        @Transient private val color: Color = Color.FIREBRICK,
+        @Transient private val color: Color = getRandomColor(),
         var parent: TagModel? = null,
         val children: ObservableSet<TagModel> = FXCollections.observableSet(),
         var showInTree: Boolean = true,
