@@ -1,4 +1,4 @@
-package org.ksoftware.lorebook.tagtreeview
+package org.ksoftware.lorebook.organiser.tagtreeview
 
 import org.ksoftware.lorebook.tags.TagFunction
 import org.ksoftware.lorebook.tags.TagModel

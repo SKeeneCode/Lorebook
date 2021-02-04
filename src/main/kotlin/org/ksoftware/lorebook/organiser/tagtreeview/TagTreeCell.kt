@@ -1,4 +1,4 @@
-package org.ksoftware.lorebook.tagtreeview
+package org.ksoftware.lorebook.organiser.tagtreeview
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView

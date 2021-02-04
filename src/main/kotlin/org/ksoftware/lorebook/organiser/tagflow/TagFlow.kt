@@ -1,11 +1,11 @@
-package org.ksoftware.lorebook.tagflow
+package org.ksoftware.lorebook.organiser.tagflow
 
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
 import org.ksoftware.lorebook.events.TagTreeRebuildRequest
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
-import org.ksoftware.lorebook.tagtreeview.TagTreeViewModel
+import org.ksoftware.lorebook.organiser.tagtreeview.TagTreeViewModel
 import tornadofx.*
 
 class TagFlow : View("My View") {

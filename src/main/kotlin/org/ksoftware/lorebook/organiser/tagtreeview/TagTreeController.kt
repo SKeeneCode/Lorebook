@@ -1,4 +1,4 @@
-package org.ksoftware.lorebook.tagtreeview
+package org.ksoftware.lorebook.organiser.tagtreeview
 
 import javafx.scene.Node
 import kotlinx.coroutines.CoroutineScope

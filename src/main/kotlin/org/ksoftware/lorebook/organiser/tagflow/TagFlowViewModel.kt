@@ -1,4 +1,4 @@
-package org.ksoftware.lorebook.tagflow
+package org.ksoftware.lorebook.organiser.tagflow
 
 import org.ksoftware.lorebook.tags.TagFunction
 import org.ksoftware.lorebook.tags.TagModel

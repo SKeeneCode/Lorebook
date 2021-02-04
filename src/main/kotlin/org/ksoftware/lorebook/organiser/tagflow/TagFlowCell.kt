@@ -1,4 +1,4 @@
-package org.ksoftware.lorebook.tagflow
+package org.ksoftware.lorebook.organiser.tagflow
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView

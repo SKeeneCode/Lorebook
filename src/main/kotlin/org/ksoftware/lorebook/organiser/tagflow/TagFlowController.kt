@@ -1,12 +1,10 @@
-package org.ksoftware.lorebook.tagflow
+package org.ksoftware.lorebook.organiser.tagflow
 
 import javafx.scene.Node
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
-import org.ksoftware.lorebook.tagtreeview.TagTreeCell
-import org.ksoftware.lorebook.tagtreeview.TagTreeViewModel
 import tornadofx.*
 
 class TagFlowController : Controller() {
