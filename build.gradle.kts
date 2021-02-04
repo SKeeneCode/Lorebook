@@ -6,8 +6,8 @@ version = "1.0-SNAPSHOT"
 plugins {
     application
     java
-    kotlin("jvm") version "1.4.21"
-    kotlin("kapt") version "1.4.21"
+    kotlin("jvm") version "1.4.30"
+    kotlin("kapt") version "1.4.30"
     id("org.openjfx.javafxplugin") version "0.0.9"
 }
 
@@ -54,9 +54,9 @@ dependencies {
     implementation("de.jensd:fontawesomefx-fontawesome:4.7.0-11")
     implementation("de.jensd:fontawesomefx-materialicons:2.2.0-11")
     implementation("org.fxmisc.richtext:richtextfx:0.10.5")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.3.9")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.30-RC")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.4.2")
     implementation("com.squareup.moshi:moshi:1.11.0")
     implementation("com.jfoenix:jfoenix:9.0.10")
     implementation("org.fxmisc.flowless:flowless:0.6.2")
