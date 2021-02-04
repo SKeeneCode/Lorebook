@@ -52,6 +52,7 @@ dependencies {
     implementation("no.tornado:tornadofx:2.0.0-SNAPSHOT")
     implementation("de.jensd:fontawesomefx-commons:11.0")
     implementation("de.jensd:fontawesomefx-fontawesome:4.7.0-11")
+    implementation("de.jensd:fontawesomefx-materialicons:2.2.0-11")
     implementation("org.fxmisc.richtext:richtextfx:0.10.5")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")

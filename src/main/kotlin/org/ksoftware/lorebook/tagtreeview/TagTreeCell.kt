@@ -1,19 +1,13 @@
 package org.ksoftware.lorebook.tagtreeview
 
-import com.jfoenix.controls.JFXColorPicker
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import de.jensd.fx.glyphs.materialicons.MaterialIcon
+import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.animation.Interpolator
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.SetChangeListener
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
 import javafx.scene.Cursor
-import javafx.scene.Node
-import javafx.scene.Parent
-import javafx.scene.control.Button
-import javafx.scene.control.Control
-import javafx.scene.control.PopupControl
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Region
 import javafx.scene.text.Font
@@ -27,12 +21,7 @@ import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
 import javafx.stage.PopupWindow
-import javafx.animation.KeyFrame
-import javafx.animation.KeyValue
-
-import javafx.animation.Timeline
-import javafx.event.EventHandler
-import javafx.scene.input.MouseEvent
+import javafx.scene.input.DataFormat
 import javafx.util.Duration
 import javafx.scene.input.MouseButton
 
@@ -82,8 +71,8 @@ class TagTreeCell : View() {
                     "-fx-background-radius: 12.0"
         })
         spacing = 2.0
-        paddingHorizontal = 16
         paddingVertical = 12
+        paddingHorizontal = if (tagViewModel.item.children.isNotEmpty()) 100 else 16
 
         val picker = projectViewModel.colorPicker
         picker.isManaged = false
@@ -95,18 +84,37 @@ class TagTreeCell : View() {
         popup.isHideOnEscape = true
         popup.content.add(hbox {
             alignment = Pos.CENTER
+            addClass(Styles.glyphIconHover)
             styleProperty().bind(tagViewModel.color.objectBinding {
                 "-fx-background-color: ${tagViewModel.color.value?.css};" +
                         "-fx-background-radius: 12.0"
             })
-            spacing = 6.0
+            spacing = 4.0
             paddingHorizontal = 8
             paddingVertical = 4
 
             button {
                 paddingAll = 0
                 background = null
-                graphic = FontAwesomeIconView(FontAwesomeIcon.TINT).apply {
+                graphic = MaterialIconView(MaterialIcon.DELETE).apply {
+                    glyphSize = 26
+                    fillProperty().bind(tagViewModel.color.objectBinding {
+                        getContrastColor(it)
+                    })
+                }
+                onHover {
+                    cursor = Cursor.HAND
+                }
+                action {
+                    tagTreeViewModel.deleteFunction.operate(item)
+                    popup.hide()
+                }
+            }
+
+            button {
+                paddingAll = 0
+                background = null
+                graphic = MaterialIconView(MaterialIcon.PALETTE).apply {
                     glyphSize = 26
                     fillProperty().bind(tagViewModel.color.objectBinding {
                         getContrastColor(it)
@@ -141,26 +149,9 @@ class TagTreeCell : View() {
             button {
                 paddingAll = 0
                 background = null
-                graphic = FontAwesomeIconView(FontAwesomeIcon.TIMES_CIRCLE).apply {
+                graphic = MaterialIconView(MaterialIcon.KEYBOARD_ARROW_RIGHT).apply {
                     glyphSize = 26
-                    fillProperty().bind(tagViewModel.color.objectBinding {
-                        getContrastColor(it)
-                    })
-                }
-                onHover {
-                    cursor = Cursor.HAND
-                }
-                action {
-                    tagTreeViewModel.deleteFunction.operate(item)
-                    popup.hide()
-                }
-            }
-
-            button {
-                paddingAll = 0
-                background = null
-                graphic = FontAwesomeIconView(FontAwesomeIcon.PLUS_CIRCLE).apply {
-                    glyphSize = 26
+                    this.addClass(Styles.glyphIconHover)
                     fillProperty().bind(tagViewModel.color.objectBinding {
                         getContrastColor(it)
                     })
@@ -226,19 +217,20 @@ class TagTreeCell : View() {
             it.consume()
         }
 
-        setOnDragDropped {
+        setOnDragDropped { event ->
             var result = false
             val draggedTag = tagTreeViewModel.draggedTag
             draggedTag?.let {
                 tagViewModel.item.addChild(draggedTag)
+                event.dragboard.setContent { putString("requiresRebuild") }
                 result = true
             }
-            it.isDropCompleted = result
-            it.consume()
+            event.isDropCompleted = result
+            event.consume()
         }
 
         setOnDragDone {
-            if (it.isAccepted) fire(TagTreeRebuildRequest)
+            if (it.isAccepted && it.dragboard.getContent(DataFormat.PLAIN_TEXT) == "requiresRebuild") fire(TagTreeRebuildRequest)
             it.consume()
         }
     }

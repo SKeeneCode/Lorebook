@@ -1,6 +1,6 @@
 package org.ksoftware.lorebook.tagtreeview
 
-import javafx.event.EventType
+import javafx.scene.input.DataFormat
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
@@ -19,28 +19,29 @@ class TagTree : View("My View") {
         vgrow = Priority.ALWAYS
         isFitToWidth = true
 
-        setOnDragOver {
-            val draggedTag = tagFlowViewModel.draggedTag
-            if (it.gestureSource != this && draggedTag != null && pageViewModel.tags.value.contains(draggedTag)) {
-                it.acceptTransferModes(TransferMode.MOVE)
+        addEventFilter(DragEvent.DRAG_OVER) {
+            if (it.dragboard.getContent(DataFormat.PLAIN_TEXT) == "dropFromTagFlow") {
+                val draggedTag = tagFlowViewModel.draggedTag
+                if (it.gestureSource != this && draggedTag != null && pageViewModel.tags.value.contains(draggedTag)) {
+                    it.acceptTransferModes(TransferMode.MOVE)
+                }
+                it.consume()
             }
-            it.consume()
         }
 
-        setOnDragDropped { event ->
-            var result = false
-            val draggedTag = tagFlowViewModel.draggedTag
-            draggedTag?.let { tag ->
-                tagFlowViewModel.deleteFunction.operate(tag)
-                result = true
+        addEventFilter(DragEvent.DRAG_DROPPED) { event ->
+            if (event.dragboard.getContent(DataFormat.PLAIN_TEXT) == "dropFromTagFlow") {
+                var result = false
+                val draggedTag = tagFlowViewModel.draggedTag
+                draggedTag?.let { tag ->
+                    tagFlowViewModel.deleteFunction.operate(tag)
+                    result = true
+                }
+                event.isDropCompleted = result
+                event.consume()
             }
-            event.isDropCompleted = result
-            event.consume()
         }
 
-        setOnDragDone {
-            it.consume()
-        }
     }
 
     fun rebuildTree() {

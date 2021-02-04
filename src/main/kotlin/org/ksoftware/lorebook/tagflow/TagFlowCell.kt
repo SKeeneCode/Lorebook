@@ -1,7 +1,7 @@
 package org.ksoftware.lorebook.tagflow
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import de.jensd.fx.glyphs.materialicons.MaterialIcon
+import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.animation.Interpolator
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Point2D
@@ -14,6 +14,7 @@ import javafx.scene.text.Font
 import javafx.stage.Popup
 import javafx.stage.PopupWindow
 import javafx.util.Duration
+import org.ksoftware.lorebook.Styles
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
@@ -51,6 +52,7 @@ class TagFlowCell : View() {
         popup.isHideOnEscape = true
         popup.content.add(hbox {
             alignment = Pos.CENTER
+            addClass(Styles.glyphIconHover)
             styleProperty().bind(tagViewModel.color.objectBinding {
                 "-fx-background-color: ${tagViewModel.color.value?.css};" +
                         "-fx-background-radius: 12.0"
@@ -62,7 +64,24 @@ class TagFlowCell : View() {
             button {
                 paddingAll = 0
                 background = null
-                graphic = FontAwesomeIconView(FontAwesomeIcon.TINT).apply {
+                graphic = MaterialIconView(MaterialIcon.KEYBOARD_ARROW_LEFT).apply {
+                    glyphSize = 26
+                    fillProperty().bind(tagViewModel.color.objectBinding {
+                        getContrastColor(it)
+                    })
+                }
+                onHover {
+                    cursor = Cursor.HAND
+                }
+                action {
+                    tagFlowViewModel.deleteFunction.operate(item)
+                }
+            }
+
+            button {
+                paddingAll = 0
+                background = null
+                graphic = MaterialIconView(MaterialIcon.PALETTE).apply {
                     glyphSize = 26
                     fillProperty().bind(tagViewModel.color.objectBinding {
                         getContrastColor(it)
@@ -97,7 +116,7 @@ class TagFlowCell : View() {
             button {
                 paddingAll = 0
                 background = null
-                graphic = FontAwesomeIconView(FontAwesomeIcon.TIMES_CIRCLE).apply {
+                graphic = MaterialIconView(MaterialIcon.DELETE).apply {
                     glyphSize = 26
                     fillProperty().bind(tagViewModel.color.objectBinding {
                         getContrastColor(it)
@@ -112,22 +131,6 @@ class TagFlowCell : View() {
                 }
             }
 
-            button {
-                paddingAll = 0
-                background = null
-                graphic = FontAwesomeIconView(FontAwesomeIcon.MINUS_CIRCLE).apply {
-                    glyphSize = 26
-                    fillProperty().bind(tagViewModel.color.objectBinding {
-                        getContrastColor(it)
-                    })
-                }
-                onHover {
-                    cursor = Cursor.HAND
-                }
-                action {
-                    tagFlowViewModel.deleteFunction.operate(item)
-                }
-            }
         })
 
         setOnMouseClicked { mouseEvent ->
@@ -164,7 +167,10 @@ class TagFlowCell : View() {
 
         setOnDragDetected {
             val db = startDragAndDrop(TransferMode.MOVE)
-            db.setContent { putImage(this@hbox.snapshot(null, null)) }
+            db.setContent {
+                putImage(this@hbox.snapshot(null, null))
+                putString("dropFromTagFlow")
+            }
             tagFlowViewModel.draggedTag = tagViewModel.item
             it.consume()
         }

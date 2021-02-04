@@ -8,9 +8,17 @@ class Styles : Stylesheet() {
         val tagTitleRegion by cssclass()
         val noBackgroundOrBorder by cssclass()
         val transparentContextMenu by cssclass()
+        val glyphIconHover by cssclass()
     }
 
     init {
+        glyphIconHover {
+            button {
+                and(hover) {
+                    translateY = (-1).px
+                }
+            }
+        }
         tagTitleRegion {
             borderWidth = multi(box(0.px))
             title {
