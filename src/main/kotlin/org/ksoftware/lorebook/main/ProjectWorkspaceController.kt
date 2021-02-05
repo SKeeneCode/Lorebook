@@ -55,9 +55,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
     // --------------------------------------- //
 
     fun saveProject(stage: Stage) {
-        launch {
             saveProjectActor.offer(SaveProjectAction(projectViewModel.item, stage))
-        }
     }
 
     /**
