@@ -9,6 +9,8 @@ class Styles : Stylesheet() {
         val noBackgroundOrBorder by cssclass()
         val transparentContextMenu by cssclass()
         val glyphIconHover by cssclass()
+        val hoverPopup by cssclass()
+        val organizerButton by cssclass()
     }
 
     init {
@@ -18,6 +20,19 @@ class Styles : Stylesheet() {
                     translateY = (-1).px
                 }
             }
+        }
+        organizerButton {
+            backgroundColor += Color.LIGHTGRAY
+            opacity = 0.8
+            and(hover) {
+                opacity = 1.0
+            }
+        }
+
+        hoverPopup {
+                and(hover) {
+                    translateY = (-1).px
+                }
         }
         tagTitleRegion {
             borderWidth = multi(box(0.px))

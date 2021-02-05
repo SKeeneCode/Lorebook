@@ -57,6 +57,19 @@ data class TagModel(
         return parent?.anyParentsAre(tag) ?: false
     }
 
+    fun allDescendants() : MutableSet<TagModel> {
+        val all = mutableSetOf<TagModel>()
+        collectAllChildren(this, all)
+        return all
+    }
+
+    private fun collectAllChildren(parent: TagModel, set: MutableSet<TagModel>) {
+        set += parent
+        for (child in parent.children) {
+            collectAllChildren(child, set)
+        }
+    }
+
     fun addChild(tag: TagModel) {
         tag.removeFromParentTag()
         tag.parent = this
