@@ -6,15 +6,11 @@ import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.collections.ObservableMap
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageModel
-import org.ksoftware.lorebook.tags.TagModel
 import java.io.File
 import java.util.*
 
@@ -33,10 +29,10 @@ data class ProjectModel(override val idProperty: StringProperty = SimpleStringPr
 
     override suspend fun save(projectFolder: File, taskMessage: StringProperty) {
         taskMessage.value = "Saving Project"
-        val jobs: List<Job> = pages.map {
+        val jobs: List<Job> = pages.map { page ->
             coroutineScope {
                 launch {
-                    it.save(projectFolder, taskMessage)
+                    page.save(projectFolder, taskMessage)
                 }
             }
         }
