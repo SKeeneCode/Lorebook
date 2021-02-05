@@ -25,10 +25,6 @@ import javafx.scene.input.DataFormat
 import javafx.util.Duration
 import javafx.scene.input.MouseButton
 
-
-
-
-
 class TagTreeCell : View() {
 
     private val tagViewModel: TagViewModel by inject()
