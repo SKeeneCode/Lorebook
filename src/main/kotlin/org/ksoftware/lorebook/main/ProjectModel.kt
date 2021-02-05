@@ -5,11 +5,9 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import javafx.collections.ObservableMap
 import kotlinx.coroutines.*
 import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.io.Savable
-import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageModel
 import java.io.File
 import java.util.*
@@ -23,9 +21,6 @@ data class ProjectModel(override val idProperty: StringProperty = SimpleStringPr
 
     // list of all page models in this project
     val pages: ObservableList<PageModel> = FXCollections.observableArrayList()
-
-    // list of all docked page views
-    val pageViewCache: ObservableMap<String, PageView> = FXCollections.observableHashMap()
 
     override suspend fun save(projectFolder: File, taskMessage: StringProperty) {
         taskMessage.value = "Saving Project"

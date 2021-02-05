@@ -18,8 +18,6 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
 
     val id = bind(ProjectModel::idProperty)
 
-    val pageViewCache = bind(ProjectModel::pageViewCache)
-
     val pages = bind(ProjectModel::pages)
     private var pagesBacking = listOf<PageModel>()
 
