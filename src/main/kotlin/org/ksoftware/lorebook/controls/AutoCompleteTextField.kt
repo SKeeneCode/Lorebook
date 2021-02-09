@@ -1,17 +1,22 @@
 package org.ksoftware.lorebook.controls
 
-import javafx.event.EventHandler
+import javafx.beans.binding.Bindings
+import javafx.geometry.Point2D
 import javafx.geometry.Pos
-import javafx.geometry.Side
-import javafx.scene.control.ContextMenu
-import javafx.scene.control.CustomMenuItem
-import javafx.scene.control.Label
+import javafx.scene.Node
+import javafx.scene.control.ListView
+import javafx.scene.input.KeyCode
+import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
+import javafx.stage.Popup
 import javafx.stage.PopupWindow
+import org.fxmisc.wellbehaved.event.EventPattern
+import org.fxmisc.wellbehaved.event.InputMap
+import org.fxmisc.wellbehaved.event.Nodes
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
@@ -27,7 +32,8 @@ class AutoCompleteTextField : View()  {
     private val pageViewModel: PageViewModel by inject()
     private val projectViewModel: ProjectViewModel by inject()
     private val pageTags = pageViewModel.tags.value
-    private val entriesPopup: ContextMenu = ContextMenu()
+    private val entriesPopup = Popup()
+    private val entriesList = ListView<SearchResult>()
 
     override val root = textfield {
         promptText = "Add page tag..."
@@ -37,8 +43,43 @@ class AutoCompleteTextField : View()  {
 
     init {
         entriesPopup.anchorLocation = PopupWindow.AnchorLocation.WINDOW_BOTTOM_LEFT
+
+        entriesList.apply {
+            prefWidth = 150.0
+            cellFormat {
+                graphic = it.graphic()
+                onLeftClick {
+                    pageTags.add(it.result)
+                    root.clear()
+                    entriesPopup.hide()
+                }
+            }
+        }
+
+        entriesList.prefHeightProperty().bind(Bindings.size(entriesList.items).multiply(31));
+
+        Nodes.addInputMap(entriesList, InputMap.sequence(
+            InputMap.consume(EventPattern.keyPressed(KeyCode.ENTER)) {
+                print("enter pressed")
+                if (entriesPopup.isShowing && entriesList.selectionModel.selectedItem != null) {
+                    pageTags.add(entriesList.selectionModel.selectedItem.result)
+                    root.clear()
+                    entriesPopup.hide()
+                }
+            },
+            InputMap.consume(EventPattern.keyPressed(KeyCode.LEFT)) {
+                root.positionCaret(root.caretPosition - 1)
+            },
+            InputMap.consume(EventPattern.keyPressed(KeyCode.RIGHT)) {
+                root.positionCaret(root.caretPosition + 1)
+            }
+        ))
+
+        entriesPopup.content.add(entriesList)
+
         setListener()
     }
+
     private fun setListener() {
         //Add "suggestions" by changing text
         root.textProperty().addListener { _, _, _ ->
@@ -56,9 +97,12 @@ class AutoCompleteTextField : View()  {
                     //build popup - list of "CustomMenuItem"
                     populatePopup(filteredEntries, enteredText)
                     if (!entriesPopup.isShowing) { //optional
-                        entriesPopup.show(root, Side.BOTTOM, 0.0, root.layoutY - 5) //position of popup
-                        entriesPopup.requestFocus()
+                        val anchorPoint: Point2D = root.localToScreen(0.0, 0.0)
+                        entriesPopup.show(root, anchorPoint.x, anchorPoint.y) //position of popup
                     }
+                    entriesPopup.requestFocus()
+                    entriesList.selectionModel.select(0)
+                    entriesList.focusModel.focus(0)
                     //no suggestions -> hide
                 } else {
                     entriesPopup.hide()
@@ -68,6 +112,7 @@ class AutoCompleteTextField : View()  {
 
         //Hide always by focus-in (optional) and out
         root.focusedProperty().addListener { _, _, _ -> entriesPopup.hide() }
+
     }
 
     /**
@@ -76,18 +121,27 @@ class AutoCompleteTextField : View()  {
      * @param searchResult The set of matching strings.
      */
     private fun populatePopup(searchResult: List<TagModel>, searchRequest: String) {
-
         //List of "suggestions"
-        val menuItems: MutableList<CustomMenuItem> = LinkedList()
+        val menuItems: MutableList<SearchResult> = LinkedList()
         //List size - 10 or founded suggestions count
         val maxEntries = 8
         val count = searchResult.size.coerceAtMost(maxEntries)
         //Build list as set of labels
         for (i in 0 until count) {
-            val result = searchResult[i]
+            val result = SearchResult(searchResult[i], searchRequest)
+            menuItems.add(result)
+        }
+
+        //"Refresh" context menu
+        entriesList.items.clear()
+        entriesList.items.addAll(menuItems)
+    }
+
+
+    private class SearchResult(val result: TagModel, private val searchString: String) {
+        fun graphic() : Node {
+            return HBox().apply {
             //label with graphic (text flow) to highlight founded subtext in suggestions
-            val entryLabel = Label()
-            val itemGraphic = hbox {
                 alignment = Pos.CENTER
                 style {
                     backgroundColor += result.colorProperty.value
@@ -95,35 +149,23 @@ class AutoCompleteTextField : View()  {
                 }
                 paddingHorizontal = 16
                 paddingVertical = 8
-                add(buildTextFlow(result, searchRequest))
-            }
-           // entryLabel.prefHeight = 10.0 //don't sure why it's changed with "graphic"
-            val item = CustomMenuItem(itemGraphic, true)
-            menuItems.add(item)
-
-            //if any suggestion is select set it into text and close popup
-            item.onAction = EventHandler {
-                pageTags.add(result)
-                root.clear()
-                entriesPopup.hide()
+                add(buildTextFlow(result, searchString))
             }
         }
 
-        //"Refresh" context menu
-        entriesPopup.items.clear()
-        entriesPopup.items.addAll(menuItems)
+        private fun buildTextFlow(tag: TagModel, filter: String): TextFlow {
+            val text = tag.nameProperty.value
+            val filterIndex = text.toLowerCase().indexOf(filter.toLowerCase())
+            val textBefore = Text(text.substring(0, filterIndex))
+            textBefore.fill = getContrastColor(tag.colorProperty.value)
+            val textAfter = Text(text.substring(filterIndex + filter.length))
+            textAfter.fill = getContrastColor(tag.colorProperty.value)
+            val textFilter = Text(text.substring(filterIndex, filterIndex + filter.length)) //instead of "filter" to keep all "case sensitive"
+            textFilter.fill = Color.ORANGE
+            textFilter.font = Font.font("Helvetica", FontWeight.BOLD, 12.0)
+            return TextFlow(textBefore, textFilter, textAfter)
+        }
     }
-    private fun buildTextFlow(tag: TagModel, filter: String): TextFlow {
-        val text = tag.nameProperty.value
-        val filterIndex = text.toLowerCase().indexOf(filter.toLowerCase())
-        val textBefore = Text(text.substring(0, filterIndex))
-        textBefore.fill = getContrastColor(tag.colorProperty.value)
-        val textAfter = Text(text.substring(filterIndex + filter.length))
-        textAfter.fill = getContrastColor(tag.colorProperty.value)
-        val textFilter = Text(text.substring(filterIndex, filterIndex + filter.length)) //instead of "filter" to keep all "case sensitive"
-        textFilter.fill = Color.ORANGE
-        textFilter.font = Font.font("Helvetica", FontWeight.BOLD, 12.0)
-        return TextFlow(textBefore, textFilter, textAfter)
-    }
+
 
 }
