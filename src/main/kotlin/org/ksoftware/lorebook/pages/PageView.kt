@@ -6,19 +6,16 @@ import javafx.geometry.Orientation
 import javafx.scene.Cursor
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.SplitPane
-import javafx.scene.input.TransferMode
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import org.ksoftware.lorebook.Styles
 import org.ksoftware.lorebook.controls.AutoCompleteTextField
-import org.ksoftware.lorebook.events.TagTreeRebuildRequest
 import org.ksoftware.lorebook.main.ProjectViewModel
+import org.ksoftware.lorebook.nodes.TextNode
 import org.ksoftware.lorebook.organiser.Organiser
-import org.ksoftware.lorebook.organiser.tagflow.TagFlow
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.tags.TagFunction
-import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
 
 /**
@@ -51,7 +48,29 @@ class PageView : View("MyPage") {
         center {
             splitpane(Orientation.VERTICAL) {
 
+                val CSS_STYLE = """  
+                -fx-glass-color: rgba(85, 132, 160, 0.9);
+                -fx-alignment: center;
+                -fx-font-size: 20;
+                -fx-background-color: -fx-glass-color;
+                -fx-border-color: derive(-fx-glass-color, -60%);
+                -fx-border-width: 2;
+                -fx-background-insets: 1;
+                -fx-border-radius: 3;
+                -fx-padding: 20;
+                -fx-background-radius: 3;
+                """
+
                 nodeContainer = pane {
+                        val node = TextNode()
+                        node.root.setPrefSize(300.0, 200.0)
+                        // define the style via css
+                        node.root.style = CSS_STYLE
+                        // position the node
+                        node.root.layoutX = 50.0
+                        node.root.layoutY = 50.0
+                        // add the node to the root pane
+                        add(node)
                     vbox {
                         button("moshi") {
                             action {

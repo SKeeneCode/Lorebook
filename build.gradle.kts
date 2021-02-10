@@ -28,7 +28,8 @@ application {
 kotlin {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "14"
+            jvmTarget = "15"
+            languageVersion = "1.5"
         }
     }
 }
@@ -61,6 +62,9 @@ dependencies {
     implementation("com.jfoenix:jfoenix:9.0.10")
     implementation("org.fxmisc.flowless:flowless:0.6.2")
     implementation("org.fxmisc.wellbehaved:wellbehavedfx:0.3.3")
+    implementation("javax.xml.bind:jaxb-api:2.3.0")
+    implementation("javax.activation:activation:1.1")
+    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.0")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
