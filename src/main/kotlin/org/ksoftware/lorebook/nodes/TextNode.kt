@@ -1,32 +1,45 @@
 package org.ksoftware.lorebook.nodes
 
-import javafx.scene.Parent
+import javafx.scene.layout.Priority
+import javafx.scene.text.Font
 import org.fxmisc.flowless.VirtualizedScrollPane
-import org.ksoftware.lorebook.MyView
 import org.ksoftware.lorebook.richtext.IndentSegment
-import org.ksoftware.lorebook.richtext.LabelSegment
+import org.ksoftware.lorebook.richtext.RichTextViewModal
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import tornadofx.paddingAll
-import tornadofx.pane
+import tornadofx.*
 
 class TextNode : TransformableNode() {
 
+    private val textController: TextController by inject(FX.defaultScope)
+    private val textViewModal: RichTextViewModal by inject(FX.defaultScope)
+    val area = VirtualizedScrollPane(StyledSegmentTextArea())
+
     init {
-        with(root) {
-            paddingAll = 10
-            val area = StyledSegmentTextArea().apply {
-                prefWidth = 300.0
-                prefHeight = 200.0
+        with(area) {
+            prefWidthProperty().bind(root.widthProperty().minus(root.paddingAllProperty.multiply(2)))
+            prefHeightProperty().bind(root.heightProperty().minus(root.paddingAllProperty.multiply(2)))
+        }
 
-                indent = true
-                replaceText(0, 0, "This demo shows how to use a custom object with RichTextFX editor to indent the first line of a paragraph.\n\n");
-                appendText("The first line of this second paragraph should be indented. It is using a Label containing a Tab to do this.");
-                appendText("\n\nPressing Enter twice to start a new paragraph will result in the first line to be indented.\n\n");
-                appendText("This is all achieved in StyledSegmentTextArea which extends GenericStyledArea using AbstractSegments: see IndentSegment and TextSegment.");
-
+        with(area.content) {
+            caretPositionProperty().addListener { _, _, _ ->
+                val style = getParagraph(currentParagraph).getStyleAtPosition(caretColumn)
+                textViewModal.updateViewModalWithStyle(style)
             }
-            add(area)
-
+            textViewModal.updateTextTrigger.onChange {
+                textController.updateStyleInSelection(this, textViewModal.createTextStyle())
+            }
+            textViewModal.updateFontTrigger.onChange {
+                textController.updateStyleInSelection(this, textViewModal.createFontStyle())
+            }
         }
     }
+
+    init {
+        with(root) {
+            paddingAll = 10.0
+            add(area)
+        }
+    }
+
 }

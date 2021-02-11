@@ -24,6 +24,7 @@ import javafx.stage.PopupWindow
 import javafx.scene.input.DataFormat
 import javafx.util.Duration
 import javafx.scene.input.MouseButton
+import org.ksoftware.lorebook.controls.PopupController
 
 class TagTreeCell : View() {
 
@@ -31,6 +32,7 @@ class TagTreeCell : View() {
     private val tagTreeViewModel: TagTreeViewModel by inject()
     private val pageViewModel: PageViewModel by inject()
     private val projectViewModel: ProjectViewModel by inject()
+    private val popupController: PopupController by inject(FX.defaultScope)
 
     private val item = tagViewModel.item
     private val enabled = SimpleBooleanProperty(true)
@@ -194,7 +196,7 @@ class TagTreeCell : View() {
                         popup.hide()
                 }
             } else if (mouseEvent.button == MouseButton.SECONDARY) {
-                showPopup(popup, this)
+                popupController.showPopup(popup, this)
             }
         }
 
@@ -231,28 +233,5 @@ class TagTreeCell : View() {
         }
     }
 
-
-    private fun showPopup(popup: Popup, ownerNode: Region) {
-        val popupContent = popup.content.first()
-        popupContent.opacity = 0.0
-        popupContent.layoutY = 0.0
-
-        popup.anchorLocation = PopupWindow.AnchorLocation.WINDOW_TOP_LEFT
-        val anchorPoint: Point2D = ownerNode.localToScreen(
-            ownerNode.width / 2,
-            ownerNode.height
-        )
-
-        popup.show(
-            ownerNode,
-            anchorPoint.x,
-            anchorPoint.y - ownerNode.height / 2
-        )
-
-        popup.anchorX -= popup.width / 2
-
-        popupContent.layoutYProperty().animate(endValue = ownerNode.height / 2, duration = Duration(300.0), Interpolator.EASE_OUT)
-        popupContent.opacityProperty().animate(endValue = 1.0, duration = Duration(300.0), Interpolator.EASE_OUT)
-    }
 }
 

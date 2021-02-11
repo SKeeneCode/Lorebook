@@ -20,7 +20,6 @@ class TagTreeController : Controller(), CoroutineScope {
 
     fun filterItemsAndRebuild(name: String, location: Node, root: TagModel) {
         filterByName(name, root)
-        println("filtered by '$name'")
         build(location, root)
     }
 

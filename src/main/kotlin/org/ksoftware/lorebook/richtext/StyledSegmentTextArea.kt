@@ -12,6 +12,7 @@ import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.text.Font
 import javafx.scene.text.TextFlow
 import org.fxmisc.richtext.NavigationActions.*
 import org.fxmisc.richtext.StyledTextArea
@@ -22,11 +23,14 @@ import org.fxmisc.richtext.model.*
 class StyledSegmentTextArea(
     val initialParStyle: String = "",
     val applyParStyle: BiConsumer<TextFlow, String> = BiConsumer { txtflow, pstyle -> txtflow.styleClass.add(pstyle) },
-    val initialSegStyle: String = "",
+    val initialSegStyle: TextStyle = TextStyle.EMPTY
+        .updateFontFamily(Font.getDefault().family)
+        .updateFontName(Font.getDefault().name)
+        .updateFontSize(Font.getDefault().size),
     val preserveStyle: Boolean = true,
-    val segmentOps: TextOps<AbstractSegment, String> = MySegmentOps(),
-    nodeFactory: (StyledSegment<AbstractSegment, String>) -> Node
-) : GenericStyledArea<String, AbstractSegment, String>(
+    val segmentOps: TextOps<AbstractSegment, TextStyle> = MySegmentOps(),
+    nodeFactory: (StyledSegment<AbstractSegment, TextStyle>) -> Node
+) : GenericStyledArea<String, AbstractSegment, TextStyle>(
     initialParStyle,
     applyParStyle,
     initialSegStyle,
@@ -36,17 +40,16 @@ class StyledSegmentTextArea(
 ) {
 
     var indent = false
-    private val INDENT_DOC =
-        ReadOnlyStyledDocument.fromSegment(IndentSegment("\t"), initialParStyle, initialSegStyle, segmentOps)
+    private val INDENT_DOC = ReadOnlyStyledDocument.fromSegment(IndentSegment("\t"), initialParStyle, initialSegStyle, segmentOps)
     private val INDENT_SEG = INDENT_DOC.getParagraph(0).styledSegments[0]
 
-    constructor() : this(nodeFactory = { styledSegment -> styledSegment.segment.createNode(styledSegment.style) })
+    constructor() : this(nodeFactory = { styledSegment -> styledSegment.segment.createNode(styledSegment.style.toCss()) })
 
     init {
         setStyleCodecs(Codec.STRING_CODEC, MySegmentCodec()) // Needed for copy paste.
         isWrapText = true
 
-        // Intercept Enter to insert an indent after an empty line.
+//         Intercept Enter to insert an indent after an empty line.
         addEventHandler(KeyEvent.KEY_PRESSED) { KE: KeyEvent ->
             if (indent && KE.code == KeyCode.ENTER) {
                 val caretPosition = caretPosition
@@ -83,13 +86,12 @@ class StyledSegmentTextArea(
     }
 
     fun insert(pos: Int, customSegment: AbstractSegment) {
-        println("rererer")
         insert(pos, ReadOnlyStyledDocument.fromSegment(customSegment, initialParStyle, initialSegStyle, segmentOps))
     }
 
 
 
-    override fun replace(start: Int, end: Int, replacement: StyledDocument<String, AbstractSegment, String>) {
+    override fun replace(start: Int, end: Int, replacement: StyledDocument<String, AbstractSegment, TextStyle>) {
         if (!indent) super.replace(start, end, replacement) else {
             val pl = replacement.paragraphs
             val db = ReadOnlyStyledDocumentBuilder(segmentOps, initialParStyle)

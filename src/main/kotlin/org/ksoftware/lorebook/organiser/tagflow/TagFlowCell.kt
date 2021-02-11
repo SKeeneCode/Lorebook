@@ -15,6 +15,7 @@ import javafx.stage.Popup
 import javafx.stage.PopupWindow
 import javafx.util.Duration
 import org.ksoftware.lorebook.Styles
+import org.ksoftware.lorebook.controls.PopupController
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
@@ -26,12 +27,12 @@ class TagFlowCell : View() {
     private val tagViewModel: TagViewModel by inject()
     private val tagFlowViewModel: TagFlowViewModel by inject()
     private val projectViewModel: ProjectViewModel by inject()
+    private val popupController: PopupController by inject(FX.defaultScope)
     private val editing = SimpleBooleanProperty(false)
     private val item = tagViewModel.item
 
 
     override val root = hbox {
-        println(projectViewModel)
         alignment = Pos.CENTER
         styleProperty().bind(tagViewModel.color.objectBinding {
             "-fx-background-color: ${tagViewModel.color.value?.css};" +
@@ -140,7 +141,7 @@ class TagFlowCell : View() {
                         popup.hide()
                 }
             } else if (mouseEvent.button == MouseButton.SECONDARY) {
-                showPopup(popup, this)
+                popupController.showPopup(popup, this)
             }
         }
 
@@ -174,28 +175,5 @@ class TagFlowCell : View() {
             tagFlowViewModel.draggedTag = tagViewModel.item
             it.consume()
         }
-    }
-
-    private fun showPopup(popup: Popup, ownerNode: Region) {
-        val popupContent = popup.content.first()
-        popupContent.opacity = 0.0
-        popupContent.layoutY = 0.0
-
-        popup.anchorLocation = PopupWindow.AnchorLocation.WINDOW_TOP_LEFT
-        val anchorPoint: Point2D = ownerNode.localToScreen(
-            ownerNode.width / 2,
-            ownerNode.height
-        )
-
-        popup.show(
-            ownerNode,
-            anchorPoint.x,
-            anchorPoint.y - ownerNode.height / 2
-        )
-
-        popup.anchorX -= popup.width / 2
-
-        popupContent.layoutYProperty().animate(endValue = ownerNode.height / 2, duration = Duration(300.0), Interpolator.EASE_OUT)
-        popupContent.opacityProperty().animate(endValue = 1.0, duration = Duration(300.0), Interpolator.EASE_OUT)
     }
 }

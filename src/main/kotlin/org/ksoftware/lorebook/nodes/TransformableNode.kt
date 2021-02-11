@@ -21,7 +21,7 @@ sealed class TransformableNode : View() {
     private var RESIZE_BOTTOM = false
     private var RESIZE_RIGHT = false
 
-    override val root = pane {
+    override val root = stackpane {
         val scaleTransform = Scale(1.0,1.0, 0.0, 0.0)
         transforms.add(scaleTransform)
 
@@ -41,8 +41,6 @@ sealed class TransformableNode : View() {
         setOnMouseReleased {
             val origin = Pair(nodeOriginX, nodeOriginY)
             val end = Pair(nodeX, nodeY)
-            println("x change ${nodeX - nodeOriginX}")
-            println("y change ${nodeY - nodeOriginY}")
         }
 
         setOnMouseDragged { event ->

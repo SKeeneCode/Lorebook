@@ -2,6 +2,7 @@ package org.ksoftware.lorebook.pages
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
+import javafx.beans.binding.BooleanExpression
 import javafx.geometry.Orientation
 import javafx.scene.Cursor
 import javafx.scene.control.ScrollPane
@@ -51,33 +52,24 @@ class PageView : View("MyPage") {
                 val CSS_STYLE = """  
                 -fx-glass-color: rgba(85, 132, 160, 0.9);
                 -fx-alignment: center;
-                -fx-font-size: 20;
                 -fx-background-color: -fx-glass-color;
                 -fx-border-color: derive(-fx-glass-color, -60%);
                 -fx-border-width: 2;
                 -fx-background-insets: 1;
                 -fx-border-radius: 3;
                 -fx-padding: 20;
-                -fx-background-radius: 3;
                 """
 
                 nodeContainer = pane {
-                        val node = TextNode()
-                        node.root.setPrefSize(300.0, 200.0)
-                        // define the style via css
-                        node.root.style = CSS_STYLE
-                        // position the node
-                        node.root.layoutX = 50.0
-                        node.root.layoutY = 50.0
-                        // add the node to the root pane
-                        add(node)
-                    vbox {
-                        button("moshi") {
-                            action {
-                                pageViewModel.item.getJson()
-                            }
-                        }
-                    }
+                    val node = TextNode()
+                    node.root.setPrefSize(300.0, 300.0)
+                    // define the style via css
+                    node.root.style = CSS_STYLE
+                    // position the node
+                    node.root.layoutX = 50.0
+                    node.root.layoutY = 50.0
+                    // add the node to the root pane
+                    add(node)
                 }
 
                 hbox {

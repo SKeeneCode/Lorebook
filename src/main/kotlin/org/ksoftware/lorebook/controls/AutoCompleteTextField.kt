@@ -60,7 +60,6 @@ class AutoCompleteTextField : View()  {
 
         Nodes.addInputMap(entriesList, InputMap.sequence(
             InputMap.consume(EventPattern.keyPressed(KeyCode.ENTER)) {
-                print("enter pressed")
                 if (entriesPopup.isShowing && entriesList.selectionModel.selectedItem != null) {
                     pageTags.add(entriesList.selectionModel.selectedItem.result)
                     root.clear()

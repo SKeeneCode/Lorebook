@@ -8,7 +8,7 @@ class TextSegment(val segmentText: String) : AbstractSegment(segmentText) {
 
     override fun createNode(style: String) : Node {
         val textNode = TextExt(segmentText)
-        if (style.isNotEmpty()) textNode.styleClass.add(style)
+        if (style.isNotEmpty()) textNode.styleProperty().value = style
         return textNode
     }
 
@@ -34,16 +34,6 @@ class TextSegment(val segmentText: String) : AbstractSegment(segmentText) {
         return if (nextSeg is TextSegment) {
             Optional.of(TextSegment(segmentText + nextSeg.getText()))
         } else Optional.empty()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is TextSegment) return false
-        if (!super.equals(other)) return false
-
-        if (segmentText != other.segmentText) return false
-
-        return true
     }
 
     override fun hashCode(): Int {

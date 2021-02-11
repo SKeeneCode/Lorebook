@@ -11,9 +11,24 @@ class Styles : Stylesheet() {
         val glyphIconHover by cssclass()
         val hoverPopup by cssclass()
         val organizerButton by cssclass()
+        val toolbarButton by cssclass()
     }
 
     init {
+        toolbarButton {
+            backgroundColor += Color.color(0.95,0.95,0.95)
+            padding = box(3.px, 6.px)
+            and(hover) {
+                backgroundColor += Color.color(0.88,0.85,0.85)
+            }
+            and(pressed) {
+                backgroundColor += Color.color(0.8,0.8,0.8)
+            }
+            and(selected) {
+                backgroundColor += Color.color(0.8,0.8,0.8)
+            }
+
+        }
         glyphIconHover {
             button {
                 and(hover) {
