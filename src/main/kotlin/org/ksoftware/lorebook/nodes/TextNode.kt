@@ -1,16 +1,10 @@
 package org.ksoftware.lorebook.nodes
 
-import javafx.scene.layout.Priority
-import javafx.scene.text.Font
 import org.fxmisc.flowless.VirtualizedScrollPane
-import org.fxmisc.richtext.model.StyleSpans
-import org.ksoftware.lorebook.richtext.IndentSegment
 import org.ksoftware.lorebook.richtext.RichTextViewModal
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
-import org.ksoftware.lorebook.richtext.TextStyle
 import tornadofx.paddingAll
 import tornadofx.*
-import java.util.function.Function
 
 class TextNode : TransformableNode() {
 
