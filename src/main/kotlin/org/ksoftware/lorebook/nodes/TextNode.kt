@@ -5,6 +5,7 @@ import org.ksoftware.lorebook.richtext.RichTextViewModal
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import tornadofx.paddingAll
 import tornadofx.*
+import java.util.stream.Collectors
 
 class TextNode : TransformableNode() {
 
@@ -26,16 +27,26 @@ class TextNode : TransformableNode() {
                 if (selection.length != 0) {
                     val styles = getStyleSpans(selection)
                     if (styles.styleStream().map { it.fontName.get() }.distinct().count() > 1) {
-                        textViewModal.fontName.value = "-----"
+                        textViewModal.fontName.value = null
+                    } else {
+                        val textStyle = styles.styleStream().findFirst()
+                        if (textStyle.isPresent) textViewModal.fontName.value = textStyle.get().fontName.orElse("")
                     }
                     if (styles.styleStream().map { it.fontSize.get() }.distinct().count() > 1) {
                         textViewModal.fontSize.value = null
+                    } else {
+                        val textStyle = styles.styleStream().findFirst()
+                        if (textStyle.isPresent) textViewModal.fontSize.value = textStyle.get().fontSize.orElse(0.0).toString()
                     }
                     if (styles.styleStream().map { it.bold.orElse(false) }.distinct().count() > 1) {
                         textViewModal.bold.value = null
+                    } else {
+                        textViewModal.bold.value = styles.styleStream().map { it.bold.orElse(false) }.anyMatch { it == true }.toString()
                     }
                     if (styles.styleStream().map { it.italic.orElse(false) }.distinct().count() > 1) {
                         textViewModal.italic.value = null
+                    } else {
+                        textViewModal.italic.value = styles.styleStream().map { it.italic.orElse(false) }.anyMatch { it == true }.toString()
                     }
                 } else {
                     textViewModal.updateViewModalWithStyle(style)
