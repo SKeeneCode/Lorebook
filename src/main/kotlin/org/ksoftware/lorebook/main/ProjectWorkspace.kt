@@ -107,19 +107,14 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     style {
                         backgroundColor += Color.WHITE
                     }
-                    val textLabel = label(Font.getDefault().name)
-                    textViewModal.fontFamily.onChange {
-                        if (!it.isNullOrEmpty()) {
-                            textLabel.font = Font(it, textViewModal.fontSize.value?.toDouble() ?: 12.0)
-                        } else {
-                            textLabel.font = Font.getDefault()
-                        }
-                    }
+                    val textLabel = label("")
+
                     textViewModal.fontName.onChange {
                         if (!it.isNullOrEmpty()) {
-                            textLabel.text = textViewModal.fontName.value
+                            textLabel.font = Font(it, textViewModal.fontSize.value?.toDouble() ?: 12.0)
+                            textLabel.text = it
                         } else {
-                            textLabel.text = Font.getDefault().name
+                            textLabel.text = ""
                         }
                     }
                     onLeftClick {

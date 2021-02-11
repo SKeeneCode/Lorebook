@@ -29,7 +29,11 @@ class TextSizePicker : View() {
         }
 
         textViewModal.fontSize.onChange {
-            it?.let { slider.value = it.toDouble() }
+            if (it.isNullOrEmpty())  {
+                root.text = ""
+            } else {
+                slider.value = it.toDouble()
+            }
         }
 
         popup.content.add(slider)
