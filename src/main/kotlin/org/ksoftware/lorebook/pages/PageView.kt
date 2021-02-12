@@ -59,18 +59,23 @@ class PageView : View("MyPage") {
                 -fx-border-radius: 3;
                 -fx-padding: 20;
                 """
-
-                nodeContainer = pane {
-                    val node = TextNode()
-                    node.root.setPrefSize(300.0, 300.0)
-                    // define the style via css
-                    node.root.style = CSS_STYLE
-                    // position the node
-                    node.root.layoutX = 50.0
-                    node.root.layoutY = 50.0
-                    // add the node to the root pane
-                    add(node)
+                scrollpane {
+                    isPannable = true
+                    nodeContainer = pane {
+                        prefWidth = 10000.0
+                        prefHeight = 10000.0
+                        val node = TextNode()
+                        node.root.setPrefSize(300.0, 300.0)
+                        // define the style via css
+                        node.root.style = CSS_STYLE
+                        // position the node
+                        node.root.layoutX = 50.0
+                        node.root.layoutY = 50.0
+                        // add the node to the root pane
+                        add(node)
+                    }
                 }
+
 
                 hbox {
                     SplitPane.setResizableWithParent(this, false)

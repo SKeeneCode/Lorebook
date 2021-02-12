@@ -9,8 +9,8 @@ import org.fxmisc.richtext.model.*
 
 
 class StyledSegmentTextArea(
-    val initialParStyle: String = "",
-    val applyParStyle: BiConsumer<TextFlow, String> = BiConsumer { txtflow, pstyle -> txtflow.styleClass.add(pstyle) },
+    val initialParStyle: ParStyle = ParStyle.EMPTY.updateAlignment(TextAlignment.JUSTIFY),
+    val applyParStyle: BiConsumer<TextFlow, ParStyle> = BiConsumer { txtflow, pstyle -> txtflow.style = pstyle.toCss() },
     val initialSegStyle: TextStyle = TextStyle.EMPTY
         .updateFontFamily(Font.getDefault().family)
         .updateFontName(Font.getDefault().name)
@@ -18,7 +18,7 @@ class StyledSegmentTextArea(
     val preserveStyle: Boolean = true,
     val segmentOps: TextOps<AbstractSegment, TextStyle> = MySegmentOps(),
     nodeFactory: (StyledSegment<AbstractSegment, TextStyle>) -> Node
-) : GenericStyledArea<String, AbstractSegment, TextStyle>(
+) : GenericStyledArea<ParStyle, AbstractSegment, TextStyle>(
     initialParStyle,
     applyParStyle,
     initialSegStyle,
@@ -30,7 +30,8 @@ class StyledSegmentTextArea(
     constructor() : this(nodeFactory = { styledSegment -> styledSegment.segment.createNode(styledSegment.style.toCss()) })
 
     init {
-        setStyleCodecs(Codec.STRING_CODEC, MySegmentCodec()) // Needed for copy paste.
+        setStyleCodecs(ParStyle.CODEC, MySegmentCodec()) // Needed for copy paste.
+        paragraphGraphicFactory = BulletFactory(this)
         isWrapText = true
     }
 

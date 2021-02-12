@@ -12,6 +12,7 @@ import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
 import javafx.scene.text.Font
@@ -99,34 +100,49 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 separator(Orientation.VERTICAL)
             }
             hbox(2.0) {
-                stackpane {
                     val fontSelector = FontSelectorDialog(Font.font(textViewModal.fontFamily.value))
-                    alignment = Pos.CENTER
-                    prefHeight = 32.0
-                    prefWidth = 120.0
-                    style {
-                        backgroundColor += Color.WHITE
-                    }
-                    val textLabel = label("")
+                     label(textViewModal.fontName) {
+                        style {
+                            backgroundColor += Color.WHITE
+                        }
+                        alignment = Pos.CENTER
+                        minWidth = Region.USE_PREF_SIZE
+                        prefWidth = 120.0
+                        maxWidth = Region.USE_PREF_SIZE
+                        minHeight = Region.USE_PREF_SIZE
+                        prefHeight = 32.0
+                        maxHeight = Region.USE_PREF_SIZE
 
-                    textViewModal.fontName.onChange {
-                        if (!it.isNullOrEmpty()) {
-                            textLabel.font = Font(it, textViewModal.fontSize.value?.toDouble() ?: 12.0)
-                            textLabel.text = it
-                        } else {
-                            textLabel.text = ""
+                        onLeftClick {
+                            val font = fontSelector.showAndWait()
+                            if (font.isPresent) {
+                                textViewModal.fontSize.value = font.get().size.toString()
+                                textViewModal.fontName.value = font.get().name
+                                textViewModal.fontFamily.value = font.get().family
+                                when (font.get().style) {
+                                     "Bold" -> textViewModal.bold.value = "true"
+                                    "Italic" -> textViewModal.italic.value = "true"
+                                    "Bold Italic" -> {
+                                        textViewModal.bold.value = "true"
+                                        textViewModal.italic.value = "true"
+                                    }
+                                    "Regular" -> {
+                                        textViewModal.bold.value = null
+                                        textViewModal.italic.value = null
+                                    }
+                                }
+                                textViewModal.triggerTextChange()
+                                textViewModal.triggerFontChange()
+                            }
+                        }
+
+                        textViewModal.fontSize.onChange {
+                            if (!it.isNullOrEmpty()) {
+                                val size = if (it.toDouble() > 24.0) 24.0 else it.toDouble()
+                                font = Font(textViewModal.fontName.value, size)
+                            }
                         }
                     }
-                    onLeftClick {
-                        val font = fontSelector.showAndWait()
-                        if (font.isPresent) {
-                            textViewModal.fontSize.value = font.get().size.toString()
-                            textViewModal.fontName.value = font.get().name
-                            textViewModal.fontFamily.value = font.get().family
-                            textViewModal.triggerFontChange()
-                        }
-                    }
-                }
                 add<TextSizePicker>()
                 togglebutton(ToggleGroup()) {
                     addClass(Styles.hoverPopup)
@@ -203,6 +219,27 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_JUSTIFY).apply { glyphSize = 24 }
                     action { }
+                }
+                separator(Orientation.VERTICAL)
+            }
+            hbox(2.0) {
+                button {
+                    addClass(Styles.hoverPopup)
+                    addClass(Styles.toolbarButton)
+                    background = null
+                    graphic = MaterialIconView(MaterialIcon.FORMAT_INDENT_INCREASE).apply { glyphSize = 24 }
+                    action {
+                        textViewModal.triggerIndentIncrease()
+                    }
+                }
+                button {
+                    addClass(Styles.hoverPopup)
+                    addClass(Styles.toolbarButton)
+                    background = null
+                    graphic = MaterialIconView(MaterialIcon.FORMAT_INDENT_DECREASE).apply { glyphSize = 24 }
+                    action {
+                        textViewModal.triggerIndentDecrease()
+                    }
                 }
                 separator(Orientation.VERTICAL)
             }

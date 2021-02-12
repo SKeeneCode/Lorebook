@@ -1,8 +1,13 @@
 package org.ksoftware.lorebook.controls
 
+import javafx.event.Event
+import javafx.event.EventType
 import javafx.scene.Parent
 import javafx.scene.control.Slider
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseButton
+import javafx.scene.paint.Color
 import javafx.stage.Popup
 import org.ksoftware.lorebook.richtext.RichTextViewModal
 import tornadofx.*
@@ -14,12 +19,24 @@ class TextSizePicker : View() {
     private val textViewModal: RichTextViewModal by inject(FX.defaultScope)
 
     private val popup = Popup()
-    private val slider = Slider(8.0, 64.0, 8.0)
+    private val slider = Slider(8.0, 72.0, 8.0)
 
     init {
         popup.isAutoFix = true
         popup.isAutoHide = true
         popup.isHideOnEscape = true
+        popup.addEventFilter(KeyEvent.KEY_PRESSED) {
+            when (it.code) {
+                KeyCode.LEFT, KeyCode.KP_LEFT -> {
+                    root.positionCaret(root.caretPosition - 1)
+                    it.consume()
+                }
+                KeyCode.RIGHT, KeyCode.KP_RIGHT -> {
+                    root.positionCaret(root.caretPosition + 1)
+                    it.consume()
+                }
+            }
+        }
 
         slider.majorTickUnit = 16.0
         slider.valueProperty().onChange {
@@ -44,11 +61,16 @@ class TextSizePicker : View() {
         prefWidth = 32.0
         background = null
 
+        style {
+            backgroundColor += Color.WHITE
+        }
+
         bind(slider.valueProperty())
+
 
         filterInput { change ->
             change.controlNewText.isInt() &&
-            change.controlNewText.toInt() in 6..64
+            change.controlNewText.toInt() in 8..72
         }
 
         onLeftClick {
