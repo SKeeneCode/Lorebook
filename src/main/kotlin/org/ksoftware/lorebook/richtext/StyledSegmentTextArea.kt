@@ -11,7 +11,7 @@ import org.fxmisc.richtext.model.*
 class StyledSegmentTextArea(
     val initialParStyle: ParStyle = ParStyle.EMPTY.updateAlignment(TextAlignment.JUSTIFY),
     val applyParStyle: BiConsumer<TextFlow, ParStyle> = BiConsumer { txtflow, pstyle -> txtflow.style = pstyle.toCss() },
-    val initialSegStyle: TextStyle = TextStyle.EMPTY
+    var initialSegStyle: TextStyle = TextStyle.EMPTY
         .updateFontFamily(Font.getDefault().family)
         .updateFontName(Font.getDefault().name)
         .updateFontSize(Font.getDefault().size),

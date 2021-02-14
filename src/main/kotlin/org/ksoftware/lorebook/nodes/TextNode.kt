@@ -1,6 +1,7 @@
 package org.ksoftware.lorebook.nodes
 
 import org.fxmisc.flowless.VirtualizedScrollPane
+import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.richtext.Indent
 import org.ksoftware.lorebook.richtext.ParStyle
 import org.ksoftware.lorebook.richtext.RichTextViewModal
@@ -16,6 +17,7 @@ class TextNode : TransformableNode() {
 
     private val textController: TextController by inject(FX.defaultScope)
     private val textViewModal: RichTextViewModal by inject(FX.defaultScope)
+    private val projectViewModal: ProjectViewModel by inject()
     val area = VirtualizedScrollPane(StyledSegmentTextArea())
 
     init {
@@ -25,29 +27,47 @@ class TextNode : TransformableNode() {
         }
 
         with(area.content) {
+            textViewModal.updateParagraphTrigger.onChange {
+                textController.updateParagraphStyleInSelection(projectViewModal.currentRichText.value) { textViewModal.createParagraphStyle() }
+                requestFocus()
+            }
             textViewModal.increaseIndentTrigger.onChange {
-                textController.updateParagraphStyleInSelection(this) { style -> style.increaseIndent() }
+                textController.updateParagraphStyleInSelection(projectViewModal.currentRichText.value) { textViewModal.createParagraphStyle().increaseIndent() }
+                requestFocus()
             }
             textViewModal.decreaseIndentTrigger.onChange {
-                textController.updateParagraphStyleInSelection(this) { style -> style.decreaseIndent() }
+                textController.updateParagraphStyleInSelection(projectViewModal.currentRichText.value) { textViewModal.createParagraphStyle().decreaseIndent() }
+                requestFocus()
             }
             textViewModal.updateTextTrigger.onChange {
-                textController.updateStyleInSelection(this, textViewModal.createTextStyle())
+                val style = textViewModal.createTextStyle()
+                textController.updateStyleInSelection(projectViewModal.currentRichText.value, style)
+                requestFocus()
             }
             textViewModal.updateFontTrigger.onChange {
-                textController.updateStyleInSelection(this, textViewModal.createFontStyle())
+                textController.updateStyleInSelection(projectViewModal.currentRichText.value, textViewModal.createFontStyle())
+                requestFocus()
             }
         }
 
         with(area.content) {
+            onLeftClick {
+                    projectViewModal.currentRichText.value = this
+                    val style = getParagraph(currentParagraph).getStyleAtPosition(caretColumn)
+                    val parStyle = getParagraph(currentParagraph).paragraphStyle
+                    if (selection.length == 0) {
+                        textViewModal.updateViewModalWithStyle(style)
+                        textViewModal.updateViewModalWithParagraphStyle(parStyle)
+                    }
+           }
             caretPositionProperty().addListener { _, _, _ ->
+                println("change")
                 val style = getParagraph(currentParagraph).getStyleAtPosition(caretColumn)
                 val parStyle = getParagraph(currentParagraph).paragraphStyle
                 // Ensures that rich text controls are only selected when text selection all share a style
                 if (selection.length == 0) {
                     textViewModal.updateViewModalWithStyle(style)
-                    if (parStyle.indent.isPresent) textViewModal.indent.value =
-                        parStyle.indent.get().level else textViewModal.indent.value = 0
+                    textViewModal.updateViewModalWithParagraphStyle(parStyle)
                 } else {
                     val styles = getStyleSpans(selection).styleStream().toList()
                     val fontNames = styles.filter { it.fontName.isPresent }.map { it.fontName.get() }

@@ -2,6 +2,7 @@ package org.ksoftware.lorebook.richtext
 
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.text.Font
 import tornadofx.ViewModel
@@ -15,13 +16,14 @@ class RichTextViewModal : ViewModel() {
     val italic = SimpleStringProperty(null)
     val underline = SimpleStringProperty(null)
     val strikethrough = SimpleStringProperty(null)
-    val alignment = SimpleStringProperty(null)
+    val alignment = SimpleObjectProperty<TextAlignment>(null)
     val indent = SimpleIntegerProperty(0)
     val showFontSizeText = SimpleBooleanProperty(true)
     val increaseIndentTrigger = SimpleBooleanProperty(false)
     val decreaseIndentTrigger = SimpleBooleanProperty(false)
     val updateTextTrigger = SimpleBooleanProperty(false)
     val updateFontTrigger = SimpleBooleanProperty(false)
+    val updateParagraphTrigger = SimpleBooleanProperty(false)
 
     fun updateViewModalWithStyle(style: TextStyle) {
         if (style.fontSize.isPresent) fontSize.value = style.fontSize.get().toString() else fontSize.value = null
@@ -29,6 +31,19 @@ class RichTextViewModal : ViewModel() {
         if (style.fontFamily.isPresent) fontFamily.value = style.fontFamily.get() else fontFamily.value = null
         if (style.bold.isPresent) bold.value = style.bold.get().toString() else bold.value = null
         if (style.italic.isPresent) italic.value = style.italic.get().toString() else italic.value = null
+    }
+
+    fun updateViewModalWithParagraphStyle(style: ParStyle) {
+        println("fefefef")
+        if (style.indent.isPresent) indent.value = style.indent.get().level else indent.value = 0
+        if (style.alignment.isPresent) alignment.value = style.alignment.get() else alignment.value = null
+    }
+
+    fun createParagraphStyle() : ParStyle {
+        var style = ParStyle.EMPTY
+        if (indent.value > 0) style = style.updateIndent(Indent(indent.value))
+        if (alignment.value != null) style = style.updateAlignment(alignment.value)
+        return style
     }
 
     fun createTextStyle() : TextStyle {
@@ -46,11 +61,17 @@ class RichTextViewModal : ViewModel() {
         return style
     }
 
+    fun triggerParagraphChange() {
+        updateParagraphTrigger.value = !updateParagraphTrigger.value
+    }
+
     fun triggerIndentIncrease() {
+        indent.value++
         increaseIndentTrigger.value = !increaseIndentTrigger.value
     }
 
     fun triggerIndentDecrease() {
+        indent.value--
         decreaseIndentTrigger.value = !decreaseIndentTrigger.value
     }
 

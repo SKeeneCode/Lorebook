@@ -2,6 +2,7 @@ package org.ksoftware.lorebook.controls
 
 import javafx.event.Event
 import javafx.event.EventType
+import javafx.geometry.Pos
 import javafx.scene.Parent
 import javafx.scene.control.Slider
 import javafx.scene.input.KeyCode
@@ -38,22 +39,37 @@ class TextSizePicker : View() {
             }
         }
 
-        slider.majorTickUnit = 16.0
-        slider.valueProperty().onChange {
-            slider.value = it.roundToInt().toDouble()
-            textViewModal.fontSize.value = it.roundToInt().toString()
-            if (popup.isShowing) textViewModal.triggerFontChange()
-        }
+        with(slider) {
+            style {
+                backgroundColor += Color.WHITE
+                paddingAll = 4
+            }
+            majorTickUnit = 16.0
+            valueProperty().onChange {
+                value = it.roundToInt().toDouble()
+                textViewModal.fontSize.value = it.roundToInt().toString()
+                if (popup.isShowing) textViewModal.triggerFontChange()
+            }
 
-        textViewModal.fontSize.onChange {
-            if (it.isNullOrEmpty())  {
-                root.text = ""
-            } else {
-                slider.value = it.toDouble()
+            textViewModal.fontSize.onChange {
+                if (it.isNullOrEmpty())  {
+                    root.text = ""
+                } else {
+                    value = it.toDouble()
+                }
             }
         }
 
-        popup.content.add(slider)
+
+        val popupContent = vbox {
+            alignment = Pos.CENTER
+            polygon(0, 0, 10,10,-10,10) {
+                fill = Color.WHITE
+            }
+            add(slider)
+        }
+
+        popup.content.add(popupContent)
     }
 
     override val root = textfield {

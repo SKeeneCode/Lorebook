@@ -1,8 +1,10 @@
 package org.ksoftware.lorebook.main
 
 import com.jfoenix.controls.JFXColorPicker
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import org.ksoftware.lorebook.pages.PageModel
+import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import org.ksoftware.lorebook.tags.TagModel
 import tornadofx.*
 
@@ -26,6 +28,8 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val taskMessage = SimpleStringProperty("No Task Running")
 
     val colorPicker = JFXColorPicker()
+
+    val currentRichText = SimpleObjectProperty<StyledSegmentTextArea>()
 
     init {
         // copies the list to its backing list after initial binding

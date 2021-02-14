@@ -23,6 +23,7 @@ import org.ksoftware.lorebook.newproject.NewProjectView
 import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.organiser.Organiser
 import org.ksoftware.lorebook.richtext.RichTextViewModal
+import org.ksoftware.lorebook.richtext.TextAlignment
 import tornadofx.*
 
 /**
@@ -188,37 +189,54 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
             }
 
             hbox(2.0) {
-                togglebutton(ToggleGroup()) {
+                val alignmentToggleGroup = ToggleGroup()
+                togglebutton(alignmentToggleGroup) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_LEFT).apply { glyphSize = 24 }
-                    action { }
+                    textViewModal.alignment.onChange { if (it == TextAlignment.LEFT) isSelected = true }
+                    action {
+                        textViewModal.alignment.value = TextAlignment.LEFT
+                        textViewModal.triggerParagraphChange()
+                    }
                 }
-                togglebutton(ToggleGroup()) {
+                togglebutton(alignmentToggleGroup) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_CENTER).apply { glyphSize = 24 }
-                    action { }
+                    textViewModal.alignment.onChange { if (it == TextAlignment.CENTER) isSelected = true }
+                    action {
+                        textViewModal.alignment.value = TextAlignment.CENTER
+                        textViewModal.triggerParagraphChange()
+                    }
                 }
-                togglebutton(ToggleGroup()) {
+                togglebutton(alignmentToggleGroup) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_RIGHT).apply { glyphSize = 24 }
-                    action { }
+                    textViewModal.alignment.onChange { if (it == TextAlignment.RIGHT) isSelected = true }
+                    action {
+                        textViewModal.alignment.value = TextAlignment.RIGHT
+                        textViewModal.triggerParagraphChange()
+                    }
                 }
-                togglebutton(ToggleGroup()) {
+                togglebutton(alignmentToggleGroup) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_JUSTIFY).apply { glyphSize = 24 }
-                    action { }
+                    textViewModal.alignment.onChange { if (it == TextAlignment.JUSTIFY) isSelected = true }
+                    action {
+                        textViewModal.alignment.value = TextAlignment.JUSTIFY
+                        textViewModal.triggerParagraphChange()
+                    }
                 }
                 separator(Orientation.VERTICAL)
             }
