@@ -2,15 +2,11 @@ package org.ksoftware.lorebook.nodes
 
 import org.fxmisc.flowless.VirtualizedScrollPane
 import org.ksoftware.lorebook.main.ProjectViewModel
-import org.ksoftware.lorebook.richtext.Indent
-import org.ksoftware.lorebook.richtext.ParStyle
-import org.ksoftware.lorebook.richtext.RichTextViewModal
-import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
-import org.ksoftware.lorebook.utilities.allSame
+import org.ksoftware.lorebook.richtext.*
 import org.ksoftware.lorebook.utilities.hasDifferentValues
 import tornadofx.paddingAll
 import tornadofx.*
-import java.util.stream.Collectors
+import java.util.*
 import kotlin.streams.toList
 
 class TextNode : TransformableNode() {
@@ -28,24 +24,25 @@ class TextNode : TransformableNode() {
 
         with(area.content) {
             textViewModal.updateParagraphTrigger.onChange {
-                textController.updateParagraphStyleInSelection(projectViewModal.currentRichText.value) { textViewModal.createParagraphStyle() }
+                textController.updateParagraphStyleInSelection(this) { textViewModal.createParagraphStyle() }
                 requestFocus()
             }
             textViewModal.increaseIndentTrigger.onChange {
-                textController.updateParagraphStyleInSelection(projectViewModal.currentRichText.value) { textViewModal.createParagraphStyle().increaseIndent() }
+                textController.updateParagraphStyleInSelection(this) { textViewModal.createParagraphStyle().increaseIndent() }
                 requestFocus()
             }
             textViewModal.decreaseIndentTrigger.onChange {
-                textController.updateParagraphStyleInSelection(projectViewModal.currentRichText.value) { textViewModal.createParagraphStyle().decreaseIndent() }
+                textController.updateParagraphStyleInSelection(this) { textViewModal.createParagraphStyle().decreaseIndent() }
                 requestFocus()
             }
             textViewModal.updateTextTrigger.onChange {
                 val style = textViewModal.createTextStyle()
-                textController.updateStyleInSelection(projectViewModal.currentRichText.value, style)
+                textController.updateStyleInSelection(this, style)
+                textInsertionStyle = style
                 requestFocus()
             }
             textViewModal.updateFontTrigger.onChange {
-                textController.updateStyleInSelection(projectViewModal.currentRichText.value, textViewModal.createFontStyle())
+                textController.updateStyleInSelection(this, textViewModal.createFontStyle())
                 requestFocus()
             }
         }
@@ -53,22 +50,22 @@ class TextNode : TransformableNode() {
         with(area.content) {
             onLeftClick {
                     projectViewModal.currentRichText.value = this
-                    val style = getParagraph(currentParagraph).getStyleAtPosition(caretColumn)
-                    val parStyle = getParagraph(currentParagraph).paragraphStyle
-                    if (selection.length == 0) {
-                        textViewModal.updateViewModalWithStyle(style)
-                        textViewModal.updateViewModalWithParagraphStyle(parStyle)
-                    }
+//                    val style = getParagraph(currentParagraph).getStyleAtPosition(caretColumn)
+//                    val parStyle = getParagraph(currentParagraph).paragraphStyle
+//                    if (selection.length == 0) {
+//                        textViewModal.updateViewModalWithStyle(style)
+//                        textViewModal.updateViewModalWithParagraphStyle(parStyle)
+//                    }
            }
             caretPositionProperty().addListener { _, _, _ ->
-                println("change")
                 val style = getParagraph(currentParagraph).getStyleAtPosition(caretColumn)
                 val parStyle = getParagraph(currentParagraph).paragraphStyle
-                // Ensures that rich text controls are only selected when text selection all share a style
+                // If we are just moving the caret and not selecting anything we can immediately update the toolbar
                 if (selection.length == 0) {
                     textViewModal.updateViewModalWithStyle(style)
                     textViewModal.updateViewModalWithParagraphStyle(parStyle)
                 } else {
+                    // otherwise we need to examine the range of styles in our selection to know what buttons to select
                     val styles = getStyleSpans(selection).styleStream().toList()
                     val fontNames = styles.filter { it.fontName.isPresent }.map { it.fontName.get() }
                     val fontSizes = styles.filter { it.fontSize.isPresent }.map { it.fontSize.get() }
@@ -96,10 +93,10 @@ class TextNode : TransformableNode() {
                     }
 
                     if (bolds.hasDifferentValues()) {
-                        textViewModal.bold.value = null
+                        textViewModal.bold.value = Optional.empty()
                     } else {
-                        println(bolds.toString())
-                        textViewModal.bold.value = bolds.any { it }.toString()
+                        // if any of the bold styles are true they all must be and set the view modal accordingly
+                        textViewModal.bold.value = Optional.of(bolds.any { it })
                     }
 
                     if (italics.hasDifferentValues()) {

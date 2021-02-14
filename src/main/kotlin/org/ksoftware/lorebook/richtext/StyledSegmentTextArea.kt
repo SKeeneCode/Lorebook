@@ -9,14 +9,14 @@ import org.fxmisc.richtext.model.*
 
 
 class StyledSegmentTextArea(
-    val initialParStyle: ParStyle = ParStyle.EMPTY.updateAlignment(TextAlignment.JUSTIFY),
-    val applyParStyle: BiConsumer<TextFlow, ParStyle> = BiConsumer { txtflow, pstyle -> txtflow.style = pstyle.toCss() },
-    var initialSegStyle: TextStyle = TextStyle.EMPTY
+    initialParStyle: ParStyle = ParStyle.EMPTY.updateAlignment(TextAlignment.JUSTIFY),
+    applyParStyle: BiConsumer<TextFlow, ParStyle> = BiConsumer { txtflow, pstyle -> txtflow.style = pstyle.toCss() },
+    initialSegStyle: TextStyle = TextStyle.EMPTY
         .updateFontFamily(Font.getDefault().family)
         .updateFontName(Font.getDefault().name)
         .updateFontSize(Font.getDefault().size),
-    val preserveStyle: Boolean = true,
-    val segmentOps: TextOps<AbstractSegment, TextStyle> = MySegmentOps(),
+    preserveStyle: Boolean = true,
+    segmentOps: TextOps<AbstractSegment, TextStyle> = MySegmentOps(),
     nodeFactory: (StyledSegment<AbstractSegment, TextStyle>) -> Node
 ) : GenericStyledArea<ParStyle, AbstractSegment, TextStyle>(
     initialParStyle,
@@ -40,7 +40,7 @@ class StyledSegmentTextArea(
     }
 
     fun insert(pos: Int, customSegment: AbstractSegment) {
-        insert(pos, ReadOnlyStyledDocument.fromSegment(customSegment, initialParStyle, initialSegStyle, segmentOps))
+        insert(pos, ReadOnlyStyledDocument.fromSegment(customSegment, initialParagraphStyle, initialTextStyle, segOps))
     }
 
 }

@@ -45,7 +45,6 @@ class MySegmentCodec : Codec<StyledSegment<AbstractSegment, TextStyle>> {
         val dataClass = Class.forName(dataType)
         val data: Any = JAXB.unmarshal(xml2data, dataClass)
         val segClass = Class.forName(segmentType)
-
         var textStyle = TextStyle.EMPTY
             .updateFontFamily(family)
             .updateFontName(name)

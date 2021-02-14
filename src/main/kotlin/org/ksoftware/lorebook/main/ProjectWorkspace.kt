@@ -4,27 +4,19 @@ import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
-import javafx.scene.Cursor
-import javafx.scene.Node
-import javafx.scene.control.Label
-import javafx.scene.control.ToggleButton
 import javafx.scene.control.ToggleGroup
-import javafx.scene.layout.FlowPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
-import javafx.scene.paint.Paint
 import javafx.scene.text.Font
 import org.controlsfx.dialog.FontSelectorDialog
 import org.ksoftware.lorebook.Styles
 import org.ksoftware.lorebook.controls.TextSizePicker
 import org.ksoftware.lorebook.newproject.NewProjectView
 import org.ksoftware.lorebook.nodes.TextController
-import org.ksoftware.lorebook.organiser.Organiser
 import org.ksoftware.lorebook.richtext.RichTextViewModal
 import org.ksoftware.lorebook.richtext.TextAlignment
 import tornadofx.*
+import java.util.*
 
 /**
  * Workspace implementation used for a projects main window.
@@ -121,10 +113,10 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                                 textViewModal.fontName.value = font.get().name
                                 textViewModal.fontFamily.value = font.get().family
                                 when (font.get().style) {
-                                     "Bold" -> textViewModal.bold.value = "true"
+                                     "Bold" -> textViewModal.bold.value = Optional.of(true)
                                     "Italic" -> textViewModal.italic.value = "true"
                                     "Bold Italic" -> {
-                                        textViewModal.bold.value = "true"
+                                        textViewModal.bold.value = Optional.of(true)
                                         textViewModal.italic.value = "true"
                                     }
                                     "Regular" -> {
@@ -148,8 +140,8 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 togglebutton(ToggleGroup()) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
-                    selectedProperty().onChange { textViewModal.bold.value = it.toString() }
-                    textViewModal.bold.onChange { isSelected = it.toBoolean() }
+                    selectedProperty().onChange { textViewModal.bold.value = Optional.of(it) }
+                    textViewModal.bold.onChange { if (it != null) isSelected = it.orElse(false) }
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_BOLD).apply { glyphSize = 24 }

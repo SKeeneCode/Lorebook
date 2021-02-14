@@ -4,15 +4,15 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.scene.text.Font
 import tornadofx.ViewModel
+import java.util.*
 
 class RichTextViewModal : ViewModel() {
 
     val fontFamily = SimpleStringProperty(null)
     val fontName = SimpleStringProperty(null)
     val fontSize = SimpleStringProperty(null)
-    val bold = SimpleStringProperty(null)
+    val bold = SimpleObjectProperty(Optional.empty<Boolean>())
     val italic = SimpleStringProperty(null)
     val underline = SimpleStringProperty(null)
     val strikethrough = SimpleStringProperty(null)
@@ -29,12 +29,11 @@ class RichTextViewModal : ViewModel() {
         if (style.fontSize.isPresent) fontSize.value = style.fontSize.get().toString() else fontSize.value = null
         if (style.fontName.isPresent) fontName.value = style.fontName.get() else fontName.value = null
         if (style.fontFamily.isPresent) fontFamily.value = style.fontFamily.get() else fontFamily.value = null
-        if (style.bold.isPresent) bold.value = style.bold.get().toString() else bold.value = null
+        if (style.bold.isPresent && style.bold.get()) bold.value = Optional.of(true) else bold.value = Optional.empty()
         if (style.italic.isPresent) italic.value = style.italic.get().toString() else italic.value = null
     }
 
     fun updateViewModalWithParagraphStyle(style: ParStyle) {
-        println("fefefef")
         if (style.indent.isPresent) indent.value = style.indent.get().level else indent.value = 0
         if (style.alignment.isPresent) alignment.value = style.alignment.get() else alignment.value = null
     }
@@ -48,7 +47,7 @@ class RichTextViewModal : ViewModel() {
 
     fun createTextStyle() : TextStyle {
         var style = TextStyle.EMPTY
-        if (!bold.value.isNullOrBlank()) style = style.updateBold(bold.value.toBoolean())
+        if (bold.value.isPresent) style = style.updateBold(bold.value.get())
         if (!italic.value.isNullOrBlank()) style = style.updateItalic(italic.value.toBoolean())
         return style
     }
