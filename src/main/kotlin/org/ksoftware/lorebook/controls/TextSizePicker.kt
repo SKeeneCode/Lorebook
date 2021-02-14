@@ -1,30 +1,26 @@
 package org.ksoftware.lorebook.controls
 
-import javafx.event.Event
-import javafx.event.EventType
 import javafx.geometry.Pos
-import javafx.scene.Parent
 import javafx.scene.control.Slider
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
-import javafx.scene.input.MouseButton
 import javafx.scene.paint.Color
 import javafx.stage.Popup
-import org.ksoftware.lorebook.richtext.RichTextViewModal
+import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import tornadofx.*
 import java.util.*
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 class TextSizePicker : View() {
 
     private val popupController: PopupController by inject(FX.defaultScope)
-    private val textViewModal: RichTextViewModal by inject(FX.defaultScope)
+    private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val popup = Popup()
     private val slider = Slider(8.0, 72.0, 8.0)
 
     init {
+        println(toolbarViewModal)
         popup.isAutoFix = true
         popup.isAutoHide = true
         popup.isHideOnEscape = true
@@ -49,13 +45,13 @@ class TextSizePicker : View() {
             majorTickUnit = 16.0
             valueProperty().onChange {
                 value = it.roundToInt().toDouble()
-                textViewModal.fontSize.value = Optional.of(it.roundToInt().toDouble())
+                toolbarViewModal.fontSize.value = Optional.of(it.roundToInt().toDouble())
                 if (popup.isShowing) {
-                    textViewModal.triggerTextChange()
+                    toolbarViewModal.triggerTextChange()
                 }
             }
 
-            textViewModal.fontSize.onChange {
+            toolbarViewModal.fontSize.onChange {
                 if (it != null) {
                     if (it.isPresent) {
                         value = it.get()
@@ -63,7 +59,7 @@ class TextSizePicker : View() {
                             backgroundColor += Color.WHITE
                             textFill = Color.BLACK
                         }
-                        textViewModal.triggerLabelChange()
+                        toolbarViewModal.triggerLabelChange()
                     } else {
                         root.style {
                             backgroundColor += Color.WHITE

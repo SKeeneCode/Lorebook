@@ -4,7 +4,6 @@ import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
-import javafx.scene.control.Label
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
@@ -14,7 +13,7 @@ import org.ksoftware.lorebook.Styles
 import org.ksoftware.lorebook.controls.TextSizePicker
 import org.ksoftware.lorebook.newproject.NewProjectView
 import org.ksoftware.lorebook.nodes.TextController
-import org.ksoftware.lorebook.richtext.RichTextViewModal
+import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.richtext.TextAlignment
 import tornadofx.*
 import java.util.*
@@ -26,7 +25,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
 
     private val projectWorkspaceController: ProjectWorkspaceController by inject()
     private val projectViewModel: ProjectViewModel by inject()
-    private val textViewModal: RichTextViewModal by inject(FX.defaultScope)
+    private val toolbarViewModal: ToolbarViewModal by inject()
     private val textController: TextController by inject(FX.defaultScope)
 
     override fun onDock() {
@@ -51,6 +50,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
     }
 
     init {
+        println(toolbarViewModal)
         with(header) {
             style {
                 spacing = 0.px
@@ -94,7 +94,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 separator(Orientation.VERTICAL)
             }
             hbox(2.0) {
-                    val fontSelector = FontSelectorDialog(Font.font(textViewModal.fontFamily.value.orElse(Font.getDefault().family)))
+                    val fontSelector = FontSelectorDialog(Font.font(toolbarViewModal.fontFamily.value.orElse(Font.getDefault().family)))
                      label {
                         style {
                             backgroundColor += Color.WHITE
@@ -110,28 +110,28 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                         onLeftClick {
                             val font = fontSelector.showAndWait()
                             if (font.isPresent) {
-                                textViewModal.fontSize.value = Optional.of(font.get().size)
-                                textViewModal.fontName.value = Optional.of(font.get().name)
-                                textViewModal.fontFamily.value = Optional.of(font.get().family)
+                                toolbarViewModal.fontSize.value = Optional.of(font.get().size)
+                                toolbarViewModal.fontName.value = Optional.of(font.get().name)
+                                toolbarViewModal.fontFamily.value = Optional.of(font.get().family)
                                 when (font.get().style) {
-                                     "Bold" -> textViewModal.bold.value = Optional.of(true)
-                                    "Italic" -> textViewModal.italic.value = Optional.of(true)
+                                     "Bold" -> toolbarViewModal.bold.value = Optional.of(true)
+                                    "Italic" -> toolbarViewModal.italic.value = Optional.of(true)
                                     "Bold Italic" -> {
-                                        textViewModal.bold.value = Optional.of(true)
-                                        textViewModal.italic.value = Optional.of(true)
+                                        toolbarViewModal.bold.value = Optional.of(true)
+                                        toolbarViewModal.italic.value = Optional.of(true)
                                     }
                                     "Regular" -> {
-                                        textViewModal.bold.value = Optional.of(false)
-                                        textViewModal.italic.value = Optional.of(false)
+                                        toolbarViewModal.bold.value = Optional.of(false)
+                                        toolbarViewModal.italic.value = Optional.of(false)
                                     }
                                 }
-                                textViewModal.triggerTextChange()
-                                textViewModal.updateFontSelectionText(this)
+                                toolbarViewModal.triggerTextChange()
+                                toolbarViewModal.updateFontSelectionText(this)
                             }
                         }
 
-                         textViewModal.updateLabelTrigger.onChange {
-                             textViewModal.updateFontSelectionText(this)
+                         toolbarViewModal.updateLabelTrigger.onChange {
+                             toolbarViewModal.updateFontSelectionText(this)
                          }
 
                     }
@@ -139,25 +139,25 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 togglebutton(ToggleGroup()) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
-                    selectedProperty().onChange { textViewModal.bold.value = Optional.of(it) }
-                    textViewModal.bold.onChange { if (it != null) isSelected = it.orElse(false) }
+                    selectedProperty().onChange { toolbarViewModal.bold.value = Optional.of(it) }
+                    toolbarViewModal.bold.onChange { if (it != null) isSelected = it.orElse(false) }
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_BOLD).apply { glyphSize = 24 }
                     action {
-                        textViewModal.triggerTextChange()
+                        toolbarViewModal.triggerTextChange()
                     }
                 }
                 togglebutton(ToggleGroup()) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
-                    selectedProperty().onChange { textViewModal.italic.value = Optional.of(it) }
-                    textViewModal.italic.onChange { if (it != null) isSelected = it.orElse(false) }
+                    selectedProperty().onChange { toolbarViewModal.italic.value = Optional.of(it) }
+                    toolbarViewModal.italic.onChange { if (it != null) isSelected = it.orElse(false) }
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ITALIC).apply { glyphSize = 24 }
                     action {
-                        textViewModal.triggerTextChange()
+                        toolbarViewModal.triggerTextChange()
                     }
                 }
                 togglebutton(ToggleGroup()) {
@@ -187,10 +187,10 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_LEFT).apply { glyphSize = 24 }
-                    textViewModal.alignment.onChange { if (it == TextAlignment.LEFT) isSelected = true }
+                    toolbarViewModal.alignment.onChange { if (it == TextAlignment.LEFT) isSelected = true }
                     action {
-                        textViewModal.alignment.value = TextAlignment.LEFT
-                        textViewModal.triggerParagraphChange()
+                        toolbarViewModal.alignment.value = TextAlignment.LEFT
+                        toolbarViewModal.triggerParagraphChange()
                     }
                 }
                 togglebutton(alignmentToggleGroup) {
@@ -199,10 +199,10 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_CENTER).apply { glyphSize = 24 }
-                    textViewModal.alignment.onChange { if (it == TextAlignment.CENTER) isSelected = true }
+                    toolbarViewModal.alignment.onChange { if (it == TextAlignment.CENTER) isSelected = true }
                     action {
-                        textViewModal.alignment.value = TextAlignment.CENTER
-                        textViewModal.triggerParagraphChange()
+                        toolbarViewModal.alignment.value = TextAlignment.CENTER
+                        toolbarViewModal.triggerParagraphChange()
                     }
                 }
                 togglebutton(alignmentToggleGroup) {
@@ -211,10 +211,10 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_RIGHT).apply { glyphSize = 24 }
-                    textViewModal.alignment.onChange { if (it == TextAlignment.RIGHT) isSelected = true }
+                    toolbarViewModal.alignment.onChange { if (it == TextAlignment.RIGHT) isSelected = true }
                     action {
-                        textViewModal.alignment.value = TextAlignment.RIGHT
-                        textViewModal.triggerParagraphChange()
+                        toolbarViewModal.alignment.value = TextAlignment.RIGHT
+                        toolbarViewModal.triggerParagraphChange()
                     }
                 }
                 togglebutton(alignmentToggleGroup) {
@@ -223,10 +223,10 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_JUSTIFY).apply { glyphSize = 24 }
-                    textViewModal.alignment.onChange { if (it == TextAlignment.JUSTIFY) isSelected = true }
+                    toolbarViewModal.alignment.onChange { if (it == TextAlignment.JUSTIFY) isSelected = true }
                     action {
-                        textViewModal.alignment.value = TextAlignment.JUSTIFY
-                        textViewModal.triggerParagraphChange()
+                        toolbarViewModal.alignment.value = TextAlignment.JUSTIFY
+                        toolbarViewModal.triggerParagraphChange()
                     }
                 }
                 separator(Orientation.VERTICAL)
@@ -238,7 +238,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_INDENT_INCREASE).apply { glyphSize = 24 }
                     action {
-                        textViewModal.triggerIndentIncrease()
+                        toolbarViewModal.triggerIndentIncrease()
                     }
                 }
                 button {
@@ -247,7 +247,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_INDENT_DECREASE).apply { glyphSize = 24 }
                     action {
-                        textViewModal.triggerIndentDecrease()
+                        toolbarViewModal.triggerIndentDecrease()
                     }
                 }
                 separator(Orientation.VERTICAL)

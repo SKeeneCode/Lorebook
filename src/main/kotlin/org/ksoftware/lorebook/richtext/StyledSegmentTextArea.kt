@@ -9,7 +9,7 @@ import org.fxmisc.richtext.model.*
 
 
 class StyledSegmentTextArea(
-    initialParStyle: ParStyle = ParStyle.EMPTY.updateAlignment(TextAlignment.JUSTIFY),
+    initialParStyle: ParStyle = ParStyle.EMPTY.updateAlignment(TextAlignment.LEFT),
     applyParStyle: BiConsumer<TextFlow, ParStyle> = BiConsumer { txtflow, pstyle -> txtflow.style = pstyle.toCss() },
     initialSegStyle: TextStyle = TextStyle.EMPTY
         .updateFontFamily(Font.getDefault().family)

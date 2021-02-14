@@ -10,6 +10,7 @@ import org.ksoftware.lorebook.actions.SaveProjectAction
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageViewModel
+import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import tornadofx.*
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -21,6 +22,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.JavaFx
     private val projectViewModel: ProjectViewModel by inject()
+    private val toolbarViewModal: ToolbarViewModal by inject()
     private val saveProjectActor: SendChannel<SaveProjectAction> = createSaveActor()
 
     /**
@@ -39,7 +41,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
      */
     fun dockPageView(page: PageModel, workspace: Workspace) {
         launch {
-            workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel)
+            workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel, toolbarViewModal)
         }
     }
 

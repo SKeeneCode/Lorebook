@@ -9,7 +9,7 @@ import javafx.scene.text.Font
 import tornadofx.ViewModel
 import java.util.*
 
-class RichTextViewModal : ViewModel() {
+class ToolbarViewModal : ViewModel() {
 
     val fontFamily = SimpleObjectProperty(Optional.empty<String>())
     val fontName = SimpleObjectProperty(Optional.empty<String>())
@@ -19,7 +19,6 @@ class RichTextViewModal : ViewModel() {
     val underline = SimpleStringProperty(null)
     val strikethrough = SimpleStringProperty(null)
     val alignment = SimpleObjectProperty<TextAlignment>(null)
-    val indent = SimpleIntegerProperty(0)
     val increaseIndentTrigger = SimpleBooleanProperty(false)
     val decreaseIndentTrigger = SimpleBooleanProperty(false)
     val updateTextTrigger = SimpleBooleanProperty(false)
@@ -35,7 +34,6 @@ class RichTextViewModal : ViewModel() {
     }
 
     fun updateViewModalWithParagraphStyle(style: ParStyle) {
-        if (style.indent.isPresent) indent.value = style.indent.get().level else indent.value = 0
         if (style.alignment.isPresent) alignment.value = style.alignment.get() else alignment.value = null
     }
 
@@ -44,7 +42,6 @@ class RichTextViewModal : ViewModel() {
         if (fontSize.value.isPresent) { size = if (fontSize.value.get() > 32.0) 32.0 else fontSize.value.get() }
         if (fontName.value.isPresent) {
             label.font = Font(fontName.value.get(), size)
-            println(Font.getFontNames(label.font.family))
             label.text = fontName.value.get()
         } else {
             label.text = ""
@@ -53,7 +50,6 @@ class RichTextViewModal : ViewModel() {
 
     fun createParagraphStyle() : ParStyle {
         var style = ParStyle.EMPTY
-        if (indent.value > 0) style = style.updateIndent(Indent(indent.value))
         if (alignment.value != null) style = style.updateAlignment(alignment.value)
         return style
     }
@@ -77,12 +73,10 @@ class RichTextViewModal : ViewModel() {
     }
 
     fun triggerIndentIncrease() {
-        indent.value++
         increaseIndentTrigger.value = !increaseIndentTrigger.value
     }
 
     fun triggerIndentDecrease() {
-        indent.value--
         decreaseIndentTrigger.value = !decreaseIndentTrigger.value
     }
 

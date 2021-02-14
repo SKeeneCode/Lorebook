@@ -16,6 +16,7 @@ import org.ksoftware.lorebook.nodes.TextNode
 import org.ksoftware.lorebook.organiser.Organiser
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
+import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.tags.TagFunction
 import tornadofx.*
 
@@ -31,12 +32,17 @@ class PageView : View("MyPage") {
 
     private val tagFlowViewModel: TagFlowViewModel by inject()
     private val tagFlowController: TagFlowController by inject()
+    private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val projectViewModel: ProjectViewModel by inject()
     private var nodeContainer: Pane by singleAssign()
 
     init {
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
+    }
+
+    override fun onDock() {
+        projectViewModel.currentRichText.value = null
     }
 
     override val root = borderpane {
@@ -64,15 +70,17 @@ class PageView : View("MyPage") {
                     nodeContainer = pane {
                         prefWidth = 10000.0
                         prefHeight = 10000.0
-                        val node = TextNode()
-                        node.root.setPrefSize(300.0, 300.0)
-                        // define the style via css
-                        node.root.style = CSS_STYLE
-                        // position the node
-                        node.root.layoutX = 50.0
-                        node.root.layoutY = 50.0
-                        // add the node to the root pane
-                        add(node)
+                        for (i in 0..4) {
+                            val node = find<TextNode>(Scope(projectViewModel, toolbarViewModal))
+                            node.root.setPrefSize(300.0, 300.0)
+                            // define the style via css
+                            node.root.style = CSS_STYLE
+                            // position the node
+                            node.root.layoutX = 50.0 + 200.0*i
+                            node.root.layoutY = 50.0
+                            // add the node to the root pane
+                            add(node)
+                        }
                     }
                 }
 

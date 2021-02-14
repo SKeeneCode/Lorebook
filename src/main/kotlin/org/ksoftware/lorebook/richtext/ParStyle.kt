@@ -38,22 +38,15 @@ class ParStyle(
                 )
         }
 
-        fun alignLeft(): ParStyle = EMPTY.updateAlignment(TextAlignment.LEFT)
-        fun alignCenter(): ParStyle = EMPTY.updateAlignment(TextAlignment.CENTER)
-        fun alignRight(): ParStyle = EMPTY.updateAlignment(TextAlignment.RIGHT)
-        fun alignJustify(): ParStyle = EMPTY.updateAlignment(TextAlignment.JUSTIFY)
-
-
-
     }
 
     fun updateAlignment(alignment: TextAlignment) : ParStyle = ParStyle(Optional.of(alignment), indent)
     fun updateIndent(indent: Indent) : ParStyle = ParStyle(alignment, Optional.of(indent))
     fun increaseIndent(): ParStyle {
-        return if (isIndented()) { updateIndent(indent.get().increase()) } else { updateIndent(Indent(1)) }
+        return if (isIndented()) { updateIndent(indent.get().increase()) } else updateIndent(Indent())
     }
     fun decreaseIndent(): ParStyle {
-        return if (isIndented()) { updateIndent(indent.get().decrease()) } else { updateIndent(Indent(0)) }
+        return if (isIndented()) { updateIndent(indent.get().decrease()) } else this
     }
     fun isIndented() : Boolean = indent.isPresent && indent.get().level > 0
 
@@ -92,7 +85,7 @@ class ParStyle(
     }
 
     override fun toString(): String {
-        return toCss()
+        return "ParStyle(alignment=$alignment, indent=$indent)"
     }
 
 

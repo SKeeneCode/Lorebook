@@ -1,6 +1,6 @@
 package org.ksoftware.lorebook.richtext
 
-class Indent(var level: Int = 0) {
+class Indent(var level: Int = 1) {
 
     var width: Double = 15.0
 
