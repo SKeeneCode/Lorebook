@@ -48,7 +48,7 @@ class TextSizePicker : View() {
             valueProperty().onChange {
                 value = it.roundToInt().toDouble()
                 textViewModal.fontSize.value = it.roundToInt().toString()
-                if (popup.isShowing) textViewModal.triggerFontChange()
+                if (popup.isShowing) textViewModal.triggerTextChange()
             }
 
             textViewModal.fontSize.onChange {

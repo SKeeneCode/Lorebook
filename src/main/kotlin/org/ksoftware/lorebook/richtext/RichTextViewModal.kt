@@ -13,7 +13,7 @@ class RichTextViewModal : ViewModel() {
     val fontName = SimpleStringProperty(null)
     val fontSize = SimpleStringProperty(null)
     val bold = SimpleObjectProperty(Optional.empty<Boolean>())
-    val italic = SimpleStringProperty(null)
+    val italic = SimpleObjectProperty(Optional.empty<Boolean>())
     val underline = SimpleStringProperty(null)
     val strikethrough = SimpleStringProperty(null)
     val alignment = SimpleObjectProperty<TextAlignment>(null)
@@ -30,7 +30,7 @@ class RichTextViewModal : ViewModel() {
         if (style.fontName.isPresent) fontName.value = style.fontName.get() else fontName.value = null
         if (style.fontFamily.isPresent) fontFamily.value = style.fontFamily.get() else fontFamily.value = null
         if (style.bold.isPresent && style.bold.get()) bold.value = Optional.of(true) else bold.value = Optional.empty()
-        if (style.italic.isPresent) italic.value = style.italic.get().toString() else italic.value = null
+        if (style.italic.isPresent && style.italic.get()) italic.value = Optional.of(true) else italic.value = Optional.empty()
     }
 
     fun updateViewModalWithParagraphStyle(style: ParStyle) {
@@ -48,12 +48,7 @@ class RichTextViewModal : ViewModel() {
     fun createTextStyle() : TextStyle {
         var style = TextStyle.EMPTY
         if (bold.value.isPresent) style = style.updateBold(bold.value.get())
-        if (!italic.value.isNullOrBlank()) style = style.updateItalic(italic.value.toBoolean())
-        return style
-    }
-
-    fun createFontStyle() : TextStyle {
-        var style = TextStyle.EMPTY
+        if (italic.value.isPresent) style = style.updateItalic(italic.value.get())
         if (!fontFamily.value.isNullOrBlank()) style = style.updateFontFamily(fontFamily.value)
         if (!fontName.value.isNullOrBlank()) style = style.updateFontName(fontName.value)
         if (!fontSize.value.isNullOrBlank()) style = style.updateFontSize(fontSize.value.toDouble())
@@ -78,7 +73,4 @@ class RichTextViewModal : ViewModel() {
         updateTextTrigger.value = !updateTextTrigger.value
     }
 
-    fun triggerFontChange() {
-        updateFontTrigger.value = !updateFontTrigger.value
-    }
 }

@@ -114,18 +114,17 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                                 textViewModal.fontFamily.value = font.get().family
                                 when (font.get().style) {
                                      "Bold" -> textViewModal.bold.value = Optional.of(true)
-                                    "Italic" -> textViewModal.italic.value = "true"
+                                    "Italic" -> textViewModal.italic.value = Optional.of(true)
                                     "Bold Italic" -> {
                                         textViewModal.bold.value = Optional.of(true)
-                                        textViewModal.italic.value = "true"
+                                        textViewModal.italic.value = Optional.of(true)
                                     }
                                     "Regular" -> {
-                                        textViewModal.bold.value = null
-                                        textViewModal.italic.value = null
+                                        textViewModal.bold.value = Optional.of(false)
+                                        textViewModal.italic.value = Optional.of(false)
                                     }
                                 }
                                 textViewModal.triggerTextChange()
-                                textViewModal.triggerFontChange()
                             }
                         }
 
@@ -152,8 +151,8 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 togglebutton(ToggleGroup()) {
                     addClass(Styles.hoverPopup)
                     addClass(Styles.toolbarButton)
-                    selectedProperty().onChange { textViewModal.italic.value = it.toString() }
-                    textViewModal.italic.onChange { isSelected = it.toBoolean() }
+                    selectedProperty().onChange { textViewModal.italic.value = Optional.of(it) }
+                    textViewModal.italic.onChange { if (it != null) isSelected = it.orElse(false) }
                     isSelected = false
                     background = null
                     graphic = MaterialIconView(MaterialIcon.FORMAT_ITALIC).apply { glyphSize = 24 }

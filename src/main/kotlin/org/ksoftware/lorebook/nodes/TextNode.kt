@@ -41,10 +41,6 @@ class TextNode : TransformableNode() {
                 textInsertionStyle = style
                 requestFocus()
             }
-            textViewModal.updateFontTrigger.onChange {
-                textController.updateStyleInSelection(this, textViewModal.createFontStyle())
-                requestFocus()
-            }
         }
 
         with(area.content) {
@@ -100,9 +96,9 @@ class TextNode : TransformableNode() {
                     }
 
                     if (italics.hasDifferentValues()) {
-                        textViewModal.italic.value = null
+                        textViewModal.italic.value = Optional.empty()
                     } else {
-                        textViewModal.italic.value = italics.any { it }.toString()
+                        textViewModal.italic.value = Optional.of(italics.any { it })
                     }
 
                 }
