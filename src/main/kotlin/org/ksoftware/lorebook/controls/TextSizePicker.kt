@@ -12,6 +12,8 @@ import javafx.scene.paint.Color
 import javafx.stage.Popup
 import org.ksoftware.lorebook.richtext.RichTextViewModal
 import tornadofx.*
+import java.util.*
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 class TextSizePicker : View() {
@@ -47,23 +49,36 @@ class TextSizePicker : View() {
             majorTickUnit = 16.0
             valueProperty().onChange {
                 value = it.roundToInt().toDouble()
-                textViewModal.fontSize.value = it.roundToInt().toString()
-                if (popup.isShowing) textViewModal.triggerTextChange()
+                textViewModal.fontSize.value = Optional.of(it.roundToInt().toDouble())
+                if (popup.isShowing) {
+                    textViewModal.triggerTextChange()
+                }
             }
 
             textViewModal.fontSize.onChange {
-                if (it.isNullOrEmpty())  {
-                    root.text = ""
-                } else {
-                    value = it.toDouble()
+                if (it != null) {
+                    if (it.isPresent) {
+                        value = it.get()
+                        root.style {
+                            backgroundColor += Color.WHITE
+                            textFill = Color.BLACK
+                        }
+                        textViewModal.triggerLabelChange()
+                    } else {
+                        root.style {
+                            backgroundColor += Color.WHITE
+                            textFill = Color.WHITE
+                        }
+                    }
                 }
             }
+
         }
 
 
         val popupContent = vbox {
             alignment = Pos.CENTER
-            polygon(0, 0, 10,10,-10,10) {
+            polygon(0, 0, 10, 10, -10, 10) {
                 fill = Color.WHITE
             }
             add(slider)
@@ -86,11 +101,11 @@ class TextSizePicker : View() {
 
         filterInput { change ->
             change.controlNewText.isInt() &&
-            change.controlNewText.toInt() in 8..72
+                    change.controlNewText.toInt() in 1..72
         }
 
         onLeftClick {
-                popupController.showPopup(popup, this)
+            popupController.showPopup(popup, this)
         }
 
 

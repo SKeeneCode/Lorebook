@@ -37,6 +37,7 @@ class TextNode : TransformableNode() {
             }
             textViewModal.updateTextTrigger.onChange {
                 val style = textViewModal.createTextStyle()
+                println(style)
                 textController.updateStyleInSelection(this, style)
                 textInsertionStyle = style
                 requestFocus()
@@ -64,28 +65,28 @@ class TextNode : TransformableNode() {
                     // otherwise we need to examine the range of styles in our selection to know what buttons to select
                     val styles = getStyleSpans(selection).styleStream().toList()
                     val fontNames = styles.filter { it.fontName.isPresent }.map { it.fontName.get() }
+                    val fontFamilies = styles.filter { it.fontFamily.isPresent }.map { it.fontFamily.get() }
                     val fontSizes = styles.filter { it.fontSize.isPresent }.map { it.fontSize.get() }
                     val bolds = styles.map { it.bold.orElse(false) }
                     val italics = styles.map { it.italic.orElse(false) }
 
 
                     if (fontNames.hasDifferentValues()) {
-                        textViewModal.fontName.value = null
+                        textViewModal.fontName.value = Optional.empty()
                     } else {
-                        fontNames.firstOrNull()?.let { textViewModal.fontName.value = it }
+                        fontNames.firstOrNull()?.let { textViewModal.fontName.value = Optional.of(it) }
+                    }
+
+                    if (fontFamilies.hasDifferentValues()) {
+                        textViewModal.fontFamily.value = Optional.empty()
+                    } else {
+                        fontFamilies.firstOrNull()?.let { textViewModal.fontFamily.value = Optional.of(it) }
                     }
 
                     if (fontSizes.hasDifferentValues()) {
-                        if (fontNames.hasDifferentValues()) {
-                            textViewModal.showFontSizeText.value = true
-                            textViewModal.fontSize.value = null
-                        } else {
-                            textViewModal.showFontSizeText.value = false
-                            textViewModal.fontSize.value = fontSizes.minOrNull().toString()
-                        }
+                        textViewModal.fontSize.value = Optional.empty()
                     } else {
-                        textViewModal.showFontSizeText.value = true
-                        fontSizes.firstOrNull()?.let { textViewModal.fontSize.value = it.toString()}
+                        fontSizes.firstOrNull()?.let { textViewModal.fontSize.value = Optional.of(it)}
                     }
 
                     if (bolds.hasDifferentValues()) {
@@ -100,8 +101,11 @@ class TextNode : TransformableNode() {
                     } else {
                         textViewModal.italic.value = Optional.of(italics.any { it })
                     }
-
                 }
+
+                println(textViewModal.fontName)
+                println(textViewModal.fontFamily)
+                textViewModal.triggerLabelChange()
             }
         }
     }

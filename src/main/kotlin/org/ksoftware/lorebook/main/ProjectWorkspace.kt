@@ -4,6 +4,7 @@ import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
+import javafx.scene.control.Label
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
@@ -93,8 +94,8 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 separator(Orientation.VERTICAL)
             }
             hbox(2.0) {
-                    val fontSelector = FontSelectorDialog(Font.font(textViewModal.fontFamily.value))
-                     label(textViewModal.fontName) {
+                    val fontSelector = FontSelectorDialog(Font.font(textViewModal.fontFamily.value.orElse(Font.getDefault().family)))
+                     label {
                         style {
                             backgroundColor += Color.WHITE
                         }
@@ -109,9 +110,9 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                         onLeftClick {
                             val font = fontSelector.showAndWait()
                             if (font.isPresent) {
-                                textViewModal.fontSize.value = font.get().size.toString()
-                                textViewModal.fontName.value = font.get().name
-                                textViewModal.fontFamily.value = font.get().family
+                                textViewModal.fontSize.value = Optional.of(font.get().size)
+                                textViewModal.fontName.value = Optional.of(font.get().name)
+                                textViewModal.fontFamily.value = Optional.of(font.get().family)
                                 when (font.get().style) {
                                      "Bold" -> textViewModal.bold.value = Optional.of(true)
                                     "Italic" -> textViewModal.italic.value = Optional.of(true)
@@ -125,15 +126,14 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                                     }
                                 }
                                 textViewModal.triggerTextChange()
+                                textViewModal.updateFontSelectionText(this)
                             }
                         }
 
-                        textViewModal.fontSize.onChange {
-                            if (!it.isNullOrEmpty()) {
-                                val size = if (it.toDouble() > 24.0) 24.0 else it.toDouble()
-                                font = Font(textViewModal.fontName.value, size)
-                            }
-                        }
+                         textViewModal.updateLabelTrigger.onChange {
+                             textViewModal.updateFontSelectionText(this)
+                         }
+
                     }
                 add<TextSizePicker>()
                 togglebutton(ToggleGroup()) {
