@@ -2,17 +2,14 @@ package org.ksoftware.lorebook.organiser.tagtreeview
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
-import javafx.animation.Interpolator
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.SetChangeListener
-import javafx.geometry.Point2D
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.input.TransferMode
-import javafx.scene.layout.Region
 import javafx.scene.text.Font
 import javafx.stage.Popup
-import org.ksoftware.lorebook.Styles
+import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.events.TagTreeRebuildRequest
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
@@ -20,9 +17,7 @@ import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
-import javafx.stage.PopupWindow
 import javafx.scene.input.DataFormat
-import javafx.util.Duration
 import javafx.scene.input.MouseButton
 import org.ksoftware.lorebook.controls.PopupController
 

@@ -2,7 +2,7 @@ package org.ksoftware.lorebook.organiser.tagtreeview
 
 import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
-import org.ksoftware.lorebook.Styles
+import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import tornadofx.*

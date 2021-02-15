@@ -2,19 +2,14 @@ package org.ksoftware.lorebook.organiser.tagflow
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
-import javafx.animation.Interpolator
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.geometry.Point2D
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.input.MouseButton
 import javafx.scene.input.TransferMode
-import javafx.scene.layout.Region
 import javafx.scene.text.Font
 import javafx.stage.Popup
-import javafx.stage.PopupWindow
-import javafx.util.Duration
-import org.ksoftware.lorebook.Styles
+import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.controls.PopupController
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.tags.TagViewModel

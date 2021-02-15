@@ -2,14 +2,12 @@ package org.ksoftware.lorebook.pages
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
-import javafx.beans.binding.BooleanExpression
 import javafx.geometry.Orientation
 import javafx.scene.Cursor
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
-import org.ksoftware.lorebook.Styles
 import org.ksoftware.lorebook.controls.AutoCompleteTextField
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.nodes.TextNode
@@ -17,6 +15,7 @@ import org.ksoftware.lorebook.organiser.Organiser
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
+import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.tags.TagFunction
 import tornadofx.*
 
@@ -46,10 +45,6 @@ class PageView : View("MyPage") {
     }
 
     override val root = borderpane {
-
-        // rich text controls
-        top {
-        }
 
         // pane container holding nodes
         center {
@@ -130,4 +125,5 @@ class PageView : View("MyPage") {
 
         }
     }
+
 }

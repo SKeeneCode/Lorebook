@@ -22,7 +22,8 @@ application {
             "--add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.util=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED"
+            "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
     )
 }
 kotlin {
@@ -45,6 +46,7 @@ javafx {
 repositories {
     mavenCentral()
     maven("https://dl.bintray.com/jerady/maven")
+    maven("https://dl.bintray.com/micheljung/maven")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
@@ -67,6 +69,8 @@ dependencies {
     // For copy + paste of rich text
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.0")
     implementation("com.sun.xml.bind:jaxb-impl:3.0.0")
+
+    implementation("ch.micheljung.fxstage:fxstage:0.7.4")
 
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")

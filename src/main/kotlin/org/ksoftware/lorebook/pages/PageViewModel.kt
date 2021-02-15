@@ -1,6 +1,6 @@
 package org.ksoftware.lorebook.pages
 
-import tornadofx.*
+import tornadofx.ItemViewModel
 
 /**
  * View model class for a page. When instantiated will bind to the provided PageModel or create a new

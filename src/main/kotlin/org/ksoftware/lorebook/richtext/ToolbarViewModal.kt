@@ -64,6 +64,22 @@ class ToolbarViewModal : ViewModel() {
         return style
     }
 
+    fun toggleBold() {
+        if (bold.value.isPresent) {
+            bold.value = Optional.of(!bold.value.get())
+        } else {
+            bold.value = Optional.of(true)
+        }
+    }
+
+    fun toggleItalic() {
+        if (italic.value.isPresent) {
+            italic.value = Optional.of(!italic.value.get())
+        } else {
+            italic.value = Optional.of(true)
+        }
+    }
+
     fun triggerLabelChange() {
         updateLabelTrigger.value = !updateLabelTrigger.value
     }

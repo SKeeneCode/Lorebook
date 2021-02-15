@@ -1,5 +1,7 @@
 package org.ksoftware.lorebook.nodes
 
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import org.fxmisc.flowless.VirtualizedScrollPane
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.richtext.*
@@ -18,6 +20,17 @@ class TextNode : TransformableNode() {
 
     init {
         with(area) {
+            addEventFilter(KeyEvent.KEY_PRESSED) {
+                if (it.code == KeyCode.B && it.isControlDown) {
+                    toolbarViewModal.toggleBold()
+                    toolbarViewModal.triggerTextChange()
+                }
+                if (it.code == KeyCode.I && it.isControlDown) {
+                    toolbarViewModal.toggleItalic()
+                    toolbarViewModal.triggerTextChange()
+                }
+            }
+
             prefWidthProperty().bind(root.widthProperty().minus(root.paddingAllProperty.multiply(2)))
             prefHeightProperty().bind(root.heightProperty().minus(root.paddingAllProperty.multiply(2)))
         }
@@ -77,7 +90,6 @@ class TextNode : TransformableNode() {
                     val fontSizes = styles.filter { it.fontSize.isPresent }.map { it.fontSize.get() }
                     val bolds = styles.map { it.bold.orElse(false) }
                     val italics = styles.map { it.italic.orElse(false) }
-
 
                     if (fontNames.hasDifferentValues()) {
                         toolbarViewModal.fontName.value = Optional.empty()
