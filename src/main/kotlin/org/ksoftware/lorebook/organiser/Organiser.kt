@@ -2,12 +2,12 @@ package org.ksoftware.lorebook.organiser
 
 import org.ksoftware.lorebook.events.TagTreeRebuildRequest
 import org.ksoftware.lorebook.main.ProjectViewModel
-import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.organiser.tagflow.TagFlow
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
-import org.ksoftware.lorebook.tags.TagFunction
 import org.ksoftware.lorebook.organiser.tagtreeview.TagTree
 import org.ksoftware.lorebook.organiser.tagtreeview.TagTreeViewModel
+import org.ksoftware.lorebook.pages.PageViewModel
+import org.ksoftware.lorebook.tags.TagFunction
 import tornadofx.*
 
 class Organiser : View("Page Organiser") {

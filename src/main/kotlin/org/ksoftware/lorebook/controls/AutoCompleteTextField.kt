@@ -21,9 +21,7 @@ import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.utilities.getContrastColor
-import tornadofx.View
 import tornadofx.*
-import tornadofx.textfield
 import java.util.*
 import java.util.stream.Collectors
 

@@ -2,7 +2,7 @@ package org.ksoftware.lorebook.organiser.tagflow
 
 import org.ksoftware.lorebook.tags.TagFunction
 import org.ksoftware.lorebook.tags.TagModel
-import tornadofx.*
+import tornadofx.ViewModel
 
 class TagFlowViewModel : ViewModel() {
     var draggedTag: TagModel? = null

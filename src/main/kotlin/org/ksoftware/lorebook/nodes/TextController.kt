@@ -1,12 +1,10 @@
 package org.ksoftware.lorebook.nodes
 
-import org.fxmisc.richtext.model.Paragraph
 import org.fxmisc.richtext.model.StyleSpans
 import org.fxmisc.richtext.model.TwoDimensional
 import org.ksoftware.lorebook.richtext.ParStyle
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import org.ksoftware.lorebook.richtext.TextStyle
-import org.reactfx.util.Either
 import tornadofx.Controller
 import java.util.function.Function
 

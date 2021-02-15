@@ -1,6 +1,5 @@
 package org.ksoftware.lorebook.richtext
 
-import org.fxmisc.richtext.model.StyledSegment
 import org.fxmisc.richtext.model.TextOps
 import java.util.*
 

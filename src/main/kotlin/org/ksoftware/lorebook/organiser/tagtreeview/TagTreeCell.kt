@@ -6,20 +6,20 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.SetChangeListener
 import javafx.geometry.Pos
 import javafx.scene.Cursor
+import javafx.scene.input.DataFormat
+import javafx.scene.input.MouseButton
 import javafx.scene.input.TransferMode
 import javafx.scene.text.Font
 import javafx.stage.Popup
-import org.ksoftware.lorebook.styles.Styles
+import org.ksoftware.lorebook.controls.PopupController
 import org.ksoftware.lorebook.events.TagTreeRebuildRequest
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
+import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
-import javafx.scene.input.DataFormat
-import javafx.scene.input.MouseButton
-import org.ksoftware.lorebook.controls.PopupController
 
 class TagTreeCell : View() {
 

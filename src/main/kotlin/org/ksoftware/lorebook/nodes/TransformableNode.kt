@@ -1,9 +1,9 @@
 package org.ksoftware.lorebook.nodes
 
 import javafx.scene.Cursor
-import javafx.scene.Parent
 import javafx.scene.transform.Scale
-import tornadofx.*
+import tornadofx.View
+import tornadofx.stackpane
 import kotlin.math.abs
 
 sealed class TransformableNode : View() {

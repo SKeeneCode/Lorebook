@@ -5,7 +5,6 @@ import org.fxmisc.richtext.model.Codec
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.*
-import java.util.function.Supplier
 
 class ParStyle(
     val alignment : Optional<TextAlignment> = Optional.empty(),

@@ -9,9 +9,9 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.TransferMode
 import javafx.scene.text.Font
 import javafx.stage.Popup
-import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.controls.PopupController
 import org.ksoftware.lorebook.main.ProjectViewModel
+import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*

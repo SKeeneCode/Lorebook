@@ -1,6 +1,5 @@
 package org.ksoftware.lorebook.richtext
 
-import javafx.scene.text.Font
 import java.util.*
 
 class TextStyle(
@@ -27,14 +26,10 @@ class TextStyle(
         val sb = StringBuilder()
         if (fontFamily.isPresent) {
             sb.append("-fx-font-family: '${fontFamily.get()}';")
-        } else {
-           // sb.append("-fx-font-family: ${Font.getDefault().family};")
         }
 
         if (fontSize.isPresent) {
             sb.append("-fx-font-size: ${fontSize.get()};")
-        } else {
-          //  sb.append("-fx-font-size: ${Font.getDefault().size};")
         }
 
         if (bold.isPresent) {

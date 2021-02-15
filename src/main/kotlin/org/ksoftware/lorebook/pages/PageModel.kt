@@ -9,7 +9,7 @@ import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.attributes.JsonModel
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.tags.TagModel
-import tornadofx.*
+import tornadofx.toProperty
 import java.io.File
 import java.util.*
 

@@ -14,7 +14,7 @@ import org.ksoftware.lorebook.attributes.JsonModel
 import org.ksoftware.lorebook.attributes.Named
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.utilities.getRandomColor
-import tornadofx.*
+import tornadofx.toProperty
 import java.io.File
 import java.util.*
 

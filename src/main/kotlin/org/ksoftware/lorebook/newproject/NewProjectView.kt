@@ -1,11 +1,6 @@
 package org.ksoftware.lorebook.newproject
 
-import ch.micheljung.fxwindow.FxStage
-import javafx.scene.Scene
 import javafx.stage.DirectoryChooser
-import javafx.stage.Modality
-import javafx.stage.Stage
-import javafx.stage.StageStyle
 import org.ksoftware.lorebook.main.ProjectWorkspace
 import tornadofx.*
 import java.io.File

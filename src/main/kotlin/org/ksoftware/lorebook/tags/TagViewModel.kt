@@ -1,7 +1,6 @@
 package org.ksoftware.lorebook.tags
 
-import javafx.beans.property.SimpleBooleanProperty
-import tornadofx.*
+import tornadofx.ItemViewModel
 
 class TagViewModel(model: TagModel = TagModel()) : ItemViewModel<TagModel>() {
     init {

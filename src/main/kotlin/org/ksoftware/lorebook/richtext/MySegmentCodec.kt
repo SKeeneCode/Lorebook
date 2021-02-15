@@ -1,10 +1,10 @@
 package org.ksoftware.lorebook.richtext
 
+import jakarta.xml.bind.JAXB
+import javafx.scene.text.Font
 import org.fxmisc.richtext.model.Codec
 import org.fxmisc.richtext.model.StyledSegment
 import java.io.*
-import jakarta.xml.bind.JAXB
-import javafx.scene.text.Font
 
 
 class MySegmentCodec : Codec<StyledSegment<AbstractSegment, TextStyle>> {

@@ -1,7 +1,6 @@
 package org.ksoftware.lorebook.styles
 
 import javafx.scene.paint.Color
-import javafx.scene.paint.Paint
 import tornadofx.*
 
 class Styles : Stylesheet() {

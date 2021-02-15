@@ -5,7 +5,9 @@ import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
-import tornadofx.*
+import tornadofx.Controller
+import tornadofx.Scope
+import tornadofx.find
 
 class TagFlowController : Controller() {
 

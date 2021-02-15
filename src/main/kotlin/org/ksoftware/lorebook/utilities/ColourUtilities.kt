@@ -1,10 +1,6 @@
 package org.ksoftware.lorebook.utilities
 
-import javafx.animation.KeyFrame
-import javafx.animation.Timeline
-import javafx.scene.control.ButtonBase
 import javafx.scene.paint.Color
-import javafx.util.Duration
 
 
 // https://stackoverflow.com/a/13030061/3317592

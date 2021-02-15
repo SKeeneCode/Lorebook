@@ -6,7 +6,6 @@ import org.fxmisc.flowless.VirtualizedScrollPane
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.richtext.*
 import org.ksoftware.lorebook.utilities.hasDifferentValues
-import tornadofx.paddingAll
 import tornadofx.*
 import java.util.*
 import kotlin.streams.toList

@@ -2,7 +2,8 @@ package org.ksoftware.lorebook.organiser.tagtreeview
 
 import org.ksoftware.lorebook.tags.TagFunction
 import org.ksoftware.lorebook.tags.TagModel
-import tornadofx.*
+import tornadofx.UIComponent
+import tornadofx.ViewModel
 
 class TagTreeViewModel : ViewModel() {
     val treeCells = mutableListOf<UIComponent>()

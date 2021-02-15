@@ -4,9 +4,11 @@ import javafx.scene.input.DataFormat
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
-import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
-import tornadofx.*
+import org.ksoftware.lorebook.pages.PageViewModel
+import tornadofx.View
+import tornadofx.scrollpane
+import tornadofx.vgrow
 
 class TagTree : View("My View") {
 

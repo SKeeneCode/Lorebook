@@ -1,11 +1,13 @@
 package org.ksoftware.lorebook.richtext
 
-import java.util.function.BiConsumer
-import org.fxmisc.richtext.GenericStyledArea
 import javafx.scene.Node
 import javafx.scene.text.Font
 import javafx.scene.text.TextFlow
-import org.fxmisc.richtext.model.*
+import org.fxmisc.richtext.GenericStyledArea
+import org.fxmisc.richtext.model.ReadOnlyStyledDocument
+import org.fxmisc.richtext.model.StyledSegment
+import org.fxmisc.richtext.model.TextOps
+import java.util.function.BiConsumer
 
 
 class StyledSegmentTextArea(

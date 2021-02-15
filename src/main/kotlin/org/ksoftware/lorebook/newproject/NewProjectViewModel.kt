@@ -1,7 +1,7 @@
 package org.ksoftware.lorebook.newproject
 
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
+import tornadofx.ViewModel
 
 /**
  * This View-Model keeps track of the users desired settings when creating a new project.

@@ -2,16 +2,19 @@ package org.ksoftware.lorebook.main
 
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.javafx.JavaFx
+import kotlinx.coroutines.launch
 import org.ksoftware.lorebook.actions.SaveProjectAction
-import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageModel
+import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
-import tornadofx.*
+import tornadofx.Controller
+import tornadofx.Workspace
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 
