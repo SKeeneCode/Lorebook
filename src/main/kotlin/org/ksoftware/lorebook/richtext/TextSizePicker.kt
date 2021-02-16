@@ -23,7 +23,6 @@ class TextSizePicker : View() {
     private val slider = Slider(8.0, 72.0, 8.0)
 
     init {
-        println(toolbarViewModal)
         popup.isAutoFix = true
         popup.isAutoHide = true
         popup.isHideOnEscape = true
@@ -88,6 +87,7 @@ class TextSizePicker : View() {
 
         style {
             backgroundColor += Color.WHITE
+            backgroundRadius += box(0.px)
         }
 
         bind(slider.valueProperty())
