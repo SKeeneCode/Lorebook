@@ -25,6 +25,9 @@ data class ProjectModel(override val idProperty: StringProperty = SimpleStringPr
     // list of all page models in this project
     val pages: ObservableList<PageModel> = FXCollections.observableArrayList()
 
+    /**
+     * Launches a coroutine for each page to save itself in the project folder.
+     */
     override suspend fun save(projectFolder: File, taskMessage: StringProperty) {
         taskMessage.value = "Saving Project"
         val jobs: List<Job> = pages.map { page ->

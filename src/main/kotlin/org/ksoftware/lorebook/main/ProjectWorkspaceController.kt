@@ -14,6 +14,7 @@ import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import tornadofx.Controller
+import tornadofx.UIComponent
 import tornadofx.Workspace
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -27,6 +28,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
     private val projectViewModel: ProjectViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
     private val saveProjectActor: SendChannel<SaveProjectAction> = createSaveActor()
+
 
     /**
      * Creates a new page and docks it in the provided workspace
@@ -75,6 +77,24 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
         val directoryChooser = DirectoryChooser()
         directoryChooser.initialDirectory = File("/")
         return directoryChooser.showDialog(stage)
+    }
+
+    // --------------------------------------- //
+    //                 OVERLAY                  //
+    // --------------------------------------- //
+
+    /**
+     * Causes the overlay to appear with this UIComponent centered.
+     */
+    fun openOverlayWith(uiComponent: UIComponent) {
+        projectViewModel.overlayNode.value = uiComponent
+    }
+
+    /**
+     * Removes the UIComponent from the overlay and closes the overlay.
+     */
+    fun closeOverlay() {
+        projectViewModel.overlayNode.value = null
     }
 
 

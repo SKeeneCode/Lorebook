@@ -1,5 +1,6 @@
 package org.ksoftware.lorebook.organiser
 
+import javafx.scene.layout.Region
 import org.ksoftware.lorebook.events.TagTreeRebuildRequest
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.organiser.tagflow.TagFlow
@@ -10,6 +11,9 @@ import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.tags.TagFunction
 import tornadofx.*
 
+/**
+ * The organiser allows the user to create and edit tags, as well as change a pages tags.
+ */
 class Organiser : View("Page Organiser") {
 
     private val pageViewModel: PageViewModel by inject()
@@ -33,8 +37,12 @@ class Organiser : View("Page Organiser") {
     }
 
     override val root = splitpane {
+        minWidth = Region.USE_PREF_SIZE
         prefWidth = 600.0
+        maxWidth = Region.USE_PREF_SIZE
+        minHeight = Region.USE_PREF_SIZE
         prefHeight = 600.0
+        maxHeight = Region.USE_PREF_SIZE
         vbox {
             textfield {
                 promptText = "search..."
@@ -49,5 +57,4 @@ class Organiser : View("Page Organiser") {
             add<TagFlow>()
         }
     }
-
 }

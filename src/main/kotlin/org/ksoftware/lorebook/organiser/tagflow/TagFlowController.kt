@@ -9,6 +9,9 @@ import tornadofx.Controller
 import tornadofx.Scope
 import tornadofx.find
 
+/**
+ * A controller for a TagFlow. Contains the converter dictating how a tag should be displayed as a node in a TagFlow.
+ */
 class TagFlowController : Controller() {
 
     private val tagFlowViewModel: TagFlowViewModel by inject()

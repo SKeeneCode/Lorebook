@@ -8,8 +8,9 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
-import org.ksoftware.lorebook.controls.AutoCompleteTextField
+import org.ksoftware.lorebook.controls.AutoCompleteTagField
 import org.ksoftware.lorebook.main.ProjectViewModel
+import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.nodes.TextNode
 import org.ksoftware.lorebook.organiser.Organiser
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
@@ -34,6 +35,7 @@ class PageView : View("MyPage") {
     private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val projectViewModel: ProjectViewModel by inject()
+    private val projectController: ProjectWorkspaceController by inject()
     private var nodeContainer: Pane by singleAssign()
 
     init {
@@ -84,7 +86,7 @@ class PageView : View("MyPage") {
                     SplitPane.setResizableWithParent(this, false)
                     prefHeight = 32.0
                     maxHeight = 76.0
-                    val textfield = find(AutoCompleteTextField::class)
+                    val textfield = find(AutoCompleteTagField::class)
                     textfield.root.prefHeightProperty().bind(this@hbox.heightProperty())
 
                     add(textfield)
@@ -115,7 +117,8 @@ class PageView : View("MyPage") {
                             cursor = Cursor.HAND
                         }
                         action {
-                            openInternalWindow(find(Organiser::class), owner = workspace.root, modal = true, movable = false)
+                            val organiser = find(Organiser::class)
+                            projectController.openOverlayWith(organiser)
                         }
                     }
                 }

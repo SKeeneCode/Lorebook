@@ -1,25 +1,20 @@
 package org.ksoftware.lorebook.nodes
 
-import org.fxmisc.richtext.model.StyleSpans
 import org.fxmisc.richtext.model.TwoDimensional
 import org.ksoftware.lorebook.richtext.ParStyle
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import org.ksoftware.lorebook.richtext.TextStyle
 import tornadofx.Controller
-import java.util.function.Function
 
+/**
+ * The text controller is responsible for updating the style of segments in a given StyledSegmentTextArea
+ */
 class TextController : Controller() {
 
-     fun updateStyleInSelection(area: StyledSegmentTextArea, mixinGetter: Function<StyleSpans<TextStyle>, TextStyle>) {
-        val selection = area.selection
-        if (selection.length != 0) {
-            val styles = area.getStyleSpans(selection)
-            val mixin = mixinGetter.apply(styles)
-            val newStyles = styles.mapStyles { style: TextStyle -> style.updateWith(mixin) }
-            area.setStyleSpans(selection.start, newStyles)
-        }
-    }
 
+    /**
+     * Updates the selection in a given StyledSegmentTextArea with the provided Style
+     */
      fun updateStyleInSelection(area: StyledSegmentTextArea, mixin: TextStyle) {
         val selection = area.selection
         if (selection.length != 0) {
@@ -29,6 +24,10 @@ class TextController : Controller() {
         }
     }
 
+    /**
+     * Updates all paragraphs in the selection of a given StyledSegmentTextArea. Each paragraph style is updated using
+     * the provided updater function.
+     */
     fun updateParagraphStyleInSelection(area: StyledSegmentTextArea, updater: (ParStyle) -> ParStyle) {
         val selection = area.selection
         val startPar = area.offsetToPosition(selection.start, TwoDimensional.Bias.Forward).major
@@ -38,8 +37,5 @@ class TextController : Controller() {
             area.setParagraphStyle(i, updater(paragraph.paragraphStyle))
         }
     }
-
-    fun toggleBold(area: StyledSegmentTextArea) = updateStyleInSelection(area) { spans: StyleSpans<TextStyle> -> TextStyle.bold(!spans.styleStream().allMatch { style: TextStyle -> style.bold.orElse(false) }) }
-    fun toggleItalic(area: StyledSegmentTextArea) = updateStyleInSelection(area) { spans: StyleSpans<TextStyle> -> TextStyle.italic(!spans.styleStream().allMatch { style: TextStyle -> style.italic.orElse(false) }) }
 
 }

@@ -9,8 +9,14 @@ import javafx.util.Duration
 import tornadofx.Controller
 import tornadofx.animate
 
+/**
+ * Class with functions that control the showing of popups.
+ */
 class PopupController : Controller() {
 
+    /**
+     * Shows the popup with a fade in/translation animation. Also centers the popup appropriately.
+     */
     fun showPopup(popup: Popup, ownerNode: Region) {
         val popupContent = popup.content.first()
         popupContent.opacity = 0.0

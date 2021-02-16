@@ -48,9 +48,11 @@ class TagTreeSqueezeCell : View("My View") {
                 translateX = 14.0
                 this.hgap = 5.0
                 this.vgap = 5.0
+                // First add in childless children.
                 for (childWithNoChildren in item.children.filter { it.children.isEmpty() })
                     tagTreeController.build(this, childWithNoChildren)
             }
+            // Then add in children with children, as they will become their own TagTreeSqueezeCell.
             for (childWithChildren in item.children.filter { it.children.isNotEmpty() }) {
                 tagTreeController.build(this, childWithChildren)
             }

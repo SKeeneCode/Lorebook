@@ -5,6 +5,9 @@ import org.ksoftware.lorebook.tags.TagModel
 import tornadofx.UIComponent
 import tornadofx.ViewModel
 
+/**
+ * ViewModal for a TagTree
+ */
 class TagTreeViewModel : ViewModel() {
     val treeCells = mutableListOf<UIComponent>()
     var draggedTag: TagModel? = null

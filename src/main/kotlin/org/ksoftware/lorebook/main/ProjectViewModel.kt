@@ -1,8 +1,12 @@
 package org.ksoftware.lorebook.main
 
 import com.jfoenix.controls.JFXColorPicker
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.geometry.Pos
+import javafx.scene.layout.Priority
+import javafx.scene.layout.StackPane
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import org.ksoftware.lorebook.tags.TagModel
@@ -23,13 +27,19 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val pages = bind(ProjectModel::pages)
     private var pagesBacking = listOf<PageModel>()
 
+    // Parent tag for every tag in this project.
     val rootTag = TagModel()
 
     val taskMessage = SimpleStringProperty("No Task Running")
 
+    // Use a shared instance of ColorPicker so recent color choices are saved.
     val colorPicker = JFXColorPicker()
 
+    // Keeps track of the TextArea the user is currently actively editing.
     val currentRichText = SimpleObjectProperty<StyledSegmentTextArea>()
+
+    val showOverlay = SimpleBooleanProperty(false)
+    val overlayNode = SimpleObjectProperty<UIComponent>(null)
 
     init {
         // copies the list to its backing list after initial binding
@@ -46,7 +56,6 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     }
 
     init {
-
         val tree1 = TagModel(name = "Item 1")
         val tree2 = TagModel(name = "Item 2")
         val tree3 = TagModel(name = "Item 3")

@@ -25,7 +25,10 @@ import tornadofx.*
 import java.util.*
 import java.util.stream.Collectors
 
-class AutoCompleteTextField : View()  {
+/**
+ * A custom text-field that allows the user to easily select available tags and add them to the page.
+ */
+class AutoCompleteTagField : View()  {
 
     private val pageViewModel: PageViewModel by inject()
     private val projectViewModel: ProjectViewModel by inject()

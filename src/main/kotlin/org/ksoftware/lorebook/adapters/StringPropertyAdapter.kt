@@ -5,6 +5,9 @@ import com.squareup.moshi.ToJson
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 
+/**
+ * Adapter so Moshi knows how to deal with StringProperties
+ */
 class StringPropertyAdapter {
     @ToJson fun toJson(property: StringProperty) : String {
         return property.get()

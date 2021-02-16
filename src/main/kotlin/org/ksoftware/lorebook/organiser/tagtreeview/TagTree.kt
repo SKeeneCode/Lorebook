@@ -10,6 +10,9 @@ import tornadofx.View
 import tornadofx.scrollpane
 import tornadofx.vgrow
 
+/**
+ * The TagTree displays a tree of Tags wrapped in a scrollpane.
+ */
 class TagTree : View("My View") {
 
     private val tagTreeController: TagTreeController by inject()
@@ -50,6 +53,7 @@ class TagTree : View("My View") {
         clearTreeCache()
         tagTreeController.build(root, tagTreeViewModel.root)
     }
+
 
     fun clearTreeCache() {
         val cache = tagTreeViewModel.treeCells

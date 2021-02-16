@@ -8,6 +8,9 @@ import org.ksoftware.lorebook.organiser.tagtreeview.TagTreeViewModel
 import org.ksoftware.lorebook.pages.PageViewModel
 import tornadofx.*
 
+/**
+ * The TagFlow lays out a pages tags in a Flow layout. It allows Tags to be dragged and dropped into it.
+ */
 class TagFlow : View("My View") {
 
     private val tagFlowController: TagFlowController by inject()

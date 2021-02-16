@@ -11,6 +11,9 @@ import tornadofx.*
 import java.util.*
 import kotlin.math.roundToInt
 
+/**
+ * The TextSizePicker allows the user to control font size of the rich text implementation.
+ */
 class TextSizePicker : View() {
 
     private val popupController: PopupController by inject(FX.defaultScope)
@@ -50,7 +53,6 @@ class TextSizePicker : View() {
                     toolbarViewModal.triggerTextChange()
                 }
             }
-
             toolbarViewModal.fontSize.onChange {
                 if (it != null) {
                     if (it.isPresent) {
@@ -68,10 +70,7 @@ class TextSizePicker : View() {
                     }
                 }
             }
-
         }
-
-
         val popupContent = vbox {
             alignment = Pos.CENTER
             polygon(0, 0, 10, 10, -10, 10) {
@@ -79,7 +78,6 @@ class TextSizePicker : View() {
             }
             add(slider)
         }
-
         popup.content.add(popupContent)
     }
 
@@ -94,7 +92,6 @@ class TextSizePicker : View() {
 
         bind(slider.valueProperty())
 
-
         filterInput { change ->
             change.controlNewText.isInt() &&
                     change.controlNewText.toInt() in 1..72
@@ -103,7 +100,5 @@ class TextSizePicker : View() {
         onLeftClick {
             popupController.showPopup(popup, this)
         }
-
-
     }
 }

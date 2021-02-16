@@ -51,8 +51,11 @@ repositories {
 }
 
 dependencies {
-    //implementation(fileTree("libs"))
-    implementation("no.tornado:tornadofx:2.0.0-SNAPSHOT")
+    implementation(fileTree("libs"))
+    implementation( "net.java.dev.jna:jna:5.5.0")
+    implementation("net.java.dev.jna:jna-platform:5.5.0")
+    implementation("org.apache.logging.log4j:log4j-api:2.13.3")
+   // implementation("no.tornado:tornadofx:2.0.0-SNAPSHOT")
     implementation("de.jensd:fontawesomefx-commons:11.0")
     implementation("de.jensd:fontawesomefx-fontawesome:4.7.0-11")
     implementation("de.jensd:fontawesomefx-materialicons:2.2.0-11")
@@ -70,7 +73,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.0")
     implementation("com.sun.xml.bind:jaxb-impl:3.0.0")
 
-    implementation("ch.micheljung.fxstage:fxstage:0.7.4")
+   // implementation("ch.micheljung.fxstage:fxstage:0.7.4")
 
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")

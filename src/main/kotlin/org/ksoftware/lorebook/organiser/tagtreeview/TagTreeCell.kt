@@ -21,6 +21,9 @@ import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
 
+/**
+ * A TagTreeCell is the view for a TagModal being displayed in a TagTree.
+ */
 class TagTreeCell : View() {
 
     private val tagViewModel: TagViewModel by inject()

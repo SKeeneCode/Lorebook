@@ -10,6 +10,10 @@ import tornadofx.*
 import java.util.*
 import kotlin.streams.toList
 
+/**
+ * The text node is a content node that the user can use to create and modify rich text using the workspaces rich text
+ * toolbar. The user can drag and drop and resize the node.
+ */
 class TextNode : TransformableNode() {
 
     private val textController: TextController by inject(FX.defaultScope)
@@ -18,6 +22,7 @@ class TextNode : TransformableNode() {
     val area = VirtualizedScrollPane(StyledSegmentTextArea())
 
     init {
+        // Configure key events
         with(area) {
             addEventFilter(KeyEvent.KEY_PRESSED) {
                 if (it.code == KeyCode.B && it.isControlDown) {

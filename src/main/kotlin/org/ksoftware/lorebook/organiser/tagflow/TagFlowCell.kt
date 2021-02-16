@@ -16,6 +16,10 @@ import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.getContrastColor
 import tornadofx.*
 
+/**
+ * The TagFlowCell is the appearance of a Tag inside a TagFlow. TagFlowCells may be edited by double-clicking, right
+ * clicking and can be dragged and dropped.
+ */
 class TagFlowCell : View() {
 
 
