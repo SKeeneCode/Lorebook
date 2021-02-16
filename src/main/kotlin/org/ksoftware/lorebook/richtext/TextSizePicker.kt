@@ -1,4 +1,4 @@
-package org.ksoftware.lorebook.controls
+package org.ksoftware.lorebook.richtext
 
 import javafx.geometry.Pos
 import javafx.scene.control.Slider
@@ -6,7 +6,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.paint.Color
 import javafx.stage.Popup
-import org.ksoftware.lorebook.richtext.ToolbarViewModal
+import org.ksoftware.lorebook.controls.PopupController
 import tornadofx.*
 import java.util.*
 import kotlin.math.roundToInt

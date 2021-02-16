@@ -9,7 +9,6 @@ import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import org.controlsfx.dialog.FontSelectorDialog
-import org.ksoftware.lorebook.controls.TextSizePicker
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.styles.Styles
