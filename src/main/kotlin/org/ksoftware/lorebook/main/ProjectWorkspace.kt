@@ -6,7 +6,7 @@ import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.scene.control.MenuBar
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
-import org.ksoftware.lorebook.newproject.NewProjectView
+import org.ksoftware.lorebook.navigator.Navigator
 import org.ksoftware.lorebook.richtext.RichTextToolbarView
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.styles.Styles
@@ -14,7 +14,7 @@ import tornadofx.*
 import java.util.*
 
 /**
- * Workspace implementation used for a projects main window. Customised to include a richtext toolbar and overlay.
+ * Workspace implementation used for a projects main window. Customised to include a rich text toolbar and overlay.
  */
 class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
 
@@ -45,8 +45,35 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
         })
     }
 
-    override fun onDock() {
-        println("I am being docked")
+    init {
+        projectViewModel.projectWorkspace = this
+    }
+
+    init {
+        with(header) {
+            style {
+                background = null
+                spacing = 0.px
+            }
+            button {
+                addClass(Styles.hoverPopup)
+                addClass(Styles.toolbarButton)
+                background = null
+                graphic = MaterialIconView(MaterialIcon.HOME).apply {
+                    glyphSize = 24
+                }
+                action { }
+            }
+            add<RichTextToolbarView>()
+        }
+    }
+
+    init {
+        with(leftDrawer) {
+            item("Navigator", expanded = true) {
+                add<Navigator>()
+            }
+        }
     }
 
     /**
@@ -75,77 +102,6 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
         sceneContainer.children.addAll(root,overlay)
         this.muteDocking = false
         fxStage.setContent(sceneContainer)
-    }
-
-
-    init {
-        with(header) {
-            style {
-                background = null
-                spacing = 0.px
-            }
-            button {
-                addClass(Styles.hoverPopup)
-                addClass(Styles.toolbarButton)
-                background = null
-                graphic = MaterialIconView(MaterialIcon.HOME).apply {
-                    glyphSize = 24
-                }
-                action { }
-            }
-            add<RichTextToolbarView>()
-        }
-    }
-
-    init {
-        with(leftDrawer) {
-            item("all pages", expanded = true) {
-                vbox {
-                    prefWidth = 200.0
-                    button("add a page") {
-                        action {
-                            projectController.dockNewPage(this@ProjectWorkspace)
-                        }
-                    }
-                    listview(projectViewModel.pages) {
-                        cellFormat {
-                            text = this.item.toString()
-                            this.onDoubleClick {
-                                projectController.dockPageView(this.item, this@ProjectWorkspace)
-                            }
-                        }
-                    }
-                    button("print") {
-                        action {
-                            println(projectViewModel.pages.value.toString())
-                        }
-                    }
-                    button("reset") {
-                        enableWhen(projectViewModel.dirty)
-                        action {
-                            projectViewModel.rollback()
-                            projectViewModel.rollBackPages()
-                        }
-                    }
-                    button("save") {
-                        enableWhen(projectViewModel.dirty)
-                        action {
-                            projectViewModel.commit()
-                        }
-                    }
-                    button("save project") {
-                        action {
-                            currentStage?.let { projectController.saveProject(it) }
-                        }
-                    }
-                    button("new project") {
-                        action {
-                            find(NewProjectView::class).openModal()
-                        }
-                    }
-                }
-            }
-        }
     }
 
 }

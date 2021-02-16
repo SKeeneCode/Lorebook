@@ -27,6 +27,9 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val pages = bind(ProjectModel::pages)
     private var pagesBacking = listOf<PageModel>()
 
+    // Initialized in ProjectWorkspace
+    lateinit var projectWorkspace: ProjectWorkspace
+
     // Parent tag for every tag in this project.
     val rootTag = TagModel()
 
