@@ -11,6 +11,7 @@ import javafx.scene.text.Font
 import org.controlsfx.dialog.FontSelectorDialog
 import org.ksoftware.lorebook.controls.TextSizePicker
 import org.ksoftware.lorebook.main.ProjectViewModel
+import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.styles.Styles
 import tornadofx.*
 import java.util.*
@@ -21,6 +22,7 @@ import java.util.*
  */
 class RichTextToolbarView : View() {
 
+    private val projectController: ProjectWorkspaceController by inject()
     private val projectViewModel: ProjectViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
 
@@ -28,16 +30,17 @@ class RichTextToolbarView : View() {
         val fontSelector = FontSelectorDialog(Font.font(toolbarViewModal.fontFamily.value.orElse(Font.getDefault().family)))
         val alignmentToggleGroup = ToggleGroup()
         separator(Orientation.VERTICAL)
-        togglebutton(ToggleGroup()) {
+        button {
             addClass(Styles.hoverPopup)
             addClass(Styles.toolbarButton)
-            isSelected = false
             background = null
             graphic = MaterialIconView(MaterialIcon.NOTE_ADD).apply {
                 glyphSize = 26
                 fill = Color.DARKGREEN
             }
-            action { }
+            action {
+                projectController.dockNewPage(projectViewModel.projectWorkspace)
+            }
         }
         togglebutton(ToggleGroup()) {
             addClass(Styles.hoverPopup)

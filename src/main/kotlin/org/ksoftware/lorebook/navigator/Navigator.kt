@@ -15,11 +15,6 @@ class Navigator : View() {
 
     override val root = vbox {
         prefWidth = 200.0
-        button("add a page") {
-            action {
-                projectController.dockNewPage(projectViewModel.projectWorkspace)
-            }
-        }
         listview(projectViewModel.pages) {
             cellFormat {
                 text = this.item.toString()
