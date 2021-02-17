@@ -1,6 +1,7 @@
 package org.ksoftware.lorebook.nodes
 
 import javafx.scene.Cursor
+import javafx.scene.layout.Region
 import javafx.scene.transform.Scale
 import tornadofx.View
 import tornadofx.stackpane
@@ -25,7 +26,7 @@ sealed class TransformableNode : View() {
     private var RESIZE_RIGHT = false
 
     override val root = stackpane {
-        val scaleTransform = Scale(1.0,1.0, 0.0, 0.0)
+        val scaleTransform = Scale(1.0, 1.0, 0.0, 0.0)
         transforms.add(scaleTransform)
 
         setOnMousePressed { event ->
@@ -55,11 +56,27 @@ sealed class TransformableNode : View() {
             val offsetY = event.sceneY - mouseY
 
             if (resize == Resize.NONE) {
+
                 nodeX += offsetX
                 nodeY += offsetY
 
-                val scaledX = nodeX / parentScaleX
-                val scaledY = nodeY / parentScaleY
+
+                var scaledX = nodeX / parentScaleX
+                var scaledY = nodeY / parentScaleY
+
+                if (scaledX < 0) {
+                    scaledX = 0.0
+                }
+                if (scaledX > (parent as Region).width - width) {
+                    scaledX = (parent as Region).width - width
+                }
+
+                if (scaledY < 0) {
+                    scaledY = 0.0
+                }
+                if (scaledY > (parent as Region).height - height) {
+                    scaledY = (parent as Region).height - height
+                }
 
                 layoutX = scaledX
                 layoutY = scaledY
@@ -67,18 +84,43 @@ sealed class TransformableNode : View() {
             } else {
                 if (RESIZE_TOP) {
                     nodeY += offsetY
-                    val scaledY = nodeY / parentScaleY
+                    var scaledY = nodeY / parentScaleY
+                    if (scaledY < 0) {
+                        scaledY = 0.0
+                        nodeY -= offsetY
+                    } else {
+                        prefHeight -= offsetY
+                        if (prefHeight < 100) {
+                            prefHeight = 100.0
+                        }
+                    }
                     layoutY = scaledY
-                    prefHeight -= offsetY
                 }
                 if (RESIZE_LEFT) {
                     nodeX += offsetX
-                    val scaledX = nodeX / parentScaleX
+                    var scaledX = nodeX / parentScaleX
+                    if (scaledX < 0) {
+                        scaledX = 0.0
+                        nodeX -= offsetX
+                    } else {
+                        prefWidth -= offsetX
+                    }
                     layoutX = scaledX
-                    prefWidth -= offsetX
                 }
-                if (RESIZE_RIGHT) prefWidth += offsetX
-                if (RESIZE_BOTTOM) prefHeight += offsetY
+                if (RESIZE_RIGHT) {
+                    if (nodeX + prefWidth + offsetX < (parent as Region).width) {
+                        prefWidth += offsetX
+                    } else {
+                        prefWidth = (parent as Region).width - nodeX
+                    }
+                }
+                if (RESIZE_BOTTOM) {
+                    if (nodeY + prefHeight + offsetY < (parent as Region).height) {
+                        prefHeight += offsetY
+                    } else {
+                        prefHeight = (parent as Region).height - nodeY
+                    }
+                }
             }
 
             mouseX = event.sceneX

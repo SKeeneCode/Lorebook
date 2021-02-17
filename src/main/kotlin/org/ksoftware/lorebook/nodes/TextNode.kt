@@ -2,7 +2,11 @@ package org.ksoftware.lorebook.nodes
 
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.input.ScrollEvent
 import org.fxmisc.flowless.VirtualizedScrollPane
+import org.fxmisc.wellbehaved.event.EventPattern
+import org.fxmisc.wellbehaved.event.InputMap
+import org.fxmisc.wellbehaved.event.Nodes
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.richtext.*
 import org.ksoftware.lorebook.utilities.hasDifferentValues
