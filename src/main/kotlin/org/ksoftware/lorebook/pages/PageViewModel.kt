@@ -14,6 +14,7 @@ class PageViewModel(model: PageModel = PageModel()) : ItemViewModel<PageModel>()
 
     val id = bind(PageModel::idProperty)
     val tags = bind(PageModel::tagSet)
+    val pageName = bind(PageModel::pageName)
 
     override fun onCommit() {
         item.modified = true

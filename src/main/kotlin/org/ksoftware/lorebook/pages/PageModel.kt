@@ -2,6 +2,7 @@ package org.ksoftware.lorebook.pages
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableSet
@@ -20,6 +21,7 @@ import java.util.*
 @JsonClass(generateAdapter = true)
 data class PageModel(
         @Json(name = "id") override val idProperty: StringProperty = UUID.randomUUID().toString().toProperty(),
+        val pageName: StringProperty = SimpleStringProperty("myPage"),
         val tagSet: ObservableSet<TagModel> = FXCollections.observableSet(),
         // flag to indicate if this model has had any commits since it was last saved
         @Transient var modified: Boolean = false

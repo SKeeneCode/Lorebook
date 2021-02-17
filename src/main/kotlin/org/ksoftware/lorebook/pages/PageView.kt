@@ -27,7 +27,7 @@ import org.ksoftware.lorebook.actions.DrawGridAction
  */
 class PageView : View("MyPage") {
 
-    private val pageController: PageController by inject(FX.defaultScope)
+    private val pageController: PageController by inject()
     private val pageViewModel: PageViewModel by inject()
     private val gridViewModal: PageGridViewModal by inject()
     private val gridController: PageGridController by inject()
@@ -42,11 +42,15 @@ class PageView : View("MyPage") {
 
     init {
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
+
     }
 
     override fun onDock() {
         projectViewModel.currentRichText.value = null
         gridController.drawGrid(DrawGridAction())
+
+        val pageTab = workspace.tabContainer.tabs.find { tab -> tab.content == root }
+        pageTab?.let { tab -> pageController.makeTabEditable(tab) }
     }
 
     override val root = splitpane(Orientation.VERTICAL) {
