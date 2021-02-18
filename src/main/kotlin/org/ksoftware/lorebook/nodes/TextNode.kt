@@ -28,6 +28,8 @@ class TextNode : TransformableNode() {
     init {
         // Configure key events
         with(area) {
+
+            println(toolbarViewModal)
             addEventFilter(KeyEvent.KEY_PRESSED) {
                 if (it.code == KeyCode.B && it.isControlDown) {
                     toolbarViewModal.toggleBold()
@@ -41,31 +43,6 @@ class TextNode : TransformableNode() {
 
             prefWidthProperty().bind(root.widthProperty().minus(root.paddingAllProperty.multiply(2)))
             prefHeightProperty().bind(root.heightProperty().minus(root.paddingAllProperty.multiply(2)))
-        }
-
-        with(area.content) {
-            toolbarViewModal.updateParagraphTrigger.onChange {
-                if (this != projectViewModal.currentRichText.value) return@onChange
-                textController.updateParagraphStyleInSelection(this) { parStyle -> parStyle.updateWith(toolbarViewModal.createParagraphStyle()) }
-                requestFocus()
-            }
-            toolbarViewModal.increaseIndentTrigger.onChange {
-                if (this != projectViewModal.currentRichText.value) return@onChange
-                textController.updateParagraphStyleInSelection(this) { parStyle -> parStyle.increaseIndent() }
-                requestFocus()
-            }
-            toolbarViewModal.decreaseIndentTrigger.onChange {
-                if (this != projectViewModal.currentRichText.value) return@onChange
-                textController.updateParagraphStyleInSelection(this) { parStyle -> parStyle.decreaseIndent() }
-                requestFocus()
-            }
-            toolbarViewModal.updateTextTrigger.onChange {
-                if (this != projectViewModal.currentRichText.value) return@onChange
-                val style = toolbarViewModal.createTextStyle()
-                textController.updateStyleInSelection(this, style)
-                textInsertionStyle = style
-                requestFocus()
-            }
         }
 
         with(area.content) {

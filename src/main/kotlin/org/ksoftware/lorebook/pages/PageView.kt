@@ -41,6 +41,7 @@ class PageView : View("MyPage") {
 
 
     init {
+        println(toolbarViewModal)
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
 
     }

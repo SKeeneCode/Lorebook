@@ -40,7 +40,7 @@ class PageContentView : View() {
             height = 2000.0
         })
 
-        for (i in 0..4) {
+        for (i in 0..2) {
             val node = find<TextNode>(Scope(projectViewModel, toolbarViewModal))
             node.root.setPrefSize(300.0, 300.0)
             // define the style via css
@@ -119,14 +119,11 @@ class PageContentView : View() {
 
     private fun outerNode(node: Node): Node {
         val outerNode = centeredNode(node)
-        outerNode.onLeftClick {
-            projectViewModel.currentRichText.value = null
-        }
         outerNode.addEventFilter(ScrollEvent.SCROLL) {
             if (it.isControlDown) {
                 onScroll(it.textDeltaY, Point2D(it.x, it.y))
+                it.consume()
             }
-            it.consume()
         }
         return outerNode
     }

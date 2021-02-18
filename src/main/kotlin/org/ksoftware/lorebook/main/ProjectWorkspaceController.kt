@@ -9,13 +9,12 @@ import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
 import org.ksoftware.lorebook.actions.SaveProjectAction
+import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
-import tornadofx.Controller
-import tornadofx.UIComponent
-import tornadofx.Workspace
+import tornadofx.*
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 
@@ -25,6 +24,8 @@ import kotlin.coroutines.CoroutineContext
 class ProjectWorkspaceController : Controller(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.JavaFx
+
+    private val textController: TextController by inject(FX.defaultScope)
     private val projectViewModel: ProjectViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
     private val saveProjectActor: SendChannel<SaveProjectAction> = createSaveActor()
@@ -95,6 +96,32 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
      */
     fun closeOverlay() {
         projectViewModel.overlayNode.value = null
+    }
+
+
+    // --------------------------------------- //
+    //                RICHTEXT                 //
+    // --------------------------------------- //
+
+    fun connectToolbarViewModalToRichTextAreas() {
+        toolbarViewModal.updateParagraphTrigger.onChange {
+            textController.updateParagraphStyleInSelection(projectViewModel.currentRichText.value) { parStyle -> parStyle.updateWith(toolbarViewModal.createParagraphStyle()) }
+            projectViewModel.currentRichText.value.requestFocus()
+        }
+        toolbarViewModal.increaseIndentTrigger.onChange {
+            textController.updateParagraphStyleInSelection(projectViewModel.currentRichText.value) { parStyle -> parStyle.increaseIndent() }
+            projectViewModel.currentRichText.value.requestFocus()
+        }
+        toolbarViewModal.decreaseIndentTrigger.onChange {
+            textController.updateParagraphStyleInSelection(projectViewModel.currentRichText.value) { parStyle -> parStyle.decreaseIndent() }
+            projectViewModel.currentRichText.value.requestFocus()
+        }
+        toolbarViewModal.updateTextTrigger.onChange {
+            val style = toolbarViewModal.createTextStyle()
+            textController.updateStyleInSelection(projectViewModel.currentRichText.value, style)
+            projectViewModel.currentRichText.value.textInsertionStyle = style
+            projectViewModel.currentRichText.value.requestFocus()
+        }
     }
 
 

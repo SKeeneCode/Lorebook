@@ -12,6 +12,7 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import org.controlsfx.dialog.FontSelectorDialog
 import org.ksoftware.lorebook.navigator.Navigator
+import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.richtext.TextAlignment
 import org.ksoftware.lorebook.richtext.TextSizePicker
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
@@ -24,6 +25,7 @@ import java.util.*
  */
 class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
 
+    private val textController: TextController by inject(FX.defaultScope)
     private val projectController: ProjectWorkspaceController by inject()
     private val projectViewModel: ProjectViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
@@ -53,6 +55,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
 
     init {
         projectViewModel.projectWorkspace = this
+        projectController.connectToolbarViewModalToRichTextAreas()
     }
 
     init {
