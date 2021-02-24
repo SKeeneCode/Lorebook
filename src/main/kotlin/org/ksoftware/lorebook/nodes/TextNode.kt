@@ -28,8 +28,6 @@ class TextNode : TransformableNode() {
     init {
         // Configure key events
         with(area) {
-
-            println(toolbarViewModal)
             addEventFilter(KeyEvent.KEY_PRESSED) {
                 if (it.code == KeyCode.B && it.isControlDown) {
                     toolbarViewModal.toggleBold()

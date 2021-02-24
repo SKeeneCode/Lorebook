@@ -39,10 +39,10 @@ class NewProjectView : View("New Project") {
                     // Customize initialization of a ProjectWorkspace to ensure compatibility with FxStage
                     val view = find(ProjectWorkspace::class, Scope())
                     view.muteDocking = true
-                    val myScene = Scene(view.root)
                     val newStage = Stage()
-                    newStage.scene = myScene
-                    val fxStage = FxStage.configure(newStage).apply()
+                    val fxStage = FxStage.configure(newStage).withSceneFactory {
+                            parent -> Scene(parent)
+                    }.apply()
                     fxStage.stage.apply {
                         aboutToBeShown = true
                         view.properties["tornadofx.scene"] = scene
@@ -51,7 +51,8 @@ class NewProjectView : View("New Project") {
                         hookGlobalShortcuts()
                         view.onBeforeShow()
                         view.muteDocking = false
-                        show()
+                        fxStage.setContent(view.root)
+                        newStage.show()
                         view.configureFxStage(fxStage)
                         aboutToBeShown = false
                     }

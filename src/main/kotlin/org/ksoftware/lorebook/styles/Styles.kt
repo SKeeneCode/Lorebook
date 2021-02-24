@@ -8,6 +8,7 @@ class Styles : Stylesheet() {
         val tagTitleRegion by cssclass()
         val noBackgroundOrBorder by cssclass()
         val transparentContextMenu by cssclass()
+        val titleLabel by cssclass()
         val glyphIconHover by cssclass()
         val hoverPopup by cssclass()
         val organizerButton by cssclass()
@@ -19,8 +20,10 @@ class Styles : Stylesheet() {
         root {
             backgroundColor += baseColor.derive(0.3)
         }
+        titleLabel {
+            fontSize = 16.px
+        }
         tabPane {
-
             tabHeaderArea {
                 padding = box(0.px)
             }

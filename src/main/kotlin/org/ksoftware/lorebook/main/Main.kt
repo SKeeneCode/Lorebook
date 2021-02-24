@@ -4,6 +4,9 @@ import javafx.stage.Stage
 import ch.micheljung.fxwindow.FxStage
 import ch.micheljung.fxwindow.WindowController
 import javafx.scene.Scene
+import javafx.scene.control.Button
+import javafx.scene.control.Label
+import javafx.scene.layout.VBox
 import org.ksoftware.lorebook.newproject.NewProjectView
 import org.ksoftware.lorebook.styles.Styles
 import tornadofx.*
@@ -20,10 +23,11 @@ class LorebookApp : App(NewProjectView::class, Styles::class) {
     override fun start(stage: Stage) {
         val view = find(NewProjectView::class)
         view.muteDocking = true
-        val myScene = Scene(view.root)
-        val newStage = Stage()
-        newStage.scene = myScene
-        val fxStage = FxStage.configure(newStage).apply()
+
+        val fxStage = FxStage.configure(stage).withSceneFactory {
+            parent -> Scene(parent)
+        }.apply()
+
         fxStage.stage.apply {
             FX.registerApplication(scope, this@LorebookApp, this)
             aboutToBeShown = true
@@ -34,11 +38,13 @@ class LorebookApp : App(NewProjectView::class, Styles::class) {
             view.onBeforeShow()
             onBeforeShow(view)
             view.muteDocking = false
-            show()
+            fxStage.setContent(view.root)
             view.callOnDock()
             aboutToBeShown = false
         }
+
         FX.initialized.value = true
+        stage.show()
     }
 
 }

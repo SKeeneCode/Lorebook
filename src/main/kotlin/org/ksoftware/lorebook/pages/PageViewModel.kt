@@ -1,5 +1,6 @@
 package org.ksoftware.lorebook.pages
 
+import javafx.beans.property.SimpleBooleanProperty
 import tornadofx.ItemViewModel
 
 /**
@@ -15,6 +16,9 @@ class PageViewModel(model: PageModel = PageModel()) : ItemViewModel<PageModel>()
     val id = bind(PageModel::idProperty)
     val tags = bind(PageModel::tagSet)
     val pageName = bind(PageModel::pageName)
+
+    val gridMinorLinesVisible = SimpleBooleanProperty(true)
+    val gridMajorLinesVisible = SimpleBooleanProperty(true)
 
     override fun onCommit() {
         item.modified = true

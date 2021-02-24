@@ -24,7 +24,7 @@ class PageGridController : Controller(), CoroutineScope {
     private val canvas = gridViewModal.pageCanvas
 
     fun drawGrid(action: DrawGridAction) {
-        println(drawGridActor.offer(action))
+        drawGridActor.offer(action)
     }
 
     private fun createDrawGridActor() = this.actor<DrawGridAction>(capacity = 1) {

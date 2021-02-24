@@ -39,19 +39,32 @@ class PageView : View("MyPage") {
     private val projectViewModel: ProjectViewModel by inject()
     private val projectController: ProjectWorkspaceController by inject()
 
+    private var pageInspector: PageInspector by singleAssign()
+
 
     init {
-        println(toolbarViewModal)
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
+        pageInspector = find(PageInspector::class)
 
     }
 
+
     override fun onDock() {
         projectViewModel.currentRichText.value = null
+
         gridController.drawGrid(DrawGridAction())
 
-        val pageTab = workspace.tabContainer.tabs.find { tab -> tab.content == root }
-        pageTab?.let { tab -> pageController.makeTabEditable(tab) }
+
+        with(workspace) {
+            with (rightDrawer) {
+                item("Page Settings", expanded = true) {
+                    add(pageInspector)
+                }
+            }
+        }
+
+        val pageTab = workspace.tabContainer.tabs.find { it.content == this.root }
+        pageTab?.let { pageController.makeTabEditable(it) }
     }
 
     override val root = splitpane(Orientation.VERTICAL) {
