@@ -32,7 +32,7 @@ data class TagModel(
     @Json(name = "name") override val nameProperty: StringProperty = SimpleStringProperty(name)
     @Json(name = "color") override val colorProperty: ObjectProperty<Color> = SimpleObjectProperty(color)
 
-    override suspend fun save(projectFolder: File, taskMessage: StringProperty) {
+    override suspend fun save(projectFolder: File) {
         TODO("Not yet implemented")
     }
 

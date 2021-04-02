@@ -17,6 +17,7 @@ import org.ksoftware.lorebook.richtext.TextAlignment
 import org.ksoftware.lorebook.richtext.TextSizePicker
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.styles.Styles
+import org.ksoftware.lorebook.timeline.CalendarWizard
 import tornadofx.*
 import java.util.*
 
@@ -47,6 +48,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 add(newValue)
                 projectViewModel.showOverlay.value = true
             } else {
+                println("hmmmm")
                 oldValue?.removeFromParent()
                 projectViewModel.showOverlay.value = false
             }
@@ -56,6 +58,9 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
     init {
         projectViewModel.projectWorkspace = this
         projectController.connectToolbarViewModalToRichTextAreas()
+
+        println("Workspace workspace is $workspace")
+        println("Workspace2 workspace is ${this as Workspace}")
     }
 
     init {
@@ -280,6 +285,13 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
             menu("File")
             menu("Edit")
             menu("View")
+            menu("Timeline") {
+                item("New Calendar") {
+                    action {
+                        projectController.openOverlayWith(find(CalendarWizard::class))
+                    }
+                }
+            }
             menu("Help")
         }
         headerMenu.children.addAll(menu)

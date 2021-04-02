@@ -9,12 +9,14 @@ plugins {
     kotlin("jvm") version "1.4.30"
     kotlin("kapt") version "1.4.30"
     id("org.openjfx.javafxplugin") version "0.0.9"
+    id ("org.beryx.runtime") version "1.12.2"
 }
 
 application {
-    mainClass.set("org.ksoftware.lorebook.main.MainKt")
+    mainClass.set("org.ksoftware.lorebook.main.MainInvokerKt")
     applicationDefaultJvmArgs = listOf(
             "--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED",
             "--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
             "--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
             "--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
@@ -36,11 +38,23 @@ kotlin {
 }
 
 javafx {
-    version = "15"
+    version = "16"
     modules = mutableListOf(
             "javafx.controls",
             "javafx.graphics",
             "javafx.fxml")
+}
+
+runtime {
+    addOptions("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
+    modules.set(listOf("java.desktop", "jdk.unsupported", "java.scripting", "java.logging", "java.xml"))
+}
+
+tasks["runtime"].doLast {
+    copy {
+        from("src/main/resources")
+        into("$buildDir/image/bin")
+    }
 }
 
 repositories {
@@ -68,6 +82,8 @@ dependencies {
     implementation("org.controlsfx:controlsfx:11.0.3")
     implementation("org.fxmisc.flowless:flowless:0.6.2")
     implementation("org.fxmisc.wellbehaved:wellbehavedfx:0.3.3")
+
+    implementation("org.fxmisc.easybind:easybind:1.0.3")
 
     // For copy + paste of rich text
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.0")

@@ -3,10 +3,18 @@ package org.ksoftware.lorebook.pages
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
 import javafx.geometry.Orientation
+import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.SplitPane
+import javafx.scene.control.Tab
+import javafx.scene.control.TabPane
+import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Priority
+import javafx.util.Duration
+import org.controlsfx.control.NotificationPane
+import org.controlsfx.control.Notifications
 import org.ksoftware.lorebook.controls.AutoCompleteTagField
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
@@ -63,11 +71,15 @@ class PageView : View("MyPage") {
             }
         }
 
-        val pageTab = workspace.tabContainer.tabs.find { it.content == this.root }
-        pageTab?.let { pageController.makeTabEditable(it) }
+//        val pageTab = workspace.tabContainer.tabs.find { it.content == this.root }
+//        pageTab?.let { pageController.makeTabEditable(it) }
     }
 
     override val root = splitpane(Orientation.VERTICAL) {
+        addEventFilter(MouseEvent.MOUSE_PRESSED) {
+            (this.parent.parent as TabPane).requestFocus()
+        }
+
         add<PageContentView>()
         hbox {
             SplitPane.setResizableWithParent(this, false)
@@ -75,9 +87,7 @@ class PageView : View("MyPage") {
             maxHeight = 76.0
             val textfield = find(AutoCompleteTagField::class)
             textfield.root.prefHeightProperty().bind(this@hbox.heightProperty())
-
             add(textfield)
-
             scrollpane {
                 hgrow = Priority.ALWAYS
                 hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
@@ -90,7 +100,6 @@ class PageView : View("MyPage") {
                     bindChildren(pageViewModel.tags.value, tagFlowController.tagToNodeConvertor)
                 }
             }
-
             button {
                 addClass(Styles.hoverPopup)
                 addClass(Styles.organizerButton)

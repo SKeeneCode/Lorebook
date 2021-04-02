@@ -1,17 +1,17 @@
 package org.ksoftware.lorebook.main
 
 import com.squareup.moshi.JsonClass
+import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.pages.PageModel
+import org.ksoftware.lorebook.timeline.CalendarModal
+import org.ksoftware.lorebook.timeline.EraModal
 import java.io.File
 import java.util.*
 
@@ -20,24 +20,25 @@ import java.util.*
  * Instead use a ProjectViewModel.
  */
 @JsonClass(generateAdapter = true)
-data class ProjectModel(override val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) : Savable, Id {
+data class ProjectModel(override val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) :
+    Savable, Id {
 
     // list of all page models in this project
     val pages: ObservableList<PageModel> = FXCollections.observableArrayList()
 
+    val calendars = SimpleListProperty(FXCollections.observableArrayList<CalendarModal>())
+
     /**
      * Launches a coroutine for each page to save itself in the project folder.
      */
-    override suspend fun save(projectFolder: File, taskMessage: StringProperty) {
-        taskMessage.value = "Saving Project"
-        val jobs: List<Job> = pages.map { page ->
+    override suspend fun save(projectFolder: File) {
+        pages.map { page ->
             coroutineScope {
-                launch {
-                    page.save(projectFolder, taskMessage)
-                }
+                println(coroutineContext.toString())
+                launch { page.save(projectFolder) }
             }
         }
-        jobs.joinAll() // wait until all jobs are finished
-        taskMessage.value = "Finished Saving"
     }
+
+
 }

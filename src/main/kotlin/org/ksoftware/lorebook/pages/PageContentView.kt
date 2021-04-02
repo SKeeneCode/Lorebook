@@ -6,6 +6,7 @@ import javafx.geometry.Pos
 import javafx.scene.Group
 import javafx.scene.Node
 import javafx.scene.Parent
+import javafx.scene.control.TabPane
 import javafx.scene.control.TextArea
 import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.VBox
@@ -17,6 +18,15 @@ import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import tornadofx.*
+import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
+import javafx.scene.paint.CycleMethod
+import javafx.scene.paint.LinearGradient
+import javafx.scene.paint.Stop
+import org.fxmisc.wellbehaved.event.InputMap
+import org.fxmisc.wellbehaved.event.Nodes
+import org.ksoftware.lorebook.styles.Styles
+
 
 class PageContentView : View() {
 
@@ -34,11 +44,31 @@ class PageContentView : View() {
     private val zoomIntensity = 0.04
 
     val target = pane {
-        style { backgroundColor += Color.WHITE }
-        add(gridViewModal.pageCanvas.apply {
-            width = 3000.0
-            height = 2000.0
-        })
+        addEventHandler(MouseEvent.ANY) {
+            if (it.button == MouseButton.PRIMARY) it.consume()
+        }
+        style {
+            backgroundColor = multi(
+
+                Styles.parchment,
+                LinearGradient(0.0, 0.0, 40.0, 0.0, false,
+                CycleMethod.REPEAT,
+                Stop(0.0, Color.rgb(0,0,0,0.3)),
+                Stop(0.01, Color.rgb(0,0,0,0.3)),
+                Stop(0.02, Color.TRANSPARENT),
+                Stop(1.0, Color.TRANSPARENT)),
+                LinearGradient(0.0, 0.0, 0.0, 40.0, false,
+                    CycleMethod.REPEAT,
+                    Stop(0.0, Color.rgb(0,0,0,0.3)),
+                    Stop(0.01, Color.rgb(0,0,0,0.3)),
+                    Stop(0.02, Color.TRANSPARENT),
+                    Stop(1.0, Color.TRANSPARENT))
+            )
+        }
+//        add(gridViewModal.pageCanvas.apply {
+//            width = 3000.0
+//            height = 2000.0
+//        })
 
         for (i in 0..2) {
             val node = find<TextNode>(Scope(projectViewModel, toolbarViewModal))

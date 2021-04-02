@@ -31,7 +31,7 @@ data class PageModel(
         println(moshi.adapter(PageModel::class.java).toJson(this))
     }
 
-    override suspend fun save(projectFolder: File, taskMessage: StringProperty) {
+    override suspend fun save(projectFolder: File) {
         val pageFolder = File(projectFolder.toString() + "/data/pages/" + idProperty.get())
         pageFolder.mkdirs()
         modified = false

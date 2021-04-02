@@ -2,12 +2,10 @@ package org.ksoftware.lorebook.main
 
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.javafx.JavaFx
-import kotlinx.coroutines.launch
 import org.ksoftware.lorebook.actions.SaveProjectAction
 import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.pages.PageModel
@@ -17,13 +15,13 @@ import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import tornadofx.*
 import java.io.File
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 /**
  * Controller for the project workspace.
  */
-class ProjectWorkspaceController : Controller(), CoroutineScope {
+class ProjectWorkspaceController : Controller() {
 
-    override val coroutineContext: CoroutineContext = Dispatchers.JavaFx
 
     private val textController: TextController by inject(FX.defaultScope)
     private val projectViewModel: ProjectViewModel by inject()
@@ -46,9 +44,7 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
      * If not, creates a new page view in a new scope and docks it.
      */
     fun dockPageView(page: PageModel, workspace: Workspace) {
-        launch {
             workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel, toolbarViewModal)
-        }
     }
 
     // --------------------------------------- //
@@ -63,15 +59,16 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
      * Creates an actor that processes one save action at a time. Will block any further save actions until the
      * current one has finished processing.
      */
-    private fun createSaveActor() = this.actor<SaveProjectAction> {
-        for (saveAction in channel) {
-            val projectSaveFolder = askUserForProjectSaveFolder(saveAction.stage)
-            projectSaveFolder?.let { saveProjectInLocation(saveAction.project, it) }
+    private fun createSaveActor() = projectViewModel.saveCoroutineScope.actor<SaveProjectAction> {
+            for (saveAction in channel) {
+                val projectSaveFolder = askUserForProjectSaveFolder(saveAction.stage)
+                projectSaveFolder?.let { saveProjectInLocation(saveAction.project, it) }
+            }
         }
-    }
+
 
     private suspend fun saveProjectInLocation(projectModel: ProjectModel, saveLocation: File) {
-        projectModel.save(saveLocation, projectViewModel.taskMessage)
+        projectModel.save(saveLocation)
     }
 
     private fun askUserForProjectSaveFolder(stage: Stage) : File? {
@@ -126,3 +123,4 @@ class ProjectWorkspaceController : Controller(), CoroutineScope {
 
 
 }
+

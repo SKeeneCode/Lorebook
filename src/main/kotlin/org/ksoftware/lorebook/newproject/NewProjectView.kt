@@ -5,6 +5,7 @@ import javafx.scene.Scene
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import org.ksoftware.lorebook.main.ProjectWorkspace
+import org.ksoftware.lorebook.timeline.CalendarEditor
 import tornadofx.*
 import java.io.File
 
