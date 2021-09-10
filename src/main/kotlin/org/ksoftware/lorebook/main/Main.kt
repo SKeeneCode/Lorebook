@@ -32,7 +32,6 @@ class LorebookApp : App(NewProjectView::class, Styles::class) {
      * Start is customized to ensure compatibility with FxStage.
      */
     override fun start(stage: Stage) {
-        println("Main workspace is $workspace")
         val view = find(primaryView)
         view.muteDocking = true
 

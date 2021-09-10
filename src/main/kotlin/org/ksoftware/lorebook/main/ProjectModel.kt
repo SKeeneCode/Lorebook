@@ -34,7 +34,6 @@ data class ProjectModel(override val idProperty: StringProperty = SimpleStringPr
     override suspend fun save(projectFolder: File) {
         pages.map { page ->
             coroutineScope {
-                println(coroutineContext.toString())
                 launch { page.save(projectFolder) }
             }
         }

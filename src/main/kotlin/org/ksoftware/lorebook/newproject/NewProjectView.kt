@@ -1,11 +1,13 @@
 package org.ksoftware.lorebook.newproject
 
 import ch.micheljung.fxwindow.FxStage
+import com.pixelduke.control.skin.FXSkins
 import javafx.scene.Scene
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
+import jfxtras.styles.jmetro.JMetro
+import jfxtras.styles.jmetro.Style
 import org.ksoftware.lorebook.main.ProjectWorkspace
-import org.ksoftware.lorebook.timeline.CalendarEditor
 import tornadofx.*
 import java.io.File
 
@@ -47,6 +49,8 @@ class NewProjectView : View("New Project") {
                     fxStage.stage.apply {
                         aboutToBeShown = true
                         view.properties["tornadofx.scene"] = scene
+                        JMetro(scene, Style.LIGHT)
+                        scene.stylesheets.add(FXSkins.getStylesheetURL());
                         FX.applyStylesheetsTo(scene)
                         titleProperty().bind(view.titleProperty)
                         hookGlobalShortcuts()

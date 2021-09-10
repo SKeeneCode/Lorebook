@@ -56,12 +56,10 @@ class PageView : View("MyPage") {
 
     }
 
-
     override fun onDock() {
         projectViewModel.currentRichText.value = null
 
         gridController.drawGrid(DrawGridAction())
-
 
         with(workspace) {
             with (rightDrawer) {
@@ -71,8 +69,8 @@ class PageView : View("MyPage") {
             }
         }
 
-//        val pageTab = workspace.tabContainer.tabs.find { it.content == this.root }
-//        pageTab?.let { pageController.makeTabEditable(it) }
+        val pageTab = workspace.tabPanes.flatMap { it.tabs }.find { it.content == this.root }
+        pageTab?.let { pageController.makeTabEditable(it) }
     }
 
     override val root = splitpane(Orientation.VERTICAL) {

@@ -48,7 +48,6 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 add(newValue)
                 projectViewModel.showOverlay.value = true
             } else {
-                println("hmmmm")
                 oldValue?.removeFromParent()
                 projectViewModel.showOverlay.value = false
             }
@@ -56,11 +55,8 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
     }
 
     init {
-        projectViewModel.projectWorkspace = this
+        this.scope.workspace(this)
         projectController.connectToolbarViewModalToRichTextAreas()
-
-        println("Workspace workspace is $workspace")
-        println("Workspace2 workspace is ${this as Workspace}")
     }
 
     init {
@@ -90,7 +86,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                     fill = Color.DARKGREEN
                 }
                 action {
-                    projectController.dockNewPage(projectViewModel.projectWorkspace)
+                    projectController.dockNewPage()
                 }
             }
             togglebutton(ToggleGroup()) {
@@ -116,6 +112,8 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 minHeight = Region.USE_PREF_SIZE
                 prefHeight = 32.0
                 maxHeight = Region.USE_PREF_SIZE
+
+                disableWhen(projectViewModel.currentRichText.isNull)
 
                 onLeftClick {
                     val font = fontSelector.showAndWait()
@@ -155,6 +153,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 isSelected = false
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_BOLD).apply { glyphSize = 24 }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.triggerTextChange()
                 }
@@ -167,6 +166,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 isSelected = false
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_ITALIC).apply { glyphSize = 24 }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.triggerTextChange()
                 }
@@ -177,6 +177,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 isSelected = false
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_UNDERLINED).apply { glyphSize = 24 }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action { }
             }
             togglebutton(ToggleGroup()) {
@@ -185,6 +186,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 isSelected = false
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_STRIKETHROUGH).apply { glyphSize = 24 }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action { }
             }
             add(Separator())
@@ -195,6 +197,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_LEFT).apply { glyphSize = 24 }
                 toolbarViewModal.alignment.onChange { if (it == TextAlignment.LEFT) isSelected = true }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.alignment.value = TextAlignment.LEFT
                     toolbarViewModal.triggerParagraphChange()
@@ -207,6 +210,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_CENTER).apply { glyphSize = 24 }
                 toolbarViewModal.alignment.onChange { if (it == TextAlignment.CENTER) isSelected = true }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.alignment.value = TextAlignment.CENTER
                     toolbarViewModal.triggerParagraphChange()
@@ -219,6 +223,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_RIGHT).apply { glyphSize = 24 }
                 toolbarViewModal.alignment.onChange { if (it == TextAlignment.RIGHT) isSelected = true }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.alignment.value = TextAlignment.RIGHT
                     toolbarViewModal.triggerParagraphChange()
@@ -231,6 +236,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_ALIGN_JUSTIFY).apply { glyphSize = 24 }
                 toolbarViewModal.alignment.onChange { if (it == TextAlignment.JUSTIFY) isSelected = true }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.alignment.value = TextAlignment.JUSTIFY
                     toolbarViewModal.triggerParagraphChange()
@@ -242,6 +248,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 addClass(Styles.toolbarButton)
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_INDENT_INCREASE).apply { glyphSize = 24 }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.triggerIndentIncrease()
                 }
@@ -251,6 +258,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 addClass(Styles.toolbarButton)
                 background = null
                 graphic = MaterialIconView(MaterialIcon.FORMAT_INDENT_DECREASE).apply { glyphSize = 24 }
+                disableWhen(projectViewModel.currentRichText.isNull)
                 action {
                     toolbarViewModal.triggerIndentDecrease()
                 }

@@ -32,10 +32,10 @@ class ProjectWorkspaceController : Controller() {
     /**
      * Creates a new page and docks it in the provided workspace
      */
-    fun dockNewPage(workspace: Workspace) {
+    fun dockNewPage() {
         val newPage = PageModel()
         projectViewModel.pages.value.add(newPage)
-        dockPageView(newPage, workspace)
+        dockPageView(newPage)
     }
 
     /**
@@ -43,8 +43,10 @@ class ProjectWorkspaceController : Controller() {
      * Checks the cache of PageViews to see if the pages view is in there.
      * If not, creates a new page view in a new scope and docks it.
      */
-    fun dockPageView(page: PageModel, workspace: Workspace) {
-            workspace.dockInNewScope<PageView>(PageViewModel(page), projectViewModel, toolbarViewModal)
+    fun dockPageView(page: PageModel) {
+        val pageToDock = projectViewModel.pageViewCache[page.idProperty.value] ?: find<PageView>(Scope(PageViewModel(page), projectViewModel, toolbarViewModal))
+        projectViewModel.pageViewCache.putIfAbsent(page.idProperty.value, pageToDock)
+        workspace.dock(pageToDock)
     }
 
     // --------------------------------------- //
@@ -52,7 +54,7 @@ class ProjectWorkspaceController : Controller() {
     // --------------------------------------- //
 
     fun saveProject(stage: Stage) {
-            saveProjectActor.offer(SaveProjectAction(projectViewModel.item, stage))
+        saveProjectActor.trySend(SaveProjectAction(projectViewModel.item, stage))
     }
 
     /**

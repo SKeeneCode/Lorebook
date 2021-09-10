@@ -6,7 +6,7 @@ import java.util.*
 /**
  * AbstractSegments is an abstract implementation of some segment in a StyledSegmentTextArea
  */
-sealed class AbstractSegment(val data: Any? = null) {
+abstract class AbstractSegment(val data: Any? = null) {
 
     open fun getText() : String = "\ufffc"
 

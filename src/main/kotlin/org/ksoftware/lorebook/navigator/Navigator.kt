@@ -19,7 +19,7 @@ class Navigator : View() {
             cellFormat {
                 text = this.item.toString()
                 this.onDoubleClick {
-                    projectController.dockPageView(this.item, projectViewModel.projectWorkspace)
+                    projectController.dockPageView(this.item)
                 }
             }
         }

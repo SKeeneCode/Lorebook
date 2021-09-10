@@ -10,7 +10,7 @@ import kotlin.math.abs
 /**
  * The transformable node can be resized a well as drag and dropped by the user.
  */
-sealed class TransformableNode : View() {
+abstract class TransformableNode : View() {
 
     private var mouseX = 0.0
     private var mouseY = 0.0
