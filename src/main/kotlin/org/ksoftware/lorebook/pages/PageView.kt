@@ -33,7 +33,7 @@ import org.ksoftware.lorebook.actions.DrawGridAction
  * a new scope. They contain a pane to hold the users content nodes (text node etc) as well as controls for rich text
  * and page tags.
  */
-class PageView : View("MyPage") {
+class PageView : View() {
 
     private val pageController: PageController by inject()
     private val pageViewModel: PageViewModel by inject()
@@ -53,7 +53,6 @@ class PageView : View("MyPage") {
     init {
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
         pageInspector = find(PageInspector::class)
-
     }
 
     override fun onDock() {
@@ -74,6 +73,10 @@ class PageView : View("MyPage") {
     }
 
     override val root = splitpane(Orientation.VERTICAL) {
+
+        // Bind root nodes ID to model id for each access when saving
+        idProperty().bind(pageViewModel.id)
+
         addEventFilter(MouseEvent.MOUSE_PRESSED) {
             (this.parent.parent as TabPane).requestFocus()
         }

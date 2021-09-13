@@ -21,9 +21,8 @@ import java.util.*
 @JsonClass(generateAdapter = true)
 data class PageModel(
         @Json(name = "id") override val idProperty: StringProperty = UUID.randomUUID().toString().toProperty(),
-        val pageName: StringProperty = SimpleStringProperty("myPage"),
+        val pageName: StringProperty = SimpleStringProperty(idProperty.value.substring(0, 8)),
         val tagSet: ObservableSet<TagModel> = FXCollections.observableSet(),
-        // flag to indicate if this model has had any commits since it was last saved
         @Transient var modified: Boolean = false
 ) : JsonModel(), Savable, Id {
 

@@ -1,5 +1,9 @@
 package org.ksoftware.lorebook.navigator
 
+import javafx.geometry.Pos
+import javafx.scene.layout.Pane
+import javafx.scene.paint.Color
+import javafx.scene.paint.Paint
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.newproject.NewProjectView
@@ -35,10 +39,9 @@ class Navigator : View() {
                 projectViewModel.rollBackPages()
             }
         }
-        button("save") {
-            enableWhen(projectViewModel.dirty)
+        button("load pages") {
             action {
-                projectViewModel.commit()
+                projectController.loadOpenPages()
             }
         }
         button("save project") {
@@ -49,6 +52,41 @@ class Navigator : View() {
         button("new project") {
             action {
                 find(NewProjectView::class).openModal()
+            }
+        }
+        button("add page above") {
+            action {
+                projectController.dockNewPage(Pos.TOP_CENTER)
+            }
+        }
+        button("add page right") {
+            action {
+                projectController.dockNewPage(Pos.CENTER_RIGHT)
+            }
+        }
+        button("add page left") {
+            action {
+                projectController.dockNewPage(Pos.CENTER_LEFT)
+            }
+        }
+        button("add page below") {
+            action {
+                projectController.dockNewPage(Pos.BOTTOM_CENTER)
+            }
+        }
+        button("add page Center") {
+            action {
+                projectController.dockNewPage(Pos.CENTER)
+            }
+        }
+
+        button("show focused") {
+            action {
+                workspace.focusedTabPane.value.apply {
+                    style {
+                        backgroundColor += Color.BLACK
+                    }
+                }
             }
         }
     }

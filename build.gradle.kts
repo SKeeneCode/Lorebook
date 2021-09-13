@@ -81,7 +81,7 @@ dependencies {
 
     // richtext
     implementation("org.fxmisc.richtext:richtextfx:0.10.6")
-    implementation("org.fxmisc.flowless:flowless:0.6.4")
+    implementation("org.fxmisc.flowless:flowless:0.6.6")
     implementation("org.fxmisc.wellbehaved:wellbehavedfx:0.3.3")
 
     // material design theme

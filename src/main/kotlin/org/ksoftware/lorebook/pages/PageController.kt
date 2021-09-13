@@ -3,6 +3,10 @@ package org.ksoftware.lorebook.pages
 import javafx.scene.control.Label
 import javafx.scene.control.Tab
 import javafx.scene.control.TextField
+import javafx.scene.input.DragEvent
+import javafx.scene.input.MouseEvent
+import org.fxmisc.wellbehaved.event.InputMap
+import org.fxmisc.wellbehaved.event.Nodes
 import tornadofx.*
 
 /**
@@ -18,6 +22,7 @@ class PageController : Controller() {
         val tabLabel = Label().apply {
             bind(pageViewModel.pageName)
         }
+        Nodes.addInputMap(tabLabel, InputMap.ignore(MouseEvent.MOUSE_DRAGGED))
         val textField = TextField()
         pageTab.graphic = tabLabel
         tabLabel.onDoubleClick {

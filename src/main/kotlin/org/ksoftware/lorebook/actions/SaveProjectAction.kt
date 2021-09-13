@@ -2,6 +2,7 @@ package org.ksoftware.lorebook.actions
 
 import javafx.stage.Stage
 import org.ksoftware.lorebook.main.ProjectModel
+import java.io.File
 
 /**
  * Represents a request by the user to save a project. Requires a stage parameter to pass the current stage of a
