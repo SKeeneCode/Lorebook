@@ -2,10 +2,12 @@ package org.ksoftware.lorebook.main
 
 import com.squareup.moshi.JsonClass
 import dock.DetachableTabPane
+import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
 import javafx.scene.Parent
 import javafx.scene.control.SplitPane
+import javafx.scene.control.Tab
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import kotlinx.coroutines.channels.SendChannel
@@ -47,10 +49,8 @@ class ProjectWorkspaceController : Controller(), Savable {
         dockPageView(newPage, placement)
     }
 
-    private fun dockFromPageID(id: String, placement: Pos = Pos.CENTER) : UIComponent? {
-        println("docking " + id)
-        val pageToDock = projectViewModel.pages.value.find { it.idProperty.value == id } ?: return null
-        println("found page")
+    private fun dockFromPageID(id: String, placement: Pos = Pos.CENTER) : UIComponent {
+        val pageToDock = projectViewModel.pages.value.find { it.idProperty.value == id } ?: PageModel(SimpleStringProperty(id))
         return dockPageView(pageToDock, placement)
     }
 
@@ -216,46 +216,62 @@ class ProjectWorkspaceController : Controller(), Savable {
     private fun loadOpenPages(projectFolder: File) {
         val json = Files.readString(Path.of(projectFolder.path + "/openPages.txt"));
         val tree = ioController.moshi.adapter(TreeNode::class.java).indent("    ").fromJson(json)
-        tree?.let { traverseTree(it, workspace.detachableTabPane) }
+        val tempTabs = mutableListOf<Tab>()
+        tree?.let { traverseTree(it, workspace.detachableTabPane, tempTabs) }
+        tempTabs.forEach { it.close() }
     }
 
-    private fun traverseTree(tree: TreeNode, parentTabPane: DetachableTabPane) {
+    private fun traverseTree(tree: TreeNode, parentTabPane: DetachableTabPane, list: MutableList<Tab>) {
         var tabPane = parentTabPane
+        if (tree.type == NodeType.SplitPane && workspace.dockedComponent == null) {
+            val pageID = "TEMP" + UUID.randomUUID().toString()
+            val cmp = dockFromPageID(pageID, Pos.CENTER)
+            cmp.let {
+                val tab = workspace.findTabFromUIComponent(cmp)
+                tab?.let {
+                    list.add(tab)
+                }
+            }
+        }
+
         tree.children.forEach { x ->
             if (x.type == NodeType.TabPane) {
+                val temp = tabPane
                 workspace.focusedTabPane.value = tabPane
                 traverseDock(x.pages.removeFirst(), tree.split)
-                tabPane = workspace.focusedTabPane.value
                 x.pages.forEach {
                     dockFromPageID(it, Pos.CENTER)
                 }
+                tabPane = temp
+                workspace.focusedTabPane.value = tabPane
             } else if (x.type == NodeType.SplitPane) {
                 val temp = tabPane
-                val pageID = ("Temp" + UUID.randomUUID().toString().take(8))
+                val pageID = "TEMP" + UUID.randomUUID().toString()
                 val cmp = traverseDock(pageID, tree.split)
                 tabPane = workspace.focusedTabPane.value
-                traverseTree(x, tabPane)
+                traverseTree(x, tabPane, list)
                 cmp?.let {
                     val tab = workspace.findTabFromUIComponent(cmp)
-                    tab?.close()
+                    tab?.let {
+                        list.add(tab)
+                    }
                 }
                 tabPane = temp
+                workspace.focusedTabPane.value = tabPane
+
             }
         }
         tabPane.parentSplitPane.setDividerPositions(*tree.dividerPositions.toDoubleArray())
     }
 
     private fun traverseDock(id: String, orientation: Orientation): UIComponent? {
-        val cmp = if (workspace.dockedComponent == null) {
-            dockFromPageID(id, Pos.CENTER)
-        } else if (orientation == Orientation.VERTICAL) {
-            dockFromPageID(id, Pos.BOTTOM_CENTER)
+        val cmp = if (orientation == Orientation.VERTICAL) {
+            dockFromPageID(id, Pos.TOP_CENTER)
         } else {
-            dockFromPageID(id, Pos.CENTER_RIGHT)
+            dockFromPageID(id, Pos.CENTER_LEFT)
         }
         return cmp
     }
-
 
     // --------------------------------------- //
     //                 OVERLAY                 //
