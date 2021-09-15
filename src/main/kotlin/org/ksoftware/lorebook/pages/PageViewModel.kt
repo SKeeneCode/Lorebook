@@ -13,9 +13,9 @@ class PageViewModel(model: PageModel = PageModel()) : ItemViewModel<PageModel>()
         item = model
     }
 
-    val id = bind(PageModel::idProperty)
-    val tags = bind(PageModel::tagSet)
-    val pageName = bind(PageModel::pageName)
+    val id = bind(PageModel::idProperty, autocommit = true)
+    val tags = bind(PageModel::tagSet, autocommit = true)
+    val pageName = bind(PageModel::pageName, autocommit = true)
 
     val gridMinorLinesVisible = SimpleBooleanProperty(true)
     val gridMajorLinesVisible = SimpleBooleanProperty(true)

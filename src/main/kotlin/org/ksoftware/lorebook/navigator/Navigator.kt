@@ -41,7 +41,7 @@ class Navigator : View() {
         }
         button("load pages") {
             action {
-                projectController.loadOpenPages()
+                projectController.loadProject()
             }
         }
         button("save project") {

@@ -22,7 +22,6 @@ class PageController : Controller() {
         val tabLabel = Label().apply {
             bind(pageViewModel.pageName)
         }
-        Nodes.addInputMap(tabLabel, InputMap.ignore(MouseEvent.MOUSE_DRAGGED))
         val textField = TextField()
         pageTab.graphic = tabLabel
         tabLabel.onDoubleClick {

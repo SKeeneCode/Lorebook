@@ -49,10 +49,13 @@ class PageView : View() {
 
     private var pageInspector: PageInspector by singleAssign()
 
+    private var done = false
+
 
     init {
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
         pageInspector = find(PageInspector::class)
+        title = pageViewModel.id.value.take(8)
     }
 
     override fun onDock() {
@@ -68,8 +71,11 @@ class PageView : View() {
             }
         }
 
-        val pageTab = workspace.tabPanes.flatMap { it.tabs }.find { it.content == this.root }
-        pageTab?.let { pageController.makeTabEditable(it) }
+        if(!done) {
+            val pageTab = workspace.tabPanes.flatMap { it.tabs }.find { it.content == this.root }
+            pageTab?.let { pageController.makeTabEditable(it) }
+            done = true
+        }
     }
 
     override val root = splitpane(Orientation.VERTICAL) {

@@ -38,7 +38,7 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val saveCoroutineScope = CoroutineScope(Dispatchers.JavaFx)
 
     // Parent tag for every tag in this project.
-    val rootTag = TagModel()
+    var rootTag = TagModel()
 
     val taskMessage = SimpleStringProperty("No Task Running")
 

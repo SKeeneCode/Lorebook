@@ -8,6 +8,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import kotlinx.coroutines.*
 import org.ksoftware.lorebook.attributes.Id
+import org.ksoftware.lorebook.io.IOController
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.timeline.CalendarModal
@@ -31,10 +32,10 @@ data class ProjectModel(override val idProperty: StringProperty = SimpleStringPr
     /**
      * Launches a coroutine for each page to save itself in the project folder.
      */
-    override suspend fun save(projectFolder: File) {
+    override suspend fun save(projectFolder: File, ioController: IOController) {
         pages.map { page ->
-            coroutineScope {
-                launch { page.save(projectFolder) }
+            CoroutineScope(Dispatchers.IO).launch {
+                launch { page.save(projectFolder, ioController) }
             }
         }
     }

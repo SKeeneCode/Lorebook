@@ -184,6 +184,13 @@ class Styles : Stylesheet() {
             fontSize = 16.px
         }
         tabPane {
+            and(focused) {
+                tab {
+                    and(selected) {
+                        borderColor += box(c("#767676"))
+                    }
+                }
+            }
             tabHeaderArea {
                 padding = box(0.px)
             }
@@ -197,17 +204,17 @@ class Styles : Stylesheet() {
                 backgroundInsets += box(0.px)
                 and(hover) {
                     backgroundColor += baseColor.derive(-0.1)
+                    borderWidth = multi(box(0.px, 0.px, 3.px, 0.px))
+                    borderColor += box(baseColor.derive(-0.10))
                 }
                 and(selected) {
                     backgroundColor += baseColor.derive(-0.05)
                     backgroundInsets += box(0.px)
-                    borderWidth = multi(box(0.px, 0.px, 4.px, 0.px))
+                    borderWidth = multi(box(0.px, 0.px, 3.px, 0.px))
                     borderColor += box(baseColor.derive(-0.15))
-                    padding = box(6.px, 12.px, 2.px, 12.px)
-                    focusIndicator {
-                        borderWidth = multi(box(0.px))
-                    }
+                    padding = box(6.px, 12.px, 4.px, 12.px)
                 }
+
             }
         }
 
