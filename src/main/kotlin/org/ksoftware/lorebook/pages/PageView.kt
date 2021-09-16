@@ -26,6 +26,7 @@ import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.tags.TagFunction
 import tornadofx.*
 import org.ksoftware.lorebook.actions.DrawGridAction
+import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 
 
 /**
@@ -45,12 +46,12 @@ class PageView : View() {
     private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val projectViewModel: ProjectViewModel by inject()
+    private val projectSettingsViewModel: ProjectSettingsViewModel by inject()
     private val projectController: ProjectWorkspaceController by inject()
 
     private var pageInspector: PageInspector by singleAssign()
 
     private var done = false
-
 
     init {
         tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
@@ -65,7 +66,7 @@ class PageView : View() {
 
         with(workspace) {
             with (rightDrawer) {
-                item("Page Settings", expanded = true) {
+                item("Page Settings", expanded = projectSettingsViewModel.allowRightDrawerOpen.value) {
                     add(pageInspector)
                 }
             }

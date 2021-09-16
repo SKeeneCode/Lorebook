@@ -20,6 +20,7 @@ import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
+import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import tornadofx.*
 import java.io.*
@@ -35,6 +36,7 @@ class ProjectWorkspaceController : Controller(), Savable {
 
     private val textController: TextController by inject(FX.defaultScope)
     private val projectViewModel: ProjectViewModel by inject()
+    private val projectSettingsViewModel: ProjectSettingsViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
     private val ioController: IOController by inject()
     private val saveProjectActor: SendChannel<SaveProjectAction> = createSaveActor()
@@ -64,6 +66,7 @@ class ProjectWorkspaceController : Controller(), Savable {
             Scope(
                 PageViewModel(page),
                 projectViewModel,
+                projectSettingsViewModel,
                 toolbarViewModal
             )
         )
@@ -226,36 +229,27 @@ class ProjectWorkspaceController : Controller(), Savable {
         if (tree.type == NodeType.SplitPane && workspace.dockedComponent == null) {
             val pageID = "TEMP" + UUID.randomUUID().toString()
             val cmp = dockFromPageID(pageID, Pos.CENTER)
-            cmp.let {
-                val tab = workspace.findTabFromUIComponent(cmp)
-                tab?.let {
-                    list.add(tab)
-                }
-            }
+            val tab = workspace.findTabFromUIComponent(cmp)
+            tab?.let {list.add(tab) }
         }
-
-        tree.children.forEach { x ->
-            if (x.type == NodeType.TabPane) {
+        tree.children.forEach { child ->
+            if (child.type == NodeType.TabPane) {
                 val temp = tabPane
                 workspace.focusedTabPane.value = tabPane
-                traverseDock(x.pages.removeFirst(), tree.split)
-                x.pages.forEach {
+                traverseDock(child.pages.removeFirst(), tree.split)
+                child.pages.forEach {
                     dockFromPageID(it, Pos.CENTER)
                 }
                 tabPane = temp
                 workspace.focusedTabPane.value = tabPane
-            } else if (x.type == NodeType.SplitPane) {
+            } else if (child.type == NodeType.SplitPane) {
                 val temp = tabPane
                 val pageID = "TEMP" + UUID.randomUUID().toString()
                 val cmp = traverseDock(pageID, tree.split)
                 tabPane = workspace.focusedTabPane.value
-                traverseTree(x, tabPane, list)
-                cmp?.let {
-                    val tab = workspace.findTabFromUIComponent(cmp)
-                    tab?.let {
-                        list.add(tab)
-                    }
-                }
+                traverseTree(child, tabPane, list)
+                val tab = workspace.findTabFromUIComponent(cmp)
+                tab?.let { list.add(tab) }
                 tabPane = temp
                 workspace.focusedTabPane.value = tabPane
 
@@ -264,7 +258,7 @@ class ProjectWorkspaceController : Controller(), Savable {
         tabPane.parentSplitPane.setDividerPositions(*tree.dividerPositions.toDoubleArray())
     }
 
-    private fun traverseDock(id: String, orientation: Orientation): UIComponent? {
+    private fun traverseDock(id: String, orientation: Orientation): UIComponent {
         val cmp = if (orientation == Orientation.VERTICAL) {
             dockFromPageID(id, Pos.TOP_CENTER)
         } else {

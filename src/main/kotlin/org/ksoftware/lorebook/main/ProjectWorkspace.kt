@@ -16,6 +16,7 @@ import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.richtext.TextAlignment
 import org.ksoftware.lorebook.richtext.TextSizePicker
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
+import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 import org.ksoftware.lorebook.styles.Styles
 import org.ksoftware.lorebook.timeline.CalendarWizard
 import tornadofx.*
@@ -29,6 +30,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
     private val textController: TextController by inject(FX.defaultScope)
     private val projectController: ProjectWorkspaceController by inject()
     private val projectViewModel: ProjectViewModel by inject()
+    private val projectSettingsViewModel: ProjectSettingsViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val overlay = Pane().apply {
@@ -52,6 +54,23 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
                 projectViewModel.showOverlay.value = false
             }
         })
+    }
+
+    init {
+        with(rightDrawer) {
+            this.items.onChange { change ->
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (item in change.addedSubList) {
+                            item.expandedProperty.onChange {
+                                projectSettingsViewModel.allowRightDrawerOpen.value = it
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     init {
