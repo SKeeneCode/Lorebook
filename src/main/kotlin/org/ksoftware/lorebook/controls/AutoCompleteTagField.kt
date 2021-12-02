@@ -90,7 +90,9 @@ class AutoCompleteTagField : View()  {
             } else {
                 //filter all possible suggestions depends on "Text", case insensitive
                 val filteredEntries = projectViewModel.rootTag.allDescendants().stream()
-                    .filter { e -> e.nameProperty.value.toLowerCase().contains(enteredText.toLowerCase()) && ( e !in pageTags) }
+                    .filter { e -> e.nameProperty.value.lowercase(Locale.getDefault()).contains(enteredText.lowercase(
+                        Locale.getDefault()
+                    )) && ( e !in pageTags) }
                     .collect(Collectors.toList())
                 //some suggestions are found
                 if (filteredEntries.isNotEmpty()) {
@@ -155,7 +157,7 @@ class AutoCompleteTagField : View()  {
 
         private fun buildTextFlow(tag: TagModel, filter: String): TextFlow {
             val text = tag.nameProperty.value
-            val filterIndex = text.toLowerCase().indexOf(filter.toLowerCase())
+            val filterIndex = text.lowercase(Locale.getDefault()).indexOf(filter.lowercase(Locale.getDefault()))
             val textBefore = Text(text.substring(0, filterIndex))
             textBefore.fill = getContrastColor(tag.colorProperty.value)
             val textAfter = Text(text.substring(filterIndex + filter.length))

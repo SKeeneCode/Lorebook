@@ -1,13 +1,10 @@
 package org.ksoftware.lorebook.navigator
 
 import javafx.geometry.Pos
-import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
-import javafx.scene.paint.Paint
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.newproject.NewProjectView
-import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 import tornadofx.*
 
 /**

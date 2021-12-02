@@ -4,14 +4,9 @@ import com.jfoenix.controls.JFXColorPicker
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.geometry.Pos
-import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
-import org.controlsfx.glyphfont.GlyphFont
-import org.controlsfx.glyphfont.GlyphFontRegistry
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import org.ksoftware.lorebook.tags.TagModel

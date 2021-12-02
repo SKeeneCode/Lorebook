@@ -1,12 +1,9 @@
 package org.ksoftware.lorebook.styles
 
-import javafx.scene.control.ScrollPane
 import javafx.scene.effect.BlurType
 import javafx.scene.effect.DropShadow
-import javafx.scene.effect.Effect
 import javafx.scene.effect.InnerShadow
 import javafx.scene.paint.*
-import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import tornadofx.*
 

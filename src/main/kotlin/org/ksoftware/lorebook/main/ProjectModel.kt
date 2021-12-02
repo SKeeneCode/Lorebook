@@ -12,7 +12,6 @@ import org.ksoftware.lorebook.io.IOController
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.timeline.CalendarModal
-import org.ksoftware.lorebook.timeline.EraModal
 import java.io.File
 import java.util.*
 

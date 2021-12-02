@@ -7,8 +7,6 @@ import javafx.collections.FXCollections
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageModelJson
-import org.ksoftware.lorebook.tags.TagModel
-import org.ksoftware.lorebook.tags.TagModelJson
 import tornadofx.Controller
 
 class PageModelJsonAdapter : Controller() {

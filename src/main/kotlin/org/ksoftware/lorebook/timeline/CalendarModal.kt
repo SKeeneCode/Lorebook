@@ -1,7 +1,6 @@
 package org.ksoftware.lorebook.timeline
 
 import javafx.beans.property.*
-import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import tornadofx.*
 import java.util.*

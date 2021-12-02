@@ -1,10 +1,7 @@
 package org.ksoftware.lorebook.controls
 
-import javafx.beans.property.IntegerProperty
 import javafx.beans.property.LongProperty
-import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleLongProperty
-import javafx.scene.control.Spinner
 import javafx.scene.control.SpinnerValueFactory
 import javafx.util.converter.LongStringConverter
 
@@ -12,7 +9,7 @@ class SpinnerLongValueFactory(val minValue: Long = 0, val maxValue: Long = Long.
 
     init {
         converter = LongStringConverter()
-        valueProperty().addListener { observable, oldValue, newValue ->
+        valueProperty().addListener { _, _, newValue ->
             // when the value is set, we need to react to ensure it is a
             // valid value (and if not, blow up appropriately)
             if (newValue == null || newValue < minValue) {
@@ -95,7 +92,6 @@ class SpinnerLongValueFactory(val minValue: Long = 0, val maxValue: Long = Long.
     /** {@inheritDoc}  */
     override fun decrement(steps: Int) {
         val min = getMin()
-        val max = getMax()
         val newIndex = (value - steps * getAmountToStepBy())
         value = if (newIndex >= min) {
             newIndex

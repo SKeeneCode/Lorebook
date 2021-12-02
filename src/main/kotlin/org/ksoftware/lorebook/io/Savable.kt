@@ -1,7 +1,5 @@
 package org.ksoftware.lorebook.io
 
-import javafx.beans.property.StringProperty
-import kotlinx.coroutines.CoroutineScope
 import java.io.File
 
 /**

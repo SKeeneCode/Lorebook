@@ -6,8 +6,8 @@ version = "1.0-SNAPSHOT"
 plugins {
     application
     java
-    kotlin("jvm") version "1.5.30"
-    kotlin("kapt") version "1.5.30"
+    kotlin("jvm") version "1.5.31"
+    kotlin("kapt") version "1.5.31"
     id("org.openjfx.javafxplugin") version "0.0.9"
     id ("org.beryx.runtime") version "1.12.2"
 }
@@ -34,7 +34,7 @@ kotlin {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "15"
-            languageVersion = "1.4"
+            languageVersion = "1.5"
         }
     }
 }
@@ -96,4 +96,13 @@ dependencies {
     // For JSON serialisation
     implementation("com.squareup.moshi:moshi:1.12.0")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
+    implementation(kotlin("stdlib-jdk8"))
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "15"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "15"
 }

@@ -61,10 +61,6 @@ data class TagModel(
         return idProperty.hashCode()
     }
 
-    private fun removeFromParentTag() {
-        parent?.children?.remove(this)
-    }
-
     fun anyParentsAre(tag: TagModel) : Boolean {
         if (parent == tag) return true
         return parent?.anyParentsAre(tag) ?: false

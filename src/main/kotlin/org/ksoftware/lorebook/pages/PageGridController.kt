@@ -7,10 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import org.ksoftware.lorebook.actions.DrawGridAction
-import org.ksoftware.lorebook.actions.SaveProjectAction
 import tornadofx.Controller
 import java.nio.IntBuffer
 import kotlin.coroutines.CoroutineContext
@@ -24,7 +22,7 @@ class PageGridController : Controller(), CoroutineScope {
     private val canvas = gridViewModal.pageCanvas
 
     fun drawGrid(action: DrawGridAction) {
-        drawGridActor.offer(action)
+        drawGridActor.trySend(action)
     }
 
     private fun createDrawGridActor() = this.actor<DrawGridAction>(capacity = 1) {

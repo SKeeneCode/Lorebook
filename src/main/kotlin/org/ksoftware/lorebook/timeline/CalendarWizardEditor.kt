@@ -1,7 +1,6 @@
 package org.ksoftware.lorebook.timeline
 
 import javafx.beans.value.ObservableValue
-import javafx.geometry.Orientation
 import javafx.scene.layout.Priority
 import org.ksoftware.lorebook.controls.SpinnerLongValueFactory
 import org.ksoftware.lorebook.main.ProjectViewModel

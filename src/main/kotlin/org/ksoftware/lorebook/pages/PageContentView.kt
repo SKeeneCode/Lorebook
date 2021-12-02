@@ -1,21 +1,15 @@
 package org.ksoftware.lorebook.pages
 
-import javafx.event.EventHandler
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
 import javafx.scene.Group
 import javafx.scene.Node
-import javafx.scene.Parent
-import javafx.scene.control.TabPane
-import javafx.scene.control.TextArea
 import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.nodes.TextNode
-import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
-import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import tornadofx.*
 import javafx.scene.input.MouseButton
@@ -23,8 +17,6 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.paint.CycleMethod
 import javafx.scene.paint.LinearGradient
 import javafx.scene.paint.Stop
-import org.fxmisc.wellbehaved.event.InputMap
-import org.fxmisc.wellbehaved.event.Nodes
 import org.ksoftware.lorebook.styles.Styles
 
 

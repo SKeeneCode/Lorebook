@@ -3,10 +3,6 @@ package org.ksoftware.lorebook.pages
 import javafx.scene.control.Label
 import javafx.scene.control.Tab
 import javafx.scene.control.TextField
-import javafx.scene.input.DragEvent
-import javafx.scene.input.MouseEvent
-import org.fxmisc.wellbehaved.event.InputMap
-import org.fxmisc.wellbehaved.event.Nodes
 import tornadofx.*
 
 /**

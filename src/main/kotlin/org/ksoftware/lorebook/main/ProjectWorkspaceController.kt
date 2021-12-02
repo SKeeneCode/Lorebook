@@ -227,8 +227,7 @@ class ProjectWorkspaceController : Controller(), Savable {
     private fun traverseTree(tree: TreeNode, parentTabPane: DetachableTabPane, list: MutableList<Tab>) {
         var tabPane = parentTabPane
         if (tree.type == NodeType.SplitPane && workspace.dockedComponent == null) {
-            val pageID = "TEMP" + UUID.randomUUID().toString()
-            val cmp = dockFromPageID(pageID, Pos.CENTER)
+            val cmp = dockFromPageID(UUID.randomUUID().toString(), Pos.CENTER)
             val tab = workspace.findTabFromUIComponent(cmp)
             tab?.let {list.add(tab) }
         }
@@ -244,15 +243,13 @@ class ProjectWorkspaceController : Controller(), Savable {
                 workspace.focusedTabPane.value = tabPane
             } else if (child.type == NodeType.SplitPane) {
                 val temp = tabPane
-                val pageID = "TEMP" + UUID.randomUUID().toString()
-                val cmp = traverseDock(pageID, tree.split)
+                val cmp = traverseDock(UUID.randomUUID().toString(), tree.split)
                 tabPane = workspace.focusedTabPane.value
                 traverseTree(child, tabPane, list)
                 val tab = workspace.findTabFromUIComponent(cmp)
                 tab?.let { list.add(tab) }
                 tabPane = temp
                 workspace.focusedTabPane.value = tabPane
-
             }
         }
         tabPane.parentSplitPane.setDividerPositions(*tree.dividerPositions.toDoubleArray())

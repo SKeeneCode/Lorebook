@@ -1,10 +1,6 @@
 package org.ksoftware.lorebook.pages
 
-import javafx.beans.property.BooleanProperty
 import javafx.geometry.Pos
-import javafx.scene.Node
-import javafx.scene.layout.Priority
-import javafx.scene.paint.Color
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.organiser.tagflow.TagFlowController

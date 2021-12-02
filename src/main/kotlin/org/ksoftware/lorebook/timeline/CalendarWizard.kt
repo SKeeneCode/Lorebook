@@ -3,7 +3,6 @@ package org.ksoftware.lorebook.timeline
 import javafx.geometry.Pos
 import javafx.scene.layout.Priority
 import org.ksoftware.lorebook.styles.Styles
-import org.ksoftware.lorebook.utilities.forceSize
 import tornadofx.*
 
 
