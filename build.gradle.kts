@@ -6,8 +6,8 @@ version = "1.0-SNAPSHOT"
 plugins {
     application
     java
-    kotlin("jvm") version "1.5.31"
-    kotlin("kapt") version "1.5.31"
+    kotlin("jvm") version "1.6.0"
+    id("com.google.devtools.ksp") version "1.6.0-1.0.1"
     id("org.openjfx.javafxplugin") version "0.0.9"
     id ("org.beryx.runtime") version "1.12.2"
 }
@@ -33,8 +33,8 @@ application {
 kotlin {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "15"
-            languageVersion = "1.5"
+            jvmTarget = "16"
+            languageVersion = "1.6"
         }
     }
 }
@@ -59,50 +59,58 @@ tasks["runtime"].doLast {
     }
 }
 
+ksp {
+   // arg("moshi.generated", "javax.annotation.Generated")
+}
+
 repositories {
+    google()
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
+
     implementation(fileTree("libs"))
+
     // logging
     implementation("org.apache.logging.log4j:log4j-api:2.14.1")
     implementation("org.apache.logging.log4j:log4j-core:2.14.1")
-    // implementation("no.tornado:tornadofx:2.0.0-SNAPSHOT")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.5.2")
 
     // fancy javafx controls
     implementation("com.jfoenix:jfoenix:9.0.10")
     implementation("org.controlsfx:controlsfx:11.1.0")
 
     // richtext
-    implementation("org.fxmisc.richtext:richtextfx:0.10.6")
-    implementation("org.fxmisc.flowless:flowless:0.6.6")
+    implementation("org.fxmisc.richtext:richtextfx:0.10.7")
+    implementation("org.fxmisc.flowless:flowless:0.6.7")
     implementation("org.fxmisc.wellbehaved:wellbehavedfx:0.3.3")
 
     // material design theme
     implementation("org.jfxtras:jmetro:11.6.15")
 
     // For copy + paste of rich text
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.0")
-    implementation("com.sun.xml.bind:jaxb-impl:3.0.0")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
+    implementation("com.sun.xml.bind:jaxb-impl:3.0.1")
 
     implementation("io.github.micheljung:fxstage:0.8.0")
 
     // For JSON serialisation
+    implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.6.0-1.0.1")
     implementation("com.squareup.moshi:moshi:1.12.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
+    ksp("dev.zacsweers.moshix:moshi-ksp:0.14.1")
     implementation(kotlin("stdlib-jdk8"))
 }
+
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-    jvmTarget = "15"
+    jvmTarget = "16"
 }
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-    jvmTarget = "15"
+    jvmTarget = "16"
 }
