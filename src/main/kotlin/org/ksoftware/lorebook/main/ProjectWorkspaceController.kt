@@ -12,9 +12,11 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
+import mu.KotlinLogging
 import org.ksoftware.lorebook.actions.SaveProjectAction
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.io.IOController
+import org.ksoftware.lorebook.navigator.BookmarkTreeNode
 import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageView
@@ -22,11 +24,14 @@ import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 import org.ksoftware.lorebook.tags.TagModel
+import org.ksoftware.lorebook.utilities.Id
 import tornadofx.*
 import java.io.*
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
+
+private val logger = KotlinLogging.logger {}
 
 /**
  * Controller for the project workspace.
@@ -41,18 +46,24 @@ class ProjectWorkspaceController : Controller(), Savable {
     private val ioController: IOController by inject()
     private val saveProjectActor: SendChannel<SaveProjectAction> = createSaveActor()
 
-
     /**
      * Creates a new page and docks it in the provided workspace
      */
     fun dockNewPage(placement: Pos = Pos.CENTER) {
         val newPage = PageModel()
-        projectViewModel.pages.value.add(newPage)
+        projectViewModel.pageModelCache.putIfAbsent(newPage.idProperty.value, newPage)
         dockPageView(newPage, placement)
     }
 
-    private fun dockFromPageID(id: String, placement: Pos = Pos.CENTER) : UIComponent {
-        val pageToDock = projectViewModel.pages.value.find { it.idProperty.value == id } ?: PageModel(SimpleStringProperty(id))
+     private fun dockFromPageID(id: Id, placement: Pos = Pos.CENTER) : PageView {
+
+        val pageView = projectViewModel.pageViewCache[id]
+        if (pageView != null) {
+            workspace.dock(pageView, placement = placement)
+            return pageView
+        }
+
+        val pageToDock = projectViewModel.pageModelCache[id] ?: PageModel(SimpleStringProperty(id))
         return dockPageView(pageToDock, placement)
     }
 
@@ -61,8 +72,8 @@ class ProjectWorkspaceController : Controller(), Savable {
      * Checks the cache of PageViews to see if the pages view is in there.
      * If not, creates a new page view in a new scope and docks it.
      */
-    fun dockPageView(page: PageModel, placement: Pos = Pos.CENTER): UIComponent {
-        val pageToDock = projectViewModel.pageViewCache[page.idProperty.value] ?: find<PageView>(
+    fun dockPageView(page: PageModel, placement: Pos = Pos.CENTER): PageView {
+        val pageToDock = projectViewModel.pageViewCache[page.idProperty.value] ?: find(
             Scope(
                 PageViewModel(page),
                 projectViewModel,
@@ -71,6 +82,7 @@ class ProjectWorkspaceController : Controller(), Savable {
             )
         )
         projectViewModel.pageViewCache.putIfAbsent(page.idProperty.value, pageToDock)
+        projectViewModel.pageModelCache.putIfAbsent(page.idProperty.value, page)
         workspace.dock(pageToDock, placement = placement)
         return pageToDock
     }
@@ -82,6 +94,7 @@ class ProjectWorkspaceController : Controller(), Savable {
     override suspend fun save(projectFolder: File, ioController: IOController) {
         saveOpenPageStructure(projectFolder)
         saveProjectTags(projectFolder)
+        saveProjectBookmarks(projectFolder)
     }
 
     fun saveProject(stage: Stage) {
@@ -100,6 +113,15 @@ class ProjectWorkspaceController : Controller(), Savable {
                 saveAction.project.save(it, ioController)
             }
         }
+    }
+
+    private fun saveProjectBookmarks(saveLocation: File) {
+        val bookmarkFile = File(saveLocation.path + "/bookmarks.txt")
+        val br = BufferedWriter(FileWriter(bookmarkFile))
+        val bookmarks = projectViewModel.bookmarks.value
+        val json = ioController.moshi.adapter(BookmarkTreeNode::class.java).indent("    ").toJson(bookmarks)
+        br.write(json)
+        br.close()
     }
 
     private fun saveOpenPageStructure(saveLocation: File) {
@@ -200,20 +222,28 @@ class ProjectWorkspaceController : Controller(), Savable {
                 loadProjectTags(projectFolder)
                 loadPages(projectFolder)
                 loadOpenPages(projectFolder)
+                loadProjectBookmarks(projectFolder)
             }
         }
+    }
+
+    private fun loadProjectBookmarks(projectFolder: File) {
+        val json = Files.readString(Path.of(projectFolder.path + "/bookmarks.txt"));
+        projectViewModel.bookmarks.value = ioController.moshi.adapter(BookmarkTreeNode::class.java).indent("    ").fromJson(json)!!
+        projectViewModel.bookmarks.value.validateBookmarkParents()
     }
 
     private fun loadProjectTags(projectFolder: File) {
         val json = Files.readString(Path.of(projectFolder.path + "/projectTags.txt"));
         projectViewModel.rootTag = ioController.moshi.adapter(TagModel::class.java).indent("    ").fromJson(json)!!
-        projectViewModel.rootTag.validateChildrensParents()
+        projectViewModel.rootTag.validateTagsParents()
     }
 
     private fun loadPages(projectFolder: File) {
         val pages = PageModel.loadProjectPages(projectFolder, ioController)
-        println(pages)
-        projectViewModel.pages.value += pages
+        pages.forEach {
+            projectViewModel.pageModelCache.putIfAbsent(it.idProperty.value, it)
+        }
     }
 
     private fun loadOpenPages(projectFolder: File) {

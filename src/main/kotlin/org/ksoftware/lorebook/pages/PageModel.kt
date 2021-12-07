@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableSet
-import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.attributes.JsonModel
 import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.io.IOController
@@ -25,11 +24,11 @@ import java.util.*
  */
 @JsonClass(generateAdapter = true)
 data class PageModel(
-        @Json(name = "id") override val idProperty: StringProperty = UUID.randomUUID().toString().toProperty(),
+        @Json(name = "id") val idProperty: StringProperty = UUID.randomUUID().toString().toProperty(),
         val pageName: StringProperty = SimpleStringProperty(idProperty.value.substring(0, 8)),
         @Transient val tagSet: ObservableSet<TagModel> = FXCollections.observableSet(),
         @Transient var modified: Boolean = false
-) : JsonModel(), Savable, Id {
+) : JsonModel(), Savable {
 
     override suspend fun save(projectFolder: File, ioController: IOController) {
         val pageFolder = File(projectFolder.toString() + "/data/pages/" + idProperty.get())

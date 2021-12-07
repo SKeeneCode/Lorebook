@@ -31,7 +31,7 @@ import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 class PageView : View() {
 
     private val pageController: PageController by inject()
-    private val pageViewModel: PageViewModel by inject()
+    val pageViewModel: PageViewModel by inject()
     private val gridViewModal: PageGridViewModal by inject()
     private val gridController: PageGridController by inject()
 

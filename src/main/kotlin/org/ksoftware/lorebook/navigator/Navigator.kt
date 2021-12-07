@@ -16,27 +16,10 @@ class Navigator : View() {
     private val projectViewModel: ProjectViewModel by inject()
 
     override val root = vbox {
+
+        add<Bookmarks>()
+
         prefWidth = 200.0
-        listview(projectViewModel.pages) {
-            cellFormat {
-                text = this.item.toString()
-                this.onDoubleClick {
-                    projectController.dockPageView(this.item)
-                }
-            }
-        }
-        button("print") {
-            action {
-                println(projectViewModel.pages.value.toString())
-            }
-        }
-        button("reset") {
-            enableWhen(projectViewModel.dirty)
-            action {
-                projectViewModel.rollback()
-                projectViewModel.rollBackPages()
-            }
-        }
         button("load pages") {
             action {
                 projectController.loadProject()

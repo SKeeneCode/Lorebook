@@ -4,12 +4,15 @@ import com.jfoenix.controls.JFXColorPicker
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.collections.ObservableMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
 import org.ksoftware.lorebook.pages.PageModel
+import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
 import org.ksoftware.lorebook.tags.TagModel
+import org.ksoftware.lorebook.utilities.Id
 import tornadofx.*
 
 /**
@@ -25,10 +28,10 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val id = bind(ProjectModel::idProperty)
     val calendars = bind(ProjectModel::calendars)
 
-    val pageViewCache = hashMapOf<String, UIComponent>()
+    val pageViewCache = hashMapOf<Id, PageView>()
+    val pageModelCache = bind(ProjectModel::pages) as ObservableMap<Id, PageModel>
 
-    val pages = bind(ProjectModel::pages)
-    private var pagesBacking = listOf<PageModel>()
+    val bookmarks = bind(ProjectModel::bookmarks, autocommit = true)
 
     val saveCoroutineScope = CoroutineScope(Dispatchers.JavaFx)
 
@@ -46,19 +49,6 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val showOverlay = SimpleBooleanProperty(false)
     val overlayNode = SimpleObjectProperty<UIComponent>(null)
 
-    init {
-        // copies the list to its backing list after initial binding
-        pagesBacking = pages.value.map { it.copy() }
-    }
-
-    override fun onCommit() {
-        pagesBacking = pages.value.map { it.copy() }
-    }
-
-    fun rollBackPages() {
-        pages.value = pagesBacking.map { it.copy() }.asObservable()
-        super.commit(pages) {}
-    }
 
     init {
         val tree1 = TagModel(name = "Item 1")

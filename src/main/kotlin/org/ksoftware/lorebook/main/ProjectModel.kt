@@ -1,17 +1,15 @@
 package org.ksoftware.lorebook.main
 
 import com.squareup.moshi.JsonClass
-import javafx.beans.property.SimpleListProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
+import javafx.beans.property.*
 import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import kotlinx.coroutines.*
-import org.ksoftware.lorebook.attributes.Id
 import org.ksoftware.lorebook.io.IOController
 import org.ksoftware.lorebook.io.Savable
+import org.ksoftware.lorebook.navigator.BookmarkTreeNode
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.timeline.CalendarModal
+import org.ksoftware.lorebook.utilities.Id
 import java.io.File
 import java.util.*
 
@@ -20,19 +18,21 @@ import java.util.*
  * Instead use a ProjectViewModel.
  */
 @JsonClass(generateAdapter = true)
-data class ProjectModel(override val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) :
-    Savable, Id {
+data class ProjectModel(val idProperty: StringProperty = SimpleStringProperty(UUID.randomUUID().toString())) :
+    Savable {
 
-    // list of all page models in this project
-    val pages: ObservableList<PageModel> = FXCollections.observableArrayList()
+    // map of all page models in this project
+    val pages = SimpleMapProperty(FXCollections.observableHashMap<Id, PageModel>())
 
     val calendars = SimpleListProperty(FXCollections.observableArrayList<CalendarModal>())
+
+    val bookmarks = SimpleObjectProperty(BookmarkTreeNode())
 
     /**
      * Launches a coroutine for each page to save itself in the project folder.
      */
     override suspend fun save(projectFolder: File, ioController: IOController) {
-        pages.map { page ->
+        pages.values.map { page ->
             CoroutineScope(Dispatchers.IO).launch {
                 launch { page.save(projectFolder, ioController) }
             }

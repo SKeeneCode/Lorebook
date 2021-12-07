@@ -48,9 +48,15 @@ class Styles : Stylesheet() {
 
         val baseSlightBG by cssclass()
 
+        val hoverBorderBottom by cssclass()
+
     }
 
     init {
+        hoverBorderBottom {
+            borderColor += box(Color.BLACK)
+            borderWidth = multi(box(0.px,0.px,1.px,0.px))
+        }
         baseSlightBG {
             backgroundColor += baseSlight
         }

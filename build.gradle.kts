@@ -27,7 +27,8 @@ application {
             "--add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
-            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
+            "--add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED",
+            "--add-opens=javafx.base/java.lang.reflect=ALL-UNNAMED"
     )
 }
 kotlin {
@@ -70,12 +71,13 @@ repositories {
 }
 
 dependencies {
-
     implementation(fileTree("libs"))
 
+    implementation("org.burningwave:core:12.35.0")
+
     // logging
-    implementation("org.apache.logging.log4j:log4j-api:2.14.1")
-    implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+    implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
+    implementation("io.github.microutils:kotlin-logging:2.1.0")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
