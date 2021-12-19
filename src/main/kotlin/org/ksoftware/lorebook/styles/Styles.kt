@@ -50,9 +50,58 @@ class Styles : Stylesheet() {
 
         val hoverBorderBottom by cssclass()
 
+        val disabledCell by cssclass()
+
+        val thinBorder by cssclass()
+
+        val headerFontFamily = loadFont("/fonts/Candara_Bold.ttf", 24)!!
+
+        val compactTreeCells by cssclass()
+
+        val noPadding by cssclass()
     }
 
     init {
+
+        scrollPane {
+            viewport {
+                backgroundColor += Color.TRANSPARENT
+            }
+        }
+
+        noPadding {
+            padding = box(0.px)
+        }
+
+        splitPane {
+            padding = box(0.px)
+            splitPaneDivider {
+                padding = box(0.px)
+            }
+        }
+
+        treeTableView {
+            treeTableRowCell {
+                padding = box(0.px)
+            }
+        }
+
+        compactTreeCells {
+            treeTableCell {
+                padding = box(0.px)
+            }
+        }
+
+
+        thinBorder {
+            borderWidth += box(1.px)
+            borderColor += box(Color.BLACK)
+        }
+
+        disabledCell {
+            opacity = 0.4
+        }
+
         hoverBorderBottom {
             borderColor += box(Color.BLACK)
             borderWidth = multi(box(0.px,0.px,1.px,0.px))
@@ -85,8 +134,7 @@ class Styles : Stylesheet() {
             effect = DropShadow(BlurType.GAUSSIAN, Color.rgb(0, 0, 0, 0.4), 10.0, 0.0, 4.0, 4.0)
         }
         headerFont {
-            fontSize = 1.2.em
-            fontWeight = FontWeight.BOLD
+            font = headerFontFamily
         }
         calaendarCell {
                 backgroundColor += baseBlueGray
@@ -282,20 +330,3 @@ class Styles : Stylesheet() {
         }
     }
 }
-
-//.column-filter .context-menu {
-//    -fx-background-color: white;
-//}
-//
-//.column-filter .context-menu:focused {
-//    -fx-background-color: white;
-//}
-//
-//.column-filter .custom-menu-item {
-//    -fx-background-color: white;
-//    -fx-padding: 0;
-//}
-//
-//.column-filter .custom-menu-item:focused {
-//    -fx-background-color: white;
-//}

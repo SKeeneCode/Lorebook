@@ -50,7 +50,7 @@ class NewProjectView : View("New Project") {
                         aboutToBeShown = true
                         view.properties["tornadofx.scene"] = scene
                         JMetro(scene, Style.LIGHT)
-                        scene.stylesheets.add(FXSkins.getStylesheetURL());
+                        //scene.stylesheets.add(FXSkins.getStylesheetURL());
                         FX.applyStylesheetsTo(scene)
                         titleProperty().bind(view.titleProperty)
                         hookGlobalShortcuts()

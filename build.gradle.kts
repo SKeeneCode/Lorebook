@@ -45,7 +45,8 @@ javafx {
     modules = mutableListOf(
             "javafx.controls",
             "javafx.graphics",
-            "javafx.fxml")
+            "javafx.fxml",
+            "javafx.swing")
 }
 
 runtime {
@@ -73,7 +74,12 @@ repositories {
 dependencies {
     implementation(fileTree("libs"))
 
+    implementation ("io.github.palexdev:materialfx:11.12.0")
+
     implementation("org.burningwave:core:12.35.0")
+
+    //image manipulation
+    implementation("com.sksamuel.scrimage:scrimage-core:4.0.24")
 
     // logging
     implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")

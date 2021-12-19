@@ -2,10 +2,8 @@ package org.ksoftware.lorebook.tags
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
+import javafx.beans.property.*
+import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import javafx.collections.ObservableSet
 import javafx.collections.SetChangeListener
@@ -28,7 +26,8 @@ data class TagModel(
         @Transient var parent: TagModel? = null,
         val children: ObservableSet<TagModel> = FXCollections.observableSet(),
         @Transient var showInTree: Boolean = true,
-        @Transient var expandedInTree: Boolean = true
+        @Transient var expandedInTree: Boolean = true,
+        @Transient var disabled: SimpleBooleanProperty = SimpleBooleanProperty(false)
 ) : JsonModel(), Savable, Named, Colored {
 
     @Json(name = "name") override val nameProperty: StringProperty = SimpleStringProperty(name)

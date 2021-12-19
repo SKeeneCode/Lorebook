@@ -26,13 +26,12 @@ import java.util.*
 import java.util.stream.Collectors
 
 /**
- * A custom text-field that allows the user to easily select available tags and add them to the page.
+ * A custom text-field that allows the user to easily select available tags and add them to an observable set of tags.
  */
 class AutoCompleteTagField : View()  {
 
-    private val pageViewModel: PageViewModel by inject()
     private val projectViewModel: ProjectViewModel by inject()
-    private val pageTags = pageViewModel.tags.value
+    private val tagFieldViewModel: AutoCompleteTagFieldViewModal by inject()
     private val entriesPopup = Popup()
     private val entriesList = ListView<SearchResult>()
 
@@ -50,7 +49,7 @@ class AutoCompleteTagField : View()  {
             cellFormat {
                 graphic = it.graphic()
                 onLeftClick {
-                    pageTags.add(it.result)
+                    tagFieldViewModel.comparisonTagSet.value.add(it.result)
                     root.clear()
                     entriesPopup.hide()
                 }
@@ -62,7 +61,7 @@ class AutoCompleteTagField : View()  {
         Nodes.addInputMap(entriesList, InputMap.sequence(
             InputMap.consume(EventPattern.keyPressed(KeyCode.ENTER)) {
                 if (entriesPopup.isShowing && entriesList.selectionModel.selectedItem != null) {
-                    pageTags.add(entriesList.selectionModel.selectedItem.result)
+                    tagFieldViewModel.comparisonTagSet.value.add(entriesList.selectionModel.selectedItem.result)
                     root.clear()
                     entriesPopup.hide()
                 }
@@ -92,7 +91,7 @@ class AutoCompleteTagField : View()  {
                 val filteredEntries = projectViewModel.rootTag.allDescendants().stream()
                     .filter { e -> e.nameProperty.value.lowercase(Locale.getDefault()).contains(enteredText.lowercase(
                         Locale.getDefault()
-                    )) && ( e !in pageTags) }
+                    )) && ( e !in tagFieldViewModel.comparisonTagSet.value) }
                     .collect(Collectors.toList())
                 //some suggestions are found
                 if (filteredEntries.isNotEmpty()) {

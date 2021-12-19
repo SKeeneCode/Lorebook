@@ -55,7 +55,6 @@ class Bookmarks : View("Bookmarks") {
             }
         }
         with(treeview) {
-            bindRoot(projectViewModel.bookmarks)
             multiSelect(true)
             isShowRoot = false
             cellFormat { treeNode ->
@@ -164,20 +163,13 @@ class Bookmarks : View("Bookmarks") {
             rootProperty().onChange {
                 populate { parent ->
                     val value = parent.value
-                    println(parent)
                     if (parent == root) projectViewModel.bookmarks.value.children
                     else if (value.isFolder()) value.children
                     else null
                 }
             }
 
-            populate { parent ->
-                val value = parent.value
-                println(parent)
-                if (parent == root) projectViewModel.bookmarks.value.children
-                else if (value.isFolder()) value.children
-                else null
-            }
+            bindRoot(projectViewModel.bookmarks)
 
         }
 

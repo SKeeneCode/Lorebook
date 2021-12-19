@@ -18,12 +18,17 @@ import org.ksoftware.lorebook.io.Savable
 import org.ksoftware.lorebook.io.IOController
 import org.ksoftware.lorebook.navigator.BookmarkTreeNode
 import org.ksoftware.lorebook.nodes.TextController
+import org.ksoftware.lorebook.organiser.TagOrganiser
+import org.ksoftware.lorebook.organiser.TagOrganiserViewModel
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.pages.PageViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
+import org.ksoftware.lorebook.tagflow.TagFlowCell
+import org.ksoftware.lorebook.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.tags.TagModel
+import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.Id
 import tornadofx.*
 import java.io.*
@@ -42,9 +47,20 @@ class ProjectWorkspaceController : Controller(), Savable {
     private val textController: TextController by inject(FX.defaultScope)
     private val projectViewModel: ProjectViewModel by inject()
     private val projectSettingsViewModel: ProjectSettingsViewModel by inject()
+    private val tagOrganiserViewModel: TagOrganiserViewModel by inject()
+    private val tagFlowViewModel: TagFlowViewModel by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
     private val ioController: IOController by inject()
     private val saveProjectActor: SendChannel<SaveProjectAction> = createSaveActor()
+    private val tagOrganiser: TagOrganiser by inject()
+
+    // configure the converter here for usage in every page and the tag organiser
+        init {
+            tagFlowViewModel.tagToNodeConverter = { tag ->
+                find(TagFlowCell::class, Scope(projectViewModel, tagOrganiserViewModel, tagFlowViewModel, TagViewModel(tag))).root
+            }
+        }
+
 
     /**
      * Creates a new page and docks it in the provided workspace
@@ -78,7 +94,10 @@ class ProjectWorkspaceController : Controller(), Savable {
                 PageViewModel(page),
                 projectViewModel,
                 projectSettingsViewModel,
-                toolbarViewModal
+                toolbarViewModal,
+                tagOrganiser,
+                tagOrganiserViewModel,
+                tagFlowViewModel
             )
         )
         projectViewModel.pageViewCache.putIfAbsent(page.idProperty.value, pageToDock)

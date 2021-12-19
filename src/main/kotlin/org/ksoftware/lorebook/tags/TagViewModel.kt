@@ -1,6 +1,6 @@
 package org.ksoftware.lorebook.tags
 
-import tornadofx.ItemViewModel
+import tornadofx.*
 
 class TagViewModel(model: TagModel = TagModel()) : ItemViewModel<TagModel>() {
     init {

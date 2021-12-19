@@ -8,6 +8,7 @@ import javafx.collections.ObservableMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
+import org.ksoftware.lorebook.gallery.GalleryItem
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.pages.PageView
 import org.ksoftware.lorebook.richtext.StyledSegmentTextArea
@@ -32,6 +33,9 @@ class ProjectViewModel(model: ProjectModel = ProjectModel()) : ItemViewModel<Pro
     val pageModelCache = bind(ProjectModel::pages) as ObservableMap<Id, PageModel>
 
     val bookmarks = bind(ProjectModel::bookmarks, autocommit = true)
+
+    val projectImages = bind(ProjectModel::projectImages, autocommit = true)
+    val galleryRoot = SimpleObjectProperty(GalleryItem())
 
     val saveCoroutineScope = CoroutineScope(Dispatchers.JavaFx)
 

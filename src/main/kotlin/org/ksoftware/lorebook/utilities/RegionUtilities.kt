@@ -10,3 +10,9 @@ fun Region.forceSize(width: Double, height: Double) {
     prefHeight = height
     maxHeight = Region.USE_PREF_SIZE
 }
+
+fun Region.forceHeight(height: Double) {
+    prefHeight = height
+    minHeight = Region.USE_PREF_SIZE
+    maxHeight = Region.USE_PREF_SIZE
+}

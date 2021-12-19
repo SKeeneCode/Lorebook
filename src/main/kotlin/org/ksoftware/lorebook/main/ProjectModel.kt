@@ -6,6 +6,7 @@ import javafx.collections.FXCollections
 import kotlinx.coroutines.*
 import org.ksoftware.lorebook.io.IOController
 import org.ksoftware.lorebook.io.Savable
+import org.ksoftware.lorebook.media.ProjectImageModel
 import org.ksoftware.lorebook.navigator.BookmarkTreeNode
 import org.ksoftware.lorebook.pages.PageModel
 import org.ksoftware.lorebook.timeline.CalendarModal
@@ -27,6 +28,8 @@ data class ProjectModel(val idProperty: StringProperty = SimpleStringProperty(UU
     val calendars = SimpleListProperty(FXCollections.observableArrayList<CalendarModal>())
 
     val bookmarks = SimpleObjectProperty(BookmarkTreeNode())
+
+    val projectImages = SimpleMapProperty(FXCollections.observableHashMap<Id, ProjectImageModel>())
 
     /**
      * Launches a coroutine for each page to save itself in the project folder.

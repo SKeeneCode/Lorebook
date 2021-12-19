@@ -3,6 +3,7 @@ package org.ksoftware.lorebook.main
 import ch.micheljung.fxwindow.FxStage
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
+import javafx.animation.Interpolator
 import javafx.geometry.Pos
 import javafx.scene.control.MenuBar
 import javafx.scene.control.Separator
@@ -10,7 +11,9 @@ import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
+import javafx.util.Duration
 import org.controlsfx.dialog.FontSelectorDialog
+import org.ksoftware.lorebook.gallery.Gallery
 import org.ksoftware.lorebook.navigator.Navigator
 import org.ksoftware.lorebook.nodes.TextController
 import org.ksoftware.lorebook.richtext.TextAlignment
@@ -48,13 +51,23 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
         projectViewModel.overlayNode.addListener(ChangeListener { _, oldValue, newValue ->
             if (newValue != null) {
                 add(newValue)
+                newValue.root.opacity = 0.0
+                newValue.root.translateY = 20.0
                 projectViewModel.showOverlay.value = true
+                timeline(true) {
+                    keyframe(Duration(300.0)) {
+                        keyvalue(newValue.root.translateYProperty(), 0, Interpolator.EASE_OUT)
+                        keyvalue(newValue.root.opacityProperty(), 1, Interpolator.EASE_OUT)
+                    }
+                }
+
             } else {
                 oldValue?.removeFromParent()
                 projectViewModel.showOverlay.value = false
             }
         })
     }
+
 
     init {
         with(rightDrawer) {
@@ -76,6 +89,7 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
     init {
         this.scope.workspace(this)
         projectController.connectToolbarViewModalToRichTextAreas()
+        root.setPrefSize(1400.0, 1000.0)
     }
 
     init {
@@ -311,7 +325,13 @@ class ProjectWorkspace : Workspace("Lorebook", NavigationMode.Tabs) {
             background = null
             menu("File")
             menu("Edit")
-            menu("View")
+            menu("View") {
+                item("Gallery") {
+                    action {
+                        projectController.openOverlayWith(find(Gallery::class))
+                    }
+                }
+            }
             menu("Timeline") {
                 item("New Calendar") {
                     action {

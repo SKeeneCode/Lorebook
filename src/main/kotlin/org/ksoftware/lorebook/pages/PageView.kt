@@ -12,15 +12,16 @@ import javafx.scene.layout.Priority
 import org.ksoftware.lorebook.controls.AutoCompleteTagField
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
-import org.ksoftware.lorebook.organiser.Organiser
-import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
-import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
+import org.ksoftware.lorebook.organiser.TagOrganiser
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.styles.Styles
-import org.ksoftware.lorebook.tags.TagFunction
 import tornadofx.*
 import org.ksoftware.lorebook.actions.DrawGridAction
+import org.ksoftware.lorebook.controls.AutoCompleteTagFieldViewModal
+import org.ksoftware.lorebook.organiser.TagOrganiserController
+import org.ksoftware.lorebook.organiser.TagOrganiserViewModel
 import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
+import org.ksoftware.lorebook.tagflow.TagFlowViewModel
 
 
 /**
@@ -35,8 +36,9 @@ class PageView : View() {
     private val gridViewModal: PageGridViewModal by inject()
     private val gridController: PageGridController by inject()
 
+    private val tagOrganiserViewModel: TagOrganiserViewModel by inject()
     private val tagFlowViewModel: TagFlowViewModel by inject()
-    private val tagFlowController: TagFlowController by inject()
+    private val tagOrganiserController: TagOrganiserController by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val projectViewModel: ProjectViewModel by inject()
@@ -44,12 +46,15 @@ class PageView : View() {
     private val projectController: ProjectWorkspaceController by inject()
 
     private var pageInspector: PageInspector by singleAssign()
+    private val tagOrganiser: TagOrganiser by inject()
 
-    private var done = false
+    private val tagFieldViewModel: AutoCompleteTagFieldViewModal by inject()
+
+    private var madeTabEditable = false
 
     init {
-        tagFlowViewModel.deleteFunction = TagFunction { pageViewModel.tags.value.remove(it) }
         pageInspector = find(PageInspector::class)
+        tagFieldViewModel.comparisonTagSet.value = pageViewModel.tags.value
         title = pageViewModel.id.value.take(8)
     }
 
@@ -66,10 +71,10 @@ class PageView : View() {
             }
         }
 
-        if(!done) {
+        if(!madeTabEditable) {
             val pageTab = workspace.tabPanes.flatMap { it.tabs }.find { it.content == this.root }
             pageTab?.let { pageController.makeTabEditable(it) }
-            done = true
+            madeTabEditable = true
         }
     }
 
@@ -99,7 +104,7 @@ class PageView : View() {
                     vgap = 5.0
                     hgrow = Priority.ALWAYS
                     paddingAll = 2
-                    bindChildren(pageViewModel.tags.value, tagFlowController.tagToNodeConvertor)
+                    bindChildren(pageViewModel.tags.value, tagFlowViewModel.tagToNodeConverter)
                 }
             }
             button {
@@ -115,8 +120,13 @@ class PageView : View() {
                     cursor = Cursor.HAND
                 }
                 action {
-                    val organiser = find(Organiser::class)
-                    projectController.openOverlayWith(organiser)
+                    println("page is $tagFlowViewModel")
+                    tagFlowViewModel.tagSet.value = null
+                    tagFlowViewModel.tagSet.value = pageViewModel.tags.value
+                    tagOrganiserViewModel.updateHeader(MaterialIcon.DESCRIPTION.name,
+                        "Tag Organiser",
+                    "Here you can add and remove tags for the page ${pageViewModel.pageName.value}.")
+                    projectController.openOverlayWith(tagOrganiser)
                 }
             }
         }

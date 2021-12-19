@@ -3,8 +3,6 @@ package org.ksoftware.lorebook.pages
 import javafx.geometry.Pos
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
-import org.ksoftware.lorebook.organiser.tagflow.TagFlowController
-import org.ksoftware.lorebook.organiser.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.richtext.ToolbarViewModal
 import org.ksoftware.lorebook.styles.Styles
 import tornadofx.*
@@ -16,8 +14,6 @@ class PageInspector : Fragment() {
     private val gridViewModal: PageGridViewModal by inject()
     private val gridController: PageGridController by inject()
 
-    private val tagFlowViewModel: TagFlowViewModel by inject()
-    private val tagFlowController: TagFlowController by inject()
     private val toolbarViewModal: ToolbarViewModal by inject()
 
     private val projectViewModel: ProjectViewModel by inject()
