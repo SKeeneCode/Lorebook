@@ -22,6 +22,7 @@ import org.ksoftware.lorebook.organiser.TagOrganiserController
 import org.ksoftware.lorebook.organiser.TagOrganiserViewModel
 import org.ksoftware.lorebook.settings.ProjectSettingsViewModel
 import org.ksoftware.lorebook.tagflow.TagFlowViewModel
+import org.ksoftware.lorebook.utilities.findTabFromUIComponent
 
 
 /**
@@ -59,6 +60,7 @@ class PageView : View() {
     }
 
     override fun onDock() {
+        println("DOCKING PAGE")
         projectViewModel.currentRichText.value = null
 
         gridController.drawGrid(DrawGridAction())
@@ -72,15 +74,19 @@ class PageView : View() {
         }
 
         if(!madeTabEditable) {
-            val pageTab = workspace.tabPanes.flatMap { it.tabs }.find { it.content == this.root }
+            val pageTab = workspace.findTabFromUIComponent(this)
             pageTab?.let { pageController.makeTabEditable(it) }
             madeTabEditable = true
         }
     }
 
+    override fun onUndock() {
+        println("Undocking ${this.pageViewModel.id}")
+    }
+
     override val root = splitpane(Orientation.VERTICAL) {
 
-        // Bind root nodes ID to model id for each access when saving
+        // Bind root nodes ID to model id for easy access when saving
         idProperty().bind(pageViewModel.id)
 
         addEventFilter(MouseEvent.MOUSE_PRESSED) {

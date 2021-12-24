@@ -1,7 +1,6 @@
 package org.ksoftware.lorebook.main
 
 import com.squareup.moshi.JsonClass
-import dock.DetachableTabPane
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
@@ -10,6 +9,7 @@ import javafx.scene.control.SplitPane
 import javafx.scene.control.Tab
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
+import kdockfx.DetachableTabPane
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
 import mu.KotlinLogging
@@ -30,6 +30,7 @@ import org.ksoftware.lorebook.tagflow.TagFlowViewModel
 import org.ksoftware.lorebook.tags.TagModel
 import org.ksoftware.lorebook.tags.TagViewModel
 import org.ksoftware.lorebook.utilities.Id
+import org.ksoftware.lorebook.utilities.findTabFromUIComponent
 import tornadofx.*
 import java.io.*
 import java.nio.file.Files
@@ -301,7 +302,7 @@ class ProjectWorkspaceController : Controller(), Savable {
                 workspace.focusedTabPane.value = tabPane
             }
         }
-        tabPane.parentSplitPane.setDividerPositions(*tree.dividerPositions.toDoubleArray())
+        tabPane.parentSplitPane?.setDividerPositions(*tree.dividerPositions.toDoubleArray())
     }
 
     private fun traverseDock(id: String, orientation: Orientation): UIComponent {

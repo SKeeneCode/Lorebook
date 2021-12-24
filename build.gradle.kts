@@ -68,11 +68,16 @@ ksp {
 repositories {
     google()
     mavenCentral()
+    mavenLocal {
+        url = uri("C://Users/samke/.m2/repository")
+    }
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
     implementation(fileTree("libs"))
+    implementation("net.ksoftware.kdockfx:kdockfx:1.0")
+    implementation("no.tornado:tornadofx2:2.0.0-SNAPSHOT")
 
     implementation ("io.github.palexdev:materialfx:11.12.0")
 

@@ -234,14 +234,8 @@ class Styles : Stylesheet() {
         titleLabel {
             fontSize = 16.px
         }
+
         tabPane {
-            and(focused) {
-                tab {
-                    and(selected) {
-                        borderColor += box(c("#767676"))
-                    }
-                }
-            }
             tabHeaderArea {
                 padding = box(0.px)
             }

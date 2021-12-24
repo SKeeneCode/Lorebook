@@ -2,10 +2,10 @@ package org.ksoftware.lorebook.navigator
 
 import de.jensd.fx.glyphs.materialicons.MaterialIcon
 import de.jensd.fx.glyphs.materialicons.MaterialIconView
-import dock.DetachableTabPane
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import javafx.scene.input.TransferMode
+import kdockfx.DetachableTabPane
 import org.ksoftware.lorebook.main.ProjectViewModel
 import org.ksoftware.lorebook.main.ProjectWorkspaceController
 import org.ksoftware.lorebook.pages.PageView
@@ -105,7 +105,7 @@ class Bookmarks : View("Bookmarks") {
                         showHoverCss.value = true
                         event.consume()
                     } else {
-                        val pageView = DetachableTabPane.DRAGGED_TAB.content.uiComponent<PageView>()
+                        val pageView = DetachableTabPane.DRAGGED_TAB?.content?.uiComponent<PageView>()
                         if (pageView != null) {
                             event.acceptTransferModes(TransferMode.MOVE)
                             showHoverCss.value = true
@@ -132,7 +132,7 @@ class Bookmarks : View("Bookmarks") {
                             }
                             success = true
                         } else {
-                            val pageView = DetachableTabPane.DRAGGED_TAB.content.uiComponent<PageView>() ?: return@setOnDragDropped
+                            val pageView = DetachableTabPane.DRAGGED_TAB?.content?.uiComponent<PageView>() ?: return@setOnDragDropped
                             val node = BookmarkTreeNode(type = BookmarkNodeType.PAGE, page = pageView.pageViewModel)
                             when (treeNode.type) {
                                 BookmarkNodeType.FOLDER -> {
